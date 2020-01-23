@@ -1,0 +1,24 @@
+<div id="fundo" class="d-flex align-items-center">
+
+
+  <div id="caixaLogin">
+    <form [formGroup]="formLogin">
+    <br>
+    <b>SISTEMA DETALHE</b>
+    <br><br>
+    <input type='text' formControlName="email" class='form-control' placeholder="Login" (click)="resetForm()"/>
+    <div *ngIf="submited && formLogin.get('email').hasError('required')" class="avisoForm">Campo <b>login</b> deve ser preenchido</div>
+    <br>
+    <input type='password' formControlName="senha" class='form-control' placeholder="Senha" (click)="resetForm()"/>
+    <div *ngIf="submited && formLogin.get('senha').hasError('required')" class="avisoForm">Campo <b>senha</b> deve ser preenchido</div>
+    <br>
+    <div class="alert alert-danger"  id="caixaMsgErro">Login/Senha Incorretos ou problemas de acesso</div>
+    <button class="btn btn-primary" (click)="submitForm()" >ACESSAR</button>
+    </form>
+    
+  </div>
+
+
+
+
+</div>

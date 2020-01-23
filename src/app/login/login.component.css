@@ -1,0 +1,28 @@
+#fundo {
+  
+    background-color: whitesmoke;
+    height: 680px;
+  }
+
+#caixaLogin{
+    
+    height: 380px;
+    background-color: white;
+    margin: 0 auto;
+    width: 340px;
+    border: 1px solid #f5f5f5; 
+    box-shadow: 10px 10px 10px -6px rgba(0,0,0,0.75);  
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.avisoForm{
+  font: bold 11px arial;
+  color: crimson
+}
+
+#caixaMsgErro{
+  font-size:12px;
+  display:none;
+}
