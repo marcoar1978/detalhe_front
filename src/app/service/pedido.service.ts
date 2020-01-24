@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { Clinica } from '../model/clinica.model';
+import { Dentista } from '../model/dentista.model';
 import { Protetico } from '../model/protetico.model';
 
 @Injectable({providedIn: 'root'})
@@ -19,6 +21,13 @@ export class PedidoService{
     getProteticos(): Observable<Protetico[]>{
         return this.http.get<Protetico[]>(this.API +'/proteticos');
     }
+
+    altClinica(pedidoId:number,clinicaId:number): Observable<Dentista[]>{
+        let httpParams:HttpParams = new HttpParams()
+            .set("pedidoIdForm", pedidoId.toString())
+            .set("clinicaIdForm", clinicaId.toString());
+        return this.http.get<Dentista[]>(this.API +'/pedido/altClinica?'+httpParams.toString());
+        }
 
     
 }

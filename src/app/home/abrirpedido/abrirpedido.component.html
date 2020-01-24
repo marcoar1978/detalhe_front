@@ -1,1 +1,21 @@
-<p>abrirpedido works!</p>
+
+
+
+<h4>Abertura de Pedido</h4>
+
+<form [formGroup]="form">
+
+<select class='form-control' formControlName="clinica" id='selClinica' style='width:350px' (change)="altClinica()">
+    <option value='0'>Selecione a Clínica
+    <option *ngFor="let clinica of clinicas" [value]="clinica.id">{{clinica.nomeSimp}}</option>
+</select> 
+<br>
+<select class='form-control' formControlName="dentista" id='selDentista' style='width:350px;display:none'>
+    <option value='0' *ngIf="dentistas?.length > 1">Selecione o Dentista</option>
+    <option *ngFor="let dentista of dentistas" [value]="dentista.id">{{dentista.nome}}</option>
+</select> 
+
+
+</form>
+
+ 
