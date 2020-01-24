@@ -1,19 +1,37 @@
 
 
-
-<h4>Abertura de Pedido</h4>
-
-<form [formGroup]="form">
-
-<select class='form-control' formControlName="clinica" id='selClinica' style='width:350px' (change)="altClinica()">
-    <option value='0'>Selecione a Clínica
-    <option *ngFor="let clinica of clinicas" [value]="clinica.id">{{clinica.nomeSimp}}</option>
-</select> 
 <br>
-<select class='form-control' formControlName="dentista" id='selDentista' style='width:350px;display:none'>
-    <option value='0' *ngIf="dentistas?.length > 1">Selecione o Dentista</option>
+<b>Abertura de Pedido</b>
+<br><br>
+<form [formGroup]="form">
+<div class="row">
+<div class="col-sm">
+<select class='form-control' formControlName="clinica" id='selClinica' (change)="altClinica()" (click)="resetAvisoForm()">
+    <option value='' disabled>Selecione a Clínica</option>
+    <option *ngFor="let clinica of clinicas" [value]="clinica.id" >{{clinica.nomeSimp}}</option>
+</select>
+<div *ngIf="submited && form.get('clinica').hasError('required')" class="avisoForm" style='width:350px'>Escolha uma clínica</div> 
+<br>
+</div>
+
+<div class="col-sm">
+
+<div id='divDentista'style='display:none'>
+<select class='form-control' formControlName="dentista" id='selDentista' (change)="altDentista()" (click)="resetAvisoForm();">
+    <option value='' disabled>Selecione o Dentista</option>
     <option *ngFor="let dentista of dentistas" [value]="dentista.id">{{dentista.nome}}</option>
 </select> 
+<div  *ngIf="submited && form.get('dentista').hasError('required')" class="avisoForm" style='width:350px'>Escolha um dentista</div> 
+<br>
+</div>
+</div>
+<div class="col-sm">
+    <input type='text' class='form-control' formControlName="nomePaciente" placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()">
+    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" style='width:350px'>Digite o nome do paciente</div> 
+</div>
+</div>
+<br>
+<button class="btn btn-primary" (click)="submitForm()" >ENVIAR</button>
 
 
 </form>

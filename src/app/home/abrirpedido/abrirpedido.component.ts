@@ -21,6 +21,7 @@ export class AbrirpedidoComponent implements OnInit {
   proteticos:Protetico[];
   form:FormGroup;
   pedidoId:number=5;
+  submited:boolean = false;
 
   constructor(private pedidoService:PedidoService, 
               private actRoute: ActivatedRoute,
@@ -35,21 +36,46 @@ export class AbrirpedidoComponent implements OnInit {
     console.log(this.proteticos);
 
     this.form = this.formBuilder.group({
-      clinica: ["0", [Validators.required]],
-      dentista: ["0", [Validators.required]],
+      clinica: ["", [Validators.required]],
+      dentista: ["", [Validators.required]],
+      nomePaciente: ["", [Validators.required]],
     })
   }
 
   altClinica(){
     const clinicaId = this.form.get("clinica").value;
-    $('#selDentista').slideUp(250);
+    $('#divDentista').fadeOut(350);
     this.pedidoService.altClinica(this.pedidoId, clinicaId)
       .subscribe(res => {
            this.dentistas = res;
-           $('#selDentista').slideDown(250);
-         
-             
-      })
+           $('#divDentista').fadeIn(350);
+           }, error => {alert("Erro ao acessar o banco de dados")})
+  }
+
+  altDentista(){
+    const dentistaId = this.form.get("dentista").value;
+    this.pedidoService.altDentista(this.pedidoId,dentistaId)
+      .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
+  }
+
+  altNomePaciente(){
+    console.log("Blur ok");
+    if(!this.form.get("nomePaciente").hasError("required")){
+      const nomePaciente = this.form.get("nomePaciente").value;
+      this.pedidoService.altNomePaciente(this.pedidoId, nomePaciente)
+        .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
+    }
+    
+
+  }
+
+  submitForm(){
+      this.submited = true;
+  }
+
+  resetAvisoForm(){
+    this.submited = false;
+    $(".avisoForm").slideUp(500);
   }
 
   

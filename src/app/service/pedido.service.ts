@@ -28,6 +28,19 @@ export class PedidoService{
             .set("clinicaIdForm", clinicaId.toString());
         return this.http.get<Dentista[]>(this.API +'/pedido/altClinica?'+httpParams.toString());
         }
+    
+   altDentista(pedidoId:number, dentistaId:number): Observable<Response>{
+    let httpParams:HttpParams = new HttpParams()
+        .set("pedidoIdForm", pedidoId.toString())
+        .set("dentistaIdForm", dentistaId.toString());
+        return this.http.get<Response>(this.API +'/pedido/altDentista?'+httpParams.toString());
+   }
 
+   altNomePaciente(pedidoId:number, nomePaciente:string):Observable<Response>{
+    let httpParams:HttpParams = new HttpParams()
+        .set("pedidoIdForm", pedidoId.toString())
+        .set("nomePaciente", nomePaciente);
+        return this.http.get<Response>(this.API +'/pedido/altNomePaciente?'+httpParams.toString());
+   }     
     
 }
