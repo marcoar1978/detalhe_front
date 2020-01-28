@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { Clinica } from '../model/clinica.model';
+import { Protetico } from '../model/protetico.model';
+import { DataService } from '../service/data.service';
+import { Produto } from '../model/produto.model';
+import { Dentista } from '../model/dentista.model';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +14,15 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, 
+              private actRoute: ActivatedRoute,
+              private dataService: DataService) { }
 
   ngOnInit() {
+    this.dataService.altDataClinica(this.actRoute.snapshot.data['clinicas']); 
+    this.dataService.altDataProtetico(this.actRoute.snapshot.data['proteticos']);
+    this.dataService.altDataProduto(this.actRoute.snapshot.data['produtos']);
+    this.dataService.altDataDentista(this.actRoute.snapshot.data['dentistas']);
   }
 
   logout(){

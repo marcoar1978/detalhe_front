@@ -7,6 +7,9 @@ import { Clinica } from 'src/app/model/clinica.model';
 import { Dentista } from 'src/app/model/dentista.model';
 import { Protetico } from 'src/app/model/protetico.model';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { DataService } from 'src/app/service/data.service';
+import { Produto } from 'src/app/model/produto.model';
 
 
 @Component({
@@ -17,23 +20,24 @@ import { ActivatedRoute } from '@angular/router';
 export class AbrirpedidoComponent implements OnInit {
   clinicas:Clinica[];
   dentistas:Dentista[];
+  dentistasForm:Dentista[];
+  produtos:Produto[];
   nomeDentista:string;
   proteticos:Protetico[];
   form:FormGroup;
   pedidoId:number=5;
   submited:boolean = false;
-
+  
   constructor(private pedidoService:PedidoService, 
               private actRoute: ActivatedRoute,
-              private formBuilder: FormBuilder ) { }
+              private formBuilder: FormBuilder,
+              private dataService: DataService ) { }
 
   ngOnInit() {
-        
-    this.clinicas =  this.actRoute.snapshot.data['clinicas'];
-    console.log(this.clinicas); 
-    
-    this.proteticos = this.actRoute.snapshot.data['proteticos'];
-    console.log(this.proteticos);
+    this.dataService.clinicaMessage.subscribe(res => { this.clinicas = res });     
+    this.dataService.proteticoMessage.subscribe(res => { this.proteticos = res });
+    this.dataService.produtoMessage.subscribe(res => { this.produtos = res });
+    this.dataService.dentistaMessage.subscribe(res => { this.dentistas = res });
 
     this.form = this.formBuilder.group({
       clinica: ["", [Validators.required]],
@@ -43,13 +47,20 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
   altClinica(){
+    console.log(this.dentistas);
     const clinicaId = this.form.get("clinica").value;
-    $('#divDentista').fadeOut(350);
-    this.pedidoService.altClinica(this.pedidoId, clinicaId)
-      .subscribe(res => {
-           this.dentistas = res;
-           $('#divDentista').fadeIn(350);
-           }, error => {alert("Erro ao acessar o banco de dados")})
+    $('#caixaItens').fadeOut(350);
+    $('#divDentista').slideUp(350, () => {
+      this.dentistasForm = this.dentistas.filter(dentista => dentista.clinicaId == clinicaId);
+      console.log(this.dentistasForm)
+      $('#divDentista').slideDown(350);
+      $('#caixaItens').fadeIn(350);
+    });
+
+   this.pedidoService.altClinica(this.pedidoId, clinicaId)
+      .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
+
+
   }
 
   altDentista(){

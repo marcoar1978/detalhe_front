@@ -8,12 +8,15 @@ import { CadastroclinicaComponent } from './home/cadastroclinica/cadastroclinica
 import { AuthGuard } from './service/authguard.service';
 import { ClinicaResolve } from './service/clinicas.resolve';
 import { ProteticoResolve } from './service/protetico.resolve';
+import { ProdutoResolve } from './service/produto.resolve';
+import { DentistaResolve } from './service/dentista.resolve';
 
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] ,children:[
-      { path: 'abrirPedido', component: AbrirpedidoComponent, resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve} },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] , 
+                  resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve, produtos: ProdutoResolve, dentistas: DentistaResolve }, children:[
+      { path: 'abrirPedido', component: AbrirpedidoComponent  },
       { path: 'cadastroClinica', component: CadastroclinicaComponent },
   ] }
 ];

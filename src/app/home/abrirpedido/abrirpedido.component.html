@@ -5,29 +5,36 @@
 <br><br>
 <form [formGroup]="form">
 <div class="row">
-<div class="col-sm">
+    <div class="col-4">
 <select class='form-control' formControlName="clinica" id='selClinica' (change)="altClinica()" (click)="resetAvisoForm()">
-    <option value='' disabled>Selecione a Clínica</option>
+    <option value='' disabled>Clínica</option>
     <option *ngFor="let clinica of clinicas" [value]="clinica.id" >{{clinica.nomeSimp}}</option>
 </select>
 <div *ngIf="submited && form.get('clinica').hasError('required')" class="avisoForm" style='width:350px'>Escolha uma clínica</div> 
 <br>
-</div>
-
-<div class="col-sm">
 
 <div id='divDentista'style='display:none'>
-<select class='form-control' formControlName="dentista" id='selDentista' (change)="altDentista()" (click)="resetAvisoForm();">
-    <option value='' disabled>Selecione o Dentista</option>
-    <option *ngFor="let dentista of dentistas" [value]="dentista.id">{{dentista.nome}}</option>
-</select> 
-<div  *ngIf="submited && form.get('dentista').hasError('required')" class="avisoForm" style='width:350px'>Escolha um dentista</div> 
-<br>
-</div>
-</div>
-<div class="col-sm">
+    <select class='form-control' formControlName="dentista" id='selDentista' (change)="altDentista()" (click)="resetAvisoForm();">
+        <option value='' disabled>Dentista</option>
+        <option *ngFor="let dentista of dentistasForm" [value]="dentista.id">{{dentista.nome}}</option>
+    </select> 
+    <div  *ngIf="submited && form.get('dentista').hasError('required')" class="avisoForm" style='width:350px'>Escolha um dentista</div> 
+    
+    </div>
+    <br>
+    
+
     <input type='text' class='form-control' formControlName="nomePaciente" placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()">
-    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" style='width:350px'>Digite o nome do paciente</div> 
+    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" style='width:350px'>Digite o nome do paciente</div>    
+</div>
+<div class="col-8">
+   <div id="caixaItens">
+       
+    
+   </div>
+
+
+
 </div>
 </div>
 <br>
