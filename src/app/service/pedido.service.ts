@@ -6,6 +6,7 @@ import { Clinica } from '../model/clinica.model';
 import { Dentista } from '../model/dentista.model';
 import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
+import { ItemPadrao } from '../model/itemPadrao.model';
 
 @Injectable({providedIn: 'root'})
 export class PedidoService{
@@ -15,6 +16,21 @@ export class PedidoService{
     
 
     constructor(private http: HttpClient){}
+
+    abrirPedido(): Observable<number>{
+        return this.http.get<number>(this.API +'/pedido/abrirPedido');
+    }
+
+    addItemPadrao(itemPadrao: ItemPadrao ):Observable<Response>{
+        return this.http.post<Response>(this.API +'/item/addItemPadrao', itemPadrao );
+    }
+
+    delItemPadrao(pedidoId:number, produtoId: number):Observable<Response>{
+        let httpParams:HttpParams = new HttpParams()
+            .set("pedidoIdForm", pedidoId.toString())
+            .set("produtoIdForm", produtoId.toString());
+        return this.http.get<Response>(this.API +'/item/delItemPadrao?'+httpParams.toString());
+    }
 
     getClinicas(): Observable<Clinica[]>{
         return this.http.get<Clinica[]>(this.API +'/clinicas');
@@ -38,7 +54,21 @@ export class PedidoService{
             .set("clinicaIdForm", clinicaId.toString());
         return this.http.get<Dentista[]>(this.API +'/pedido/altClinica?'+httpParams.toString());
         }
-    
+
+   altProtetico(pedidoId:number, proteticoId:number): Observable<Response>{
+        let httpParams:HttpParams = new HttpParams()
+          .set("pedidoIdForm", pedidoId.toString())
+          .set("proteticoIdForm", proteticoId.toString());
+        return this.http.get<Response>(this.API +'/pedido/altProtetico?'+httpParams.toString());  
+   }
+
+   altDesconto(pedidoId:number,desconto:number):Observable<Response>{
+    let httpParams:HttpParams = new HttpParams()
+    .set("pedidoIdForm", pedidoId.toString())
+    .set("descontoForm", desconto.toString());
+    return this.http.get<Response>(this.API +'/pedido/altDesconto?'+httpParams.toString());  
+   } 
+
    altDentista(pedidoId:number, dentistaId:number): Observable<Response>{
     let httpParams:HttpParams = new HttpParams()
         .set("pedidoIdForm", pedidoId.toString())
@@ -51,6 +81,12 @@ export class PedidoService{
         .set("pedidoIdForm", pedidoId.toString())
         .set("nomePaciente", nomePaciente);
         return this.http.get<Response>(this.API +'/pedido/altNomePaciente?'+httpParams.toString());
-   }     
+   }
+
+   altObs(pedidoId:number, obs:string):Observable<Response>{
+    return this.http.post<Response>(this.API +'/pedido/altObs', {pedidoId, obs});
+   }
+   
+   
     
 }

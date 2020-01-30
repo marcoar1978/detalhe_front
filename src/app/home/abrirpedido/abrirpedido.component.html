@@ -5,15 +5,15 @@
 <br><br>
 <form [formGroup]="form">
 <div class="row">
-    <div class="col-4">
-<select class='form-control' formControlName="clinica" id='selClinica' (change)="altClinica()" (click)="resetAvisoForm()">
+    <div class="col-md-4">
+<select class='form-control' formControlName="clinica" id='selClinica' (change)="altClinica()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
     <option value='' disabled>Clínica</option>
     <option *ngFor="let clinica of clinicas" [value]="clinica.id" >{{clinica.nomeSimp}}</option>
 </select>
-<div *ngIf="submited && form.get('clinica').hasError('required')" class="avisoForm" style='width:350px'>Escolha uma clínica</div> 
-<br>
+<div *ngIf="submited && form.get('clinica').hasError('required')" class="avisoForm">Escolha uma clínica</div> 
 
-<div id='divDentista'style='display:none'>
+<div id='divDentista'style='display:none;margin-bottom: 20px;' >
+    
     <select class='form-control' formControlName="dentista" id='selDentista' (change)="altDentista()" (click)="resetAvisoForm();">
         <option value='' disabled>Dentista</option>
         <option *ngFor="let dentista of dentistasForm" [value]="dentista.id">{{dentista.nome}}</option>
@@ -21,15 +21,118 @@
     <div  *ngIf="submited && form.get('dentista').hasError('required')" class="avisoForm" style='width:350px'>Escolha um dentista</div> 
     
     </div>
-    <br>
+   
+    <input type='text' class='form-control' formControlName="nomePaciente" placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
+    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" >Digite o nome do paciente</div>  
     
+    <select class='form-control' formControlName="protetico" id='selProtetico' (change)="altProtetico()" (click)="resetAvisoForm();" style="margin-bottom: 20px;">
+        <option value='' disabled>Protetico</option>
+        <option *ngFor="let protetico of proteticos" [value]="protetico.id">{{protetico.nome}}</option>
+    </select> 
+    <div  *ngIf="submited && form.get('protetico').hasError('required')" class="avisoForm" >Escolha um protetico</div> 
+    
+    <select formControlName="desconto" class='form-control' (click)="altDesconto()" style="margin-bottom: 20px;" >
+        <option value='0'>Desconto
+        <option *ngFor='let optionDesconto of optionsDesconto'>{{optionDesconto}}
 
-    <input type='text' class='form-control' formControlName="nomePaciente" placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()">
-    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" style='width:350px'>Digite o nome do paciente</div>    
+   </select>
+
+   
+   
+         
 </div>
-<div class="col-8">
-   <div id="caixaItens">
+<div class="col-md-8">
+   
+    <div id="caixaItens" style='display:none'>
+    <label class="radio-inline">
+       <input type='radio' name='tipoProduto' formControlName='tipoProduto' value='padrao' (click)="mostraFormProdutoPadrao()"> Padrão
+       </label> &nbsp; &nbsp;
+       <label class="radio-inline">
+       <input type='radio' name='tipoProduto' formControlName='tipoProduto' value='variavel' (click)="mostraFormProdutoVariavel()"> Variável 
+       </label>
+       <div id='divProduto' style='margin-top:15px'>
+        <table>
+            <tr>
+                <td valign="top" padding="30px" id='tdSelTipoProdutoVariavel' style='display:none'> 
+                    <select class='form-control' formControlName="tipoVariavel" id='selTipoProdutoVariavel' (click)="resetAvisoForm();" style='display:none'>
+                        <option value='' disabled>Tipo</option>
+                        <option value='10'>Diversos
+                        <option value='9'>Grampo
+                        <option value='8'>Máscara
+                    </select>
+
+                 </td>   
+
+              <td valign="top" padding="30px">  
        
+        <select class='form-control' formControlName="produtoPadrao" id='selProdutoPadrao' (click)="resetAvisoFormItem();" style='width:250px'>
+            <option value='' disabled>Produto</option>
+            <option *ngFor="let produtoPadrao of produtosPadraoClinica" [value]="produtoPadrao.produtoId">{{produtoPadrao.nome}} - R$ {{produtoPadrao.valor}}</option>
+        </select>
+       <input type='text' formControlName="descProdVariavel" id="descProdVariavel" class='form-control' placeholder="Descrição" style="display:none;">
+    
+       </td>
+       <td width='120' padding="30px" id='tdValorProdVariavel'>
+           <input type='number' step="0.50" min="1.00" class="form-control" placeholder='Valor' id='valorProdVariavel' /></td>
+           
+      
+       <td valign="top" padding="30px">
+        <div >
+        <select formControlName="qdeProduto" class='form-control' (click)="resetAvisoFormItem();" style='width:80px' >
+            <option value=''>Qde
+            <option *ngFor='let option of options'>{{option}}
+
+       </select>
+       </div>
+        </td>
+        <td padding="30px">
+            <button class='btn btn-outline-primary' (click)='inserirProduto()'>Inserir</button>
+        </td>    
+      </tr>
+      </table> 
+      <div id='avisoFormItem' style='display:none' >{{msgFormItem}}</div>
+    </div>
+    <br>   
+    <div id="tabelaItens" style='display:none' >
+        <table class="table table-hover table-sm ">
+            <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Derscrição</th>
+                  <th scope="col">Valor Unitário</th>
+                  <th scope="col">Qde</th>
+                  <th scope="col">Total</th>
+                  <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let produtoEscolhido of produtosEscolhidos; let i= index" id='item_{{produtoEscolhido.produtoId}}'>
+                    <td>{{i + 1}}</td>
+                    <td>{{produtoEscolhido.nome}}</td>
+                    <td>{{produtoEscolhido.valor | currency }}</td>
+                    <td>{{produtoEscolhido.qde}}</td>
+                    <td>{{produtoEscolhido.valorTotal | currency }}</td>
+                    <td><i class="material-icons" (click)="deleteItem(produtoEscolhido.produtoId)" style='cursor:pointer;color: #FB8C00;'>delete_outline</i></td>
+                </tr> 
+                <tr>
+                    <td  colspan='4'><b>Valor Total</b></td>
+                    <td><b>{{totalPedido | currency }}</b></td>
+                    <td></td>
+                <tr>
+                <tr *ngIf="desconto > 0">
+                    <td colspan='4'><b>Desconto ({{desconto}} %)</b></td>
+                    <td><b>{{valorDesconto | currency }}</b></td>
+                    <td></td>    
+                </tr> 
+                <tr *ngIf="desconto > 0">
+                    <td colspan='4'><b>Valor Total Líquido</b></td>
+                    <td><b>{{valorTotalLiquido | currency }}</b></td>
+                    <td></td>    
+                </tr>       
+             </tbody>
+        </table>       
+    </div>
+   
     
    </div>
 
@@ -38,9 +141,27 @@
 </div>
 </div>
 <br>
-<button class="btn btn-primary" (click)="submitForm()" >ENVIAR</button>
 
+<i class="material-icons" id='edit' (click)="mostrarCampoObs()" (mouseover)="scaleEditMouseOver($event)" style='cursor:pointer;color: #FB8C00;margin-bottom:15px ;' title="Datas e Observações">edit</i>
+<div id='camposObsDatas' style='font-size:14px;display:none;margin-bottom:20px;'>
+    <table width='300px'>
+        <tr>
+            <td valign='top'>Pedido</td>
+            <td><input type="date" class="form-control" style="margin-left: 20px;margin-bottom:20px;"  ></td>
+        </tr>
+        <tr>   
+             <td valign='top'>Previsão Entrega</td>   
+             <td><input type="date" class="form-control" style="margin-left: 20px;margin-bottom:20px;" ></td>
+         </tr>
+     </table>  
+<input type='text' class="form-control" placeholder="Observações" formControlName="obs" (blur)="altObs()" style='margin-bottom:15px;'>
+</div>
+<div style='text-align:right'>
+<button class="btn btn-primary" (click)="submitForm()" >ENVIAR</button>
+</div>
 
 </form>
+
+
 
  

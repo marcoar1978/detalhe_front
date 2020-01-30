@@ -3,8 +3,8 @@
 
   <div id="caixaLogin">
     <form [formGroup]="formLogin">
-    <br>
-    <b>SISTEMA DETALHE</b>
+    
+    <img src="http://www.detalheprotetico.com.br/img/Logo_Detalhes_2.png" width='230'/>
     <br><br>
     <input type='text' formControlName="email" class='form-control' placeholder="Login" (click)="resetForm()"/>
     <div *ngIf="submited && formLogin.get('email').hasError('required')" class="avisoForm">Campo <b>login</b> deve ser preenchido</div>

@@ -4,6 +4,8 @@ export class Produto{
     clinicaId: number;
     nome:string;
     valor:number;
+    qde:number;
+    valorTotal:number;
     padraoPrazoEntrega: number;
 
 }
