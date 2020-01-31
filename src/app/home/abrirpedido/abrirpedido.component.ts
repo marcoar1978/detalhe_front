@@ -292,7 +292,11 @@ fecharPedido(){
 }
 
 imprimir(){
-  $('#conferenciaPedido').print();
+  const janela = window.open('', 'PRINT', 'height=400,width=700');
+  janela.document.write('<html><head><title>Pedido nº '+this.aberturaPedido.pedidoId+'</title>');
+  janela.document.write('</head><body>');  
+  janela.document.write(document.getElementById("conferenciaPedido").innerHTML);
+  janela.document.write('</body></html>');
 }
 
 
