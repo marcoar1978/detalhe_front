@@ -6,6 +6,7 @@ import { Clinica } from '../model/clinica.model';
 import { Dentista } from '../model/dentista.model';
 import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
+import { AbrirPedido } from '../model/abrirPedido.model';
 import { ItemPadrao } from '../model/itemPadrao.model';
 
 @Injectable({providedIn: 'root'})
@@ -17,8 +18,8 @@ export class PedidoService{
 
     constructor(private http: HttpClient){}
 
-    abrirPedido(): Observable<number>{
-        return this.http.get<number>(this.API +'/pedido/abrirPedido');
+    abrirPedido(): Observable<AbrirPedido>{
+        return this.http.get<AbrirPedido>(this.API +'/pedido/abrirPedido');
     }
 
     addItemPadrao(itemPadrao: ItemPadrao ):Observable<Response>{

@@ -9,11 +9,12 @@ import { HomeComponent } from './home.component';
 import { AbrirpedidoComponent } from './abrirpedido/abrirpedido.component';
 import { CadastroclinicaComponent } from './cadastroclinica/cadastroclinica.component';
 import { InterceptorService } from '../service/interceptor.service';
+import { PedidoFechadoComponent } from './pedido-fechado/pedido-fechado.component';
 
 
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent ],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent ],
   imports: [
     CommonModule,
     HttpClientModule,

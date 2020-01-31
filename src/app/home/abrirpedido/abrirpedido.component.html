@@ -1,8 +1,8 @@
 
 
 <br>
-<b>Abertura de Pedido</b>
-<br><br>
+<div style='text-align:center' id='titulo'><b>Abertura de Pedido</b></div>
+<br>
 <form [formGroup]="form">
 <div class="row">
     <div class="col-md-4">
@@ -22,7 +22,7 @@
     
     </div>
    
-    <input type='text' class='form-control' formControlName="nomePaciente" placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
+    <input type='text' class='form-control' formControlName="nomePaciente" id='nomePaciente' placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
     <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" >Digite o nome do paciente</div>  
     
     <select class='form-control' formControlName="protetico" id='selProtetico' (change)="altProtetico()" (click)="resetAvisoForm();" style="margin-bottom: 20px;">
@@ -31,7 +31,7 @@
     </select> 
     <div  *ngIf="submited && form.get('protetico').hasError('required')" class="avisoForm" >Escolha um protetico</div> 
     
-    <select formControlName="desconto" class='form-control' (click)="altDesconto()" style="margin-bottom: 20px;" >
+    <select formControlName="desconto" id='desconto' class='form-control' (click)="altDesconto()" style="margin-bottom: 20px;" >
         <option value='0'>Desconto
         <option *ngFor='let optionDesconto of optionsDesconto'>{{optionDesconto}}
 
@@ -130,13 +130,16 @@
                     <td></td>    
                 </tr>       
              </tbody>
-        </table>       
+        </table>
+          
     </div>
-   
+    <div style='font-size: 12px;margin-top:20px'><b>Prazo:</b> {{aberturaPedido.prazo}} dias corridos</div>   
+     
     
    </div>
-
-
+   <div id="conferenciaPedido" style='display:none'>
+        <div style='text-align:center'><b>CONFERÊNCIA PEDIDO nº {{aberturaPedido.pedidoId}}</b></div>
+    </div>
 
 </div>
 </div>
@@ -147,17 +150,18 @@
     <table width='300px'>
         <tr>
             <td valign='top'>Pedido</td>
-            <td><input type="date" class="form-control" style="margin-left: 20px;margin-bottom:20px;"  ></td>
+            <td><input type="date" class="form-control" style="margin-left: 20px;margin-bottom:20px;" [value]="aberturaPedido.dataPedido"  ></td>
         </tr>
-        <tr>   
-             <td valign='top'>Previsão Entrega</td>   
-             <td><input type="date" class="form-control" style="margin-left: 20px;margin-bottom:20px;" ></td>
-         </tr>
-     </table>  
+    </table>  
 <input type='text' class="form-control" placeholder="Observações" formControlName="obs" (blur)="altObs()" style='margin-bottom:15px;'>
 </div>
-<div style='text-align:right'>
-<button class="btn btn-primary" (click)="submitForm()" >ENVIAR</button>
+<div style='text-align:right' id='divBotaoContinuar'>
+<button class="btn btn-primary" (click)="submitForm()" >CONTINUAR</button><br>
+
+</div>
+<div style='text-align:right;display:none;' id='divBotaoFechar'>
+    <button class="btn btn-primary" (click)="voltarForm()" style= 'margin-right:20px' >VOLTAR</button> <button class="btn btn-primary" (click)="fecharPedido()" >FECHAR</button>
+    <br><button class="btn btn-primary" (click)="imprimir()" >PRINT</button>
 </div>
 
 </form>

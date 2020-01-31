@@ -6,11 +6,12 @@ import { PedidoService } from 'src/app/service/pedido.service';
 import { Clinica } from 'src/app/model/clinica.model';
 import { Dentista } from 'src/app/model/dentista.model';
 import { Protetico } from 'src/app/model/protetico.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { DataService } from 'src/app/service/data.service';
 import { Produto } from 'src/app/model/produto.model';
 import { ItemPadrao } from 'src/app/model/itemPadrao.model';
+import { AbrirPedido } from 'src/app/model/abrirPedido.model';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class AbrirpedidoComponent implements OnInit {
   nomeDentista:string;
   proteticos:Protetico[];
   form:FormGroup;
-  pedidoId:number=5;
+  aberturaPedido:AbrirPedido;;
   submited:boolean = false;
   options:number[] = [];
   optionsDesconto:number[] = [];
@@ -37,15 +38,17 @@ export class AbrirpedidoComponent implements OnInit {
   valorTotalLiquido:number;
   totalPedido:number = 0;
   msgFormItem:string;
+  
     
   constructor(private pedidoService:PedidoService, 
               private actRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
-              private dataService: DataService ) { }
+              private dataService: DataService,
+              private router: Router ) { }
 
   ngOnInit() {
-    //this.pedidoId = this.actRoute.snapshot.data['pedidoId'];
-    console.log(this.pedidoId);
+    this.aberturaPedido = this.actRoute.snapshot.data['aberturaPedido'];
+    this.aberturaPedido.prazo =7;
     this.dataService.clinicaMessage.subscribe(res => { this.clinicas = res });     
     this.dataService.proteticoMessage.subscribe(res => { this.proteticos = res });
     this.dataService.produtoMessage.subscribe(res => { this.produtos = res });
@@ -64,8 +67,8 @@ export class AbrirpedidoComponent implements OnInit {
       dentista: ["", [Validators.required]],
       nomePaciente: ["", [Validators.required]],
       tipoProduto: ["padrao"],
-      produtoPadrao: ["", [Validators.required]],
-      qdeProduto: ["", [Validators.required]],
+      produtoPadrao: [""],
+      qdeProduto: [""],
       tipoVariavel:[""],
       descProdVariavel:[],
       protetico:["", [Validators.required]],
@@ -88,29 +91,28 @@ export class AbrirpedidoComponent implements OnInit {
       $('#caixaItens').fadeIn(350);
     });
 
-   this.pedidoService.altClinica(this.pedidoId, clinicaId)
+   this.pedidoService.altClinica(this.aberturaPedido.pedidoId, clinicaId)
       .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
 
   }
 
   altDentista(){
     const dentistaId = this.form.get("dentista").value;
-    this.pedidoService.altDentista(this.pedidoId,dentistaId)
+    this.pedidoService.altDentista(this.aberturaPedido.pedidoId,dentistaId)
       .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
   }
 
   altNomePaciente(){
-    console.log("Blur ok");
     if(!this.form.get("nomePaciente").hasError("required")){
       const nomePaciente = this.form.get("nomePaciente").value;
-      this.pedidoService.altNomePaciente(this.pedidoId, nomePaciente)
+      this.pedidoService.altNomePaciente(this.aberturaPedido.pedidoId, nomePaciente)
         .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
     }
   }
 
   altProtetico(){
     const proteticoId =  this.form.get("protetico").value;
-    this.pedidoService.altProtetico(this.pedidoId, proteticoId)
+    this.pedidoService.altProtetico(this.aberturaPedido.pedidoId, proteticoId)
       .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
 
   }
@@ -119,7 +121,7 @@ export class AbrirpedidoComponent implements OnInit {
     this.desconto = this.form.get('desconto').value;
     this.valorDesconto = (this.totalPedido * this.desconto)/100;
     this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
-    this.pedidoService.altDesconto(this.pedidoId, this.desconto)
+    this.pedidoService.altDesconto(this.aberturaPedido.pedidoId, this.desconto)
        .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")});
   }
 
@@ -150,6 +152,45 @@ export class AbrirpedidoComponent implements OnInit {
 
   submitForm(){
       this.submited = true;
+      if(!this.form.invalid){
+
+        $('#titulo').fadeOut(350);
+        $('#selClinica').fadeOut(350);
+        $('#selDentista').fadeOut(350);
+        $('#nomePaciente').fadeOut(350);
+        $('#selProtetico').fadeOut(350);
+        $('#desconto').fadeOut(350);
+        $('#edit').fadeOut(350);
+
+
+        $('#caixaItens').fadeOut(350, () => {
+          $("#conferenciaPedido").fadeIn(350);
+        })
+
+        $('#divBotaoContinuar').fadeOut(350, () => {
+          $("#divBotaoFechar").fadeIn(350);
+        })
+
+      }
+  }
+
+  voltarForm(){
+    $('#titulo').fadeIn(350);
+    $('#selClinica').fadeIn(350);
+    $('#selDentista').fadeIn(350);
+    $('#nomePaciente').fadeIn(350);
+    $('#selProtetico').fadeIn(350);
+    $('#desconto').fadeIn(350);
+    $('#edit').fadeIn(350);
+
+    $("#conferenciaPedido").fadeOut(350,() => {
+      $('#caixaItens').fadeIn(350);
+    });
+
+    $("#divBotaoFechar").fadeOut(350, () => {
+      $('#divBotaoContinuar').fadeIn(350);
+    });
+
   }
 
   resetAvisoForm(){
@@ -197,11 +238,13 @@ export class AbrirpedidoComponent implements OnInit {
         .reduce((prevVal, produtoEscolhido) => {return prevVal + produtoEscolhido.valorTotal },0);
       this.valorDesconto = (this.totalPedido * this.desconto)/100;
       this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
+      let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
+      this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
       $('#tabelaItens').fadeIn(350);
       })
   
   let itemPadrao:ItemPadrao = new ItemPadrao();
-  itemPadrao.pedidoId = this.pedidoId;
+  itemPadrao.pedidoId = this.aberturaPedido.pedidoId;
   itemPadrao.produtoId = produtoPadrao.produtoId;
   itemPadrao.qdeProdutoPadrao = produtoPadrao.qde;
   itemPadrao.valorUnitario = produtoPadrao.valor;
@@ -216,10 +259,14 @@ deleteItem(produtoId){
   this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId != produtoId)
   this.totalPedido = this.produtosEscolhidos
         .reduce((prevVal, produtoEscolhido) => {return prevVal + produtoEscolhido.valorTotal },0);
+  let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
+  this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
+  console.log(produtoVerifPrazo.length);
 
   $("#item_"+produtoId).hide();
-  this.pedidoService.delItemPadrao(this.pedidoId, produtoId)
+  this.pedidoService.delItemPadrao(this.aberturaPedido.pedidoId, produtoId)
     .subscribe(res => res, error => error => alert("Erro ao deletar o ítem"))
+
 }
 
 mostrarCampoObs(){
@@ -228,7 +275,7 @@ mostrarCampoObs(){
 
 altObs(){
   const obs = this.form.get('obs').value;
-  this.pedidoService.altObs(this.pedidoId, obs)
+  this.pedidoService.altObs(this.aberturaPedido.pedidoId, obs)
     .subscribe(res => res, error => alert("Erro ao inserir a observação") );
 }
 
@@ -240,6 +287,13 @@ scaleEditMouseOver(e){
   
 }
 
+fecharPedido(){
+  this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
+}
+
+imprimir(){
+  $('#conferenciaPedido').print();
+}
 
 
 }
