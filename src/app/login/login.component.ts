@@ -39,6 +39,10 @@ export class LoginComponent implements OnInit {
 submitForm(){
   this.submited = true;
   if(!this.formLogin.invalid){
+    $("#caixaMsgErro").slideDown(500, () => {
+      $("#caixaMsgAguardar").slideDown(500);
+    })
+    
     this.email = this.formLogin.get("email").value;
     this.senha = this.formLogin.get("senha").value;
 
@@ -48,7 +52,10 @@ submitForm(){
        window.localStorage.setItem("tokenDetalhe", this.credencial.token);
        this.router.navigate(['/home']);
        }, err => {
+        $("#caixaMsgAguardar").slideUp(500, () => {
           $("#caixaMsgErro").slideDown(500);
+        });
+          
        });
   }
 }

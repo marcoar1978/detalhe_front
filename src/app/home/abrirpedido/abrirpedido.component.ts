@@ -12,6 +12,7 @@ import { DataService } from 'src/app/service/data.service';
 import { Produto } from 'src/app/model/produto.model';
 import { ItemPadrao } from 'src/app/model/itemPadrao.model';
 import { AbrirPedido } from 'src/app/model/abrirPedido.model';
+import { Pedido } from 'src/app/model/pedido.model';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { AbrirPedido } from 'src/app/model/abrirPedido.model';
   styleUrls: ['./abrirpedido.component.css']
 })
 export class AbrirpedidoComponent implements OnInit {
+  pedido:Pedido = new Pedido();
   clinicas:Clinica[];
   dentistas:Dentista[];
   dentistasForm:Dentista[];
@@ -38,6 +40,7 @@ export class AbrirpedidoComponent implements OnInit {
   valorTotalLiquido:number;
   totalPedido:number = 0;
   msgFormItem:string;
+  recebeConfPedido:boolean = false;
   
     
   constructor(private pedidoService:PedidoService, 
@@ -153,6 +156,15 @@ export class AbrirpedidoComponent implements OnInit {
   submitForm(){
       this.submited = true;
       if(!this.form.invalid){
+               
+        this.pedidoService.conferirPedido(this.aberturaPedido.pedidoId, this.totalPedido, this.valorTotalLiquido, this.aberturaPedido.prazo)
+          .subscribe(res => {
+                
+                this.pedido = res;
+                this.recebeConfPedido = true;
+                            
+              }, error => {alert("Erro ao acessar o banco de dados")})
+
 
         $('#titulo').fadeOut(350);
         $('#selClinica').fadeOut(350);
@@ -162,19 +174,18 @@ export class AbrirpedidoComponent implements OnInit {
         $('#desconto').fadeOut(350);
         $('#edit').fadeOut(350);
 
-
         $('#caixaItens').fadeOut(350, () => {
           $("#conferenciaPedido").fadeIn(350);
-        })
-
+        }) 
+        
         $('#divBotaoContinuar').fadeOut(350, () => {
           $("#divBotaoFechar").fadeIn(350);
         })
-
       }
   }
 
   voltarForm(){
+    this.recebeConfPedido = false;
     $('#titulo').fadeIn(350);
     $('#selClinica').fadeIn(350);
     $('#selDentista').fadeIn(350);
@@ -256,13 +267,14 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
 deleteItem(produtoId){
-  this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId != produtoId)
+  this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId != produtoId);
   this.totalPedido = this.produtosEscolhidos
         .reduce((prevVal, produtoEscolhido) => {return prevVal + produtoEscolhido.valorTotal },0);
+  this.valorDesconto = (this.totalPedido * this.desconto)/100;
+  this.valorTotalLiquido = this.totalPedido - this.valorDesconto;      
   let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
   this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
-  console.log(produtoVerifPrazo.length);
-
+ 
   $("#item_"+produtoId).hide();
   this.pedidoService.delItemPadrao(this.aberturaPedido.pedidoId, produtoId)
     .subscribe(res => res, error => error => alert("Erro ao deletar o ítem"))
@@ -297,6 +309,8 @@ imprimir(){
   janela.document.write('</head><body>');  
   janela.document.write(document.getElementById("conferenciaPedido").innerHTML);
   janela.document.write('</body></html>');
+  janela.print();
+  janela.close();
 }
 
 

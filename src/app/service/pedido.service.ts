@@ -8,10 +8,12 @@ import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
 import { AbrirPedido } from '../model/abrirPedido.model';
 import { ItemPadrao } from '../model/itemPadrao.model';
+import { Pedido } from '../model/pedido.model';
 
 @Injectable({providedIn: 'root'})
 export class PedidoService{
     API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
+    //API:string = "http://localhost:8080";
     clinicas:Clinica[];
     proteticos:Protetico[];
     
@@ -87,6 +89,15 @@ export class PedidoService{
    altObs(pedidoId:number, obs:string):Observable<Response>{
     return this.http.post<Response>(this.API +'/pedido/altObs', {pedidoId, obs});
    }
+
+   conferirPedido(pedidoId:number, valorTotal: number,valorLiquido:number, prazo:number):Observable<Pedido>{
+    let httpParams:HttpParams = new HttpParams()
+        .set("pedidoIdForm", pedidoId.toString())
+        .set("valorTotalForm", valorTotal.toString())
+        .set("valorLiquidoForm", valorLiquido.toString())
+        .set("prazoForm", prazo.toString());
+     return this.http.get<Pedido>(this.API +'/pedido/conferirPedido?'+httpParams.toString());    
+   } 
    
    
     

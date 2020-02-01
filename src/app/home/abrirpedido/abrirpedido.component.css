@@ -31,12 +31,12 @@
 
 #conferenciaPedido{
     
-  background-color: #e2eec2;
+  background-color: #ffffff;
   border: 1px solid #bbaeae; 
   box-shadow: 10px 10px 10px -6px rgba(0,0,0,0.75);  
   padding: 10px;
   border-radius: 5px;
   padding:5px;
   font-size:14px;
-  height: 400px;
+  
 }

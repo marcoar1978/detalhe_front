@@ -139,6 +139,93 @@
    </div>
    <div id="conferenciaPedido" style='display:none'>
         <div style='text-align:center;'><b>CONFERÊNCIA PEDIDO nº {{aberturaPedido.pedidoId}}</b></div>
+        <br>
+        <div *ngIf="!recebeConfPedido" style="color:blue;font-size: 18px;text-align: center;">AGUARDAR O CARREGAMENTO DOS DADOS</div>
+        <div *ngIf="recebeConfPedido">
+        <table style='width: 90%!important;margin: auto;' class='table table-sm'>
+            <tr>
+                <td width='100' style='border:none !important;'><b>Data Pedido</b></td>    
+                <td style='border:none !important;'>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
+            </tr>
+            <tr>
+                <td style='border:none !important;'><b>Clínica</b></td>    
+                <td style='border:none !important;'>{{pedido.clinica}}</td>    
+            </tr>
+             
+            <tr>
+                <td style='border:none !important;'><b>Dentista</b></td>    
+                <td style='border:none !important;'>{{pedido.dentista}}</td>    
+            </tr>
+            <tr>
+                <td style='border:none !important;'><b>Paciente</b></td>    
+                <td style='border:none !important;'>{{pedido.nomePaciente}}</td>    
+            </tr>
+            <tr>
+                <td style='border:none !important;'><b>Protético(a)</b></td>    
+                <td style='border:none !important;'>{{pedido.protetico}}</td>    
+            </tr> 
+                
+        </table>
+        <br>
+        <div>
+        <table class='table  table-bordered table-sm' style='width: 90% !important;margin: auto;' >
+            <tr>
+                <td ></td>
+                <td><b>Derscrição</b></td>
+                <td><b>Valor Unitário</b></td>
+                <td><b>Qde</b></td>
+                <td><b>Total</b></td>
+             </tr>
+             <tr *ngFor="let itemPadrao of pedido.itensPadrao; let i= index; ">
+                <td>{{i + 1}}</td>
+                <td>{{itemPadrao.descricao}}</td>
+                <td >{{itemPadrao.valorUnitario | currency}}</td>
+                <td >{{itemPadrao.qde}}</td>
+                <td >{{itemPadrao.valorTotal | currency}}</td>
+             </tr> 
+             <tr>
+                <td  colspan='4'><b>Valor Total</b></td>
+                <td><b>{{pedido.valorTotal | currency }}</b></td>
+                
+            <tr>
+            <tr *ngIf="pedido.desconto > 0">
+                <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
+                <td><b>{{pedido.valorTotal - pedido.valorLiquido | currency }}</b></td>
+                   
+            </tr> 
+            <tr *ngIf="pedido.desconto > 0">
+                <td colspan='4'><b>Valor Total Líquido</b></td>
+                <td><b>{{pedido.valorLiquido | currency }}</b></td>
+                    
+            </tr>      
+        </table> 
+        <br>
+        <table style='width: 90%!important;margin: auto;' class='table table-sm'>
+        <tr>
+            <td width='100' style='border:none !important;'><b>Prazo</b></td>    
+            <td style='border:none !important;'>{{pedido.prazo}} dias corridos</td>    
+        </tr>
+        <tr>
+            <td width='100' style='border:none !important;'><b>Previsão</b></td>    
+            <td style='border:none !important;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>    
+        </tr>
+        <tr>
+            <td width='100' style='border:none !important;'><b>Observações</b></td>    
+            <td style='border:none !important;'>{{pedido.obs}}</td>    
+        </tr>
+        </table>
+        <br>  
+
+
+        </div>
+
+
+
+
+        </div>
+
+
+
     </div>
 
 </div>
@@ -156,7 +243,7 @@
 <input type='text' class="form-control" placeholder="Observações" formControlName="obs" (blur)="altObs()" style='margin-bottom:15px;'>
 </div>
 <div style='text-align:right' id='divBotaoContinuar'>
-<button class="btn btn-primary" (click)="submitForm()" >CONTINUAR</button><br>
+<button class="btn btn-primary" (click)="submitForm()" id='buttonSubmitForm' >CONTINUAR</button><br>
 
 </div>
 <div style='text-align:right;display:none;' id='divBotaoFechar'>

@@ -13,6 +13,7 @@
     <div *ngIf="submited && formLogin.get('senha').hasError('required')" class="avisoForm">Campo <b>senha</b> deve ser preenchido</div>
     <br>
     <div class="alert alert-danger"  id="caixaMsgErro">Login/Senha Incorretos ou problemas de acesso</div>
+    <div class="alert alert-info"  id="caixaMsgAguardar">Aguarde um momento</div>
     <button class="btn btn-primary" (click)="submitForm()" >ACESSAR</button>
     </form>
     

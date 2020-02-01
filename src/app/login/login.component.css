@@ -6,7 +6,7 @@
 
 #caixaLogin{
     
-    height: 380px;
+    height: 420px;
     background-color: white;
     margin: 0 auto;
     width: 340px;
@@ -23,6 +23,11 @@
 }
 
 #caixaMsgErro{
+  font-size:12px;
+  display:none;
+}
+
+#caixaMsgAguardar{
   font-size:12px;
   display:none;
 }
