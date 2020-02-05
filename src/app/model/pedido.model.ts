@@ -1,9 +1,11 @@
 import { Item } from './item.model';
 
 export class Pedido{
+    
     id:number;
     dataPedido:string;
     clinica:string;
+    clinicaId:number;
     dentista:string;
     nomePaciente:string;
     prazo:number;
@@ -18,5 +20,7 @@ export class Pedido{
     itensPadrao:Item[] = [];
     statusPedido:string;
     statusEntrega:string;
+    checkEntrega:boolean;
+    
 
 }

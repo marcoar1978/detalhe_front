@@ -12,10 +12,10 @@ import { CadastroclinicaComponent } from './cadastroclinica/cadastroclinica.comp
 import { InterceptorService } from '../service/interceptor.service';
 import { PedidoFechadoComponent } from './pedido-fechado/pedido-fechado.component';
 import { PedidosEmProcessoComponent } from './pedidos-em-processo/pedidos-em-processo.component';
-
+import { ModalPedidoConsComponent } from './modal-pedido-cons/modal-pedido-cons.component';
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent ],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent],
   imports: [
     CommonModule,
     HttpClientModule,

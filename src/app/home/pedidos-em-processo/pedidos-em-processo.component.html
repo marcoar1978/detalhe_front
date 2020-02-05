@@ -1,24 +1,26 @@
 
-<ng-template #content let-modal>
+
+<ng-template #content  let-modal>
     <div class="modal-header">
-      <h4 class="modal-title">Modal title</h4>
+      <h4 class="modal-title">Pedido nº {{pedidoSelecionado.id}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>One fine body&hellip;</p>
-    </div>
+        <app-modal-pedido-cons [pedidoSelecionado]=pedidoSelecionado></app-modal-pedido-cons>
+    </div>    
     <div class="modal-footer">
-      <button type="button" class="btn btn-light">Teste</button>
-      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+     
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Fechar</button>
     </div>
-  </ng-template>
+</ng-template>
 
+  
 <br>
 <div style='text-align:center' id='titulo'><b>Pedidos em Processo</b></div><br>
 <div class="container">
-<div class="alert alert-info" *ngIf="!carregamentoClinicas || !carregamentoPedidos">Aguarde enquanto os dados estão sendo carrgados</div>
+<div class="alert alert-info" *ngIf="!carregamentoClinicas || !carregamentoPedidos">Aguarde enquanto os dados estão sendo carregados</div>
 <div id='dadosCarregados' *ngIf="carregamentoClinicas || carregamentoPedidos">
     <table class='table table-dark' style='text-align: center;'>
         <tr>
@@ -38,18 +40,17 @@
      
      <table class='table table-hover'>
         <tr *ngFor="let pedido of pedidos">
-        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;'>{{pedido.id}}</td>
+        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;;cursor:pointer' (click)="abreModalPedido(content, pedido.id)">{{pedido.id}}</td>
         <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer'><i class="material-icons">print </i></td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
-        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='10%' style='text-align: center;'><input type='checkbox'></td>  
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='10%' style='text-align: center;'><input type='checkbox' id='checkEntrega_{{pedido.id}}' (click)="checkEntrega(clinica.id, pedido.id)"></td>  
         </tr> 
-        <tr>
-            <td colspan='7' style='padding:10px;text-align:right'><button class='btn btn-info btn-sm' (click)="abreModalPedido(content)">Registrar Entrega</button></td>
-        </tr>    
+           
      </table>
+     <div style='display:none;text-align:right' id="botaoRegistrarEntrega_{{clinica.id}}" ><button  class='btn btn-info btn-sm'>Registrar Entrega</button></div>
      
      <br>   
      </div>

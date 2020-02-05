@@ -15,7 +15,9 @@ import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.serv
 export class PedidosEmProcessoComponent implements OnInit {
 
   pedidos:Pedido[];
+  pedidoSelecionado:Pedido;
   clinicas:Clinica[];
+  verifCheckEntrega:boolean;
   carregamentoPedidos:boolean = false;
   carregamentoClinicas:boolean = false;
   
@@ -27,22 +29,47 @@ export class PedidosEmProcessoComponent implements OnInit {
     this.pedidosEmProcessoService.listaClinicasPorStatusPedidoEmProcesso()
       .subscribe(res => {
         this.clinicas = res;
-        console.log(this.clinicas);
         this.carregamentoClinicas = true;
       }, error => {alert("Erro ao acessar o banco de dados")});
 
     this.pedidosEmProcessoService.listaPedidosPorStatusEmProcesso()
       .subscribe(res =>{
         this.pedidos = res;
-        console.log(this.pedidos);
+        this.pedidos.forEach(pedido => pedido.checkEntrega = false);
         this.carregamentoPedidos = true;
       }, error => {alert("Erro ao acessar o banco de dados")});  
 
       }
     
-    abreModalPedido(content){
-        this.modalService.open(content, { centered: true, size: 'lg' });
+    abreModalPedido(content, pedidoId){
+        this.pedidos.find(pedido => this.pedidoSelecionado = pedido);
+        this.modalService.open(content, { centered: true, size: 'lg',scrollable: true });
+       }
+    
+    checkEntrega(clinicaId:number, pedidoId:number){
+     this.verifCheckEntrega = false;
+      this.pedidos.forEach(pedido => {
+        if(pedido.id == pedidoId){
+          pedido.checkEntrega =  $('#checkEntrega_'+pedidoId).prop("checked");
+         }
+      })
+
+      this.pedidos.forEach(pedido => {
+        if((pedido.clinicaId == clinicaId) && (pedido.checkEntrega)){
+          this.verifCheckEntrega = true;
+        }
+      })
+          
+      if(this.verifCheckEntrega){
+        $("#botaoRegistrarEntrega_"+clinicaId).slideDown(350);
+      }
+      else{
+        $("#botaoRegistrarEntrega_"+clinicaId).slideUp(350);
+      }
+      this.verifCheckEntrega = false;  
     }
+      
+
 
     }
 
