@@ -12,6 +12,8 @@ import { ProdutoResolve } from './service/produto.resolve';
 import { DentistaResolve } from './service/dentista.resolve';
 import { AbrirPedidoResolve } from './service/abrirPedido.resolve';
 import { PedidoFechadoComponent } from './home/pedido-fechado/pedido-fechado.component';
+import { PedidosEmProcessoComponent } from './home/pedidos-em-processo/pedidos-em-processo.component';
+
 
 
 const routes: Routes = [
@@ -20,6 +22,7 @@ const routes: Routes = [
                   resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve, produtos: ProdutoResolve, dentistas: DentistaResolve }, children:[
       { path: 'abrirPedido', component: AbrirpedidoComponent, resolve: {aberturaPedido: AbrirPedidoResolve } },
       { path: 'pedidoFechado/:pedidoId', component: PedidoFechadoComponent },
+      { path: 'pedidosEmProcesso', component: PedidosEmProcessoComponent },
       { path: 'cadastroClinica', component: CadastroclinicaComponent },
   ] }
 ];

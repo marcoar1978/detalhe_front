@@ -5,6 +5,7 @@ import { Clinica } from '../model/clinica.model';
 import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
 import { Dentista } from '../model/dentista.model';
+import { Pedido } from '../model/pedido.model';
 
 
 @Injectable({providedIn: 'root'})
@@ -17,6 +18,8 @@ export class DataService{
     produtoMessage = this.produtoSubject.asObservable();
     dentistaSubject: BehaviorSubject<Dentista[]> = new BehaviorSubject<Dentista[]>([]);  
     dentistaMessage = this.dentistaSubject.asObservable();
+    pedidoFechadoSubject :BehaviorSubject<Pedido> = new BehaviorSubject<Pedido>(new Pedido());
+    pedidoFechadoMessage = this.pedidoFechadoSubject.asObservable();
 
     altDataClinica(clinicas:Clinica[]){
         this.clinicaSubject.next(clinicas);
@@ -32,6 +35,10 @@ export class DataService{
 
     altDataDentista(dentistas: Dentista[]){
         this.dentistaSubject.next(dentistas);
+    }
+
+    altDataPedidoFechado(pedidoFechado: Pedido){
+        this.pedidoFechadoSubject.next(pedidoFechado);
     }
 
 

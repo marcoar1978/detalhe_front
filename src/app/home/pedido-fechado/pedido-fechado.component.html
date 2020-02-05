@@ -2,10 +2,94 @@
 <br>
 <br>
 <br>
-<div style='text-align:center;'> Pedido nº <b>{{pedidoId}}</b> fechado com sucesso<br><br>
-    <button class="btn btn-info btn-sm" (click)='abrirNovoPedido()' >ABRIR NOVO PEDIDO</button> &nbsp;&nbsp;&nbsp;
-    <button class="btn btn-info btn-sm">VISUALIZAR</button>     
+<div class="row">
+    <div class="col-md-4">
+<div style='text-align:center;'> Pedido nº <b>{{pedidoFechado.id}}</b> fechado<br><br>
+    <button class="btn btn-info btn-sm" (click)='abrirNovoPedido()' style='margin-bottom: 20px;'>ABRIR NOVO PEDIDO</button><br> 
+    <button class="btn btn-info btn-sm" (click)="imprimirPedidoFechado()" >IMPRIMIR</button>    
 </div>
+</div>
+<div class="col-md-8">
+    <div style='padding:15px; text-align: center; border:1px solid #000;width:600px' id='caixaPedidoFechado'>
+    <div style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#0000cc'><b>PEDIDO nº {{pedidoFechado.id}}</b></div>
+    <br>
+    
+    
+    <table style='width: 550px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;'>
+        <tr height="30">
+            <td width='100'><b>Data Pedido</b></td>    
+            <td>{{pedidoFechado.dataPedido | date:'dd/MM/yyyy'}}</td>    
+        </tr>
+        <tr height="30">
+            <td><b>Clínica</b></td>    
+            <td>{{pedidoFechado.clinica}}</td>    
+        </tr>
+         
+        <tr height="30">
+            <td ><b>Dentista</b></td>    
+            <td >{{pedidoFechado.dentista}}</td>    
+        </tr>
+        <tr height="30">
+            <td ><b>Paciente</b></td>    
+            <td >{{pedidoFechado.nomePaciente}}</td>    
+        </tr>
+                  
+    </table>
+    <br>
+    
+    <table style='width: 550px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; ' >
+        <tr height="30" style='border-bottom:1px solid #ccc;'>
+            <td ></td>
+            <td><b>Derscrição</b></td>
+            <td><b>Valor Unitário</b></td>
+            <td><b>Qde</b></td>
+            <td><b>Total</b></td>
+         </tr>
+         <tr height="30" *ngFor="let itemPadrao of pedidoFechado.itensPadrao; let i= index; " style='border-bottom:1px solid #ccc;'>
+            <td>{{i + 1}}</td>
+            <td>{{itemPadrao.descricao}}</td>
+            <td >{{itemPadrao.valorUnitario | currency}}</td>
+            <td >{{itemPadrao.qde}}</td>
+            <td >{{itemPadrao.valorTotal | currency}}</td>
+         </tr> 
+         <tr height="30" style='border-bottom:1px solid #ccc;'>
+            <td  colspan='4'><b>Valor Total</b></td>
+            <td><b>{{pedidoFechado.valorTotal | currency }}</b></td>
+            
+        <tr>
+        <tr height="30" *ngIf="pedidoFechado.desconto > 0" style='border-bottom:1px solid #ccc;'>
+            <td colspan='4'><b>Desconto ({{pedidoFechado.desconto}} %)</b></td>
+            <td><b>{{pedidoFechado.valorTotal - pedidoFechado.valorLiquido | currency }}</b></td>
+               
+        </tr> 
+        <tr height="30" *ngIf="pedidoFechado.desconto > 0">
+            <td colspan='4'><b>Valor Total Líquido</b></td>
+            <td><b>{{pedidoFechado.valorLiquido | currency }}</b></td>
+                
+        </tr>      
+    </table> 
+    <br>
+    <table style='width: 550px!important;margin: auto;font-family: Arial, Helvetica, sans-serif;font-size:12px;text-align:left;'>
+    <tr height="30">
+        <td width='100' ><b>Prazo</b></td>    
+        <td >{{pedidoFechado.prazo}} dias corridos</td>    
+    </tr>
+    <tr height="30">
+        <td ><b>Previsão</b></td>    
+        <td>{{pedidoFechado.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>    
+    </tr>
+    <tr height="30">
+        <td width='100' ><b>Observações</b></td>    
+        <td >{{pedidoFechado.obs}}</td>    
+    </tr>
+    </table>
+    <br>
+    <br>
+
+</div>
+</div>
+</div>
+<br>
 
 
 

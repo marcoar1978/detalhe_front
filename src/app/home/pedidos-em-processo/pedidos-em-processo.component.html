@@ -1,0 +1,40 @@
+
+<br>
+<div style='text-align:center' id='titulo'><b>Pedidos em Processo</b></div>
+<div class="container">
+<div class="alert alert-info" *ngIf="!carregamentoClinicas || !carregamentoPedidos">Aguarde enquanto os dados estão sendo carrgados</div>
+<div id='dadosCarregados' *ngIf="carregamentoClinicas || carregamentoPedidos">
+    <table class='table table-dark' style='text-align: center;'>
+        <tr>
+        <td width='10%' >Id</td>
+        <td width='20%'>Paciente</td>
+        <td width='30%'>Dentista</td>
+        <td width='15%'>Data Prevista</td>
+        <td width='15%'>Valor</td>
+        <td width='10%'>Ent.</td>
+        </tr>
+    </table>    
+    
+    <div *ngFor="let clinica of clinicas">
+     <div style='margin-bottom:20px;color:#000099;font-size:18px;text-align:center'>{{clinica.nomeSimp}}</div>
+    
+     
+     <table class='table table-hover'>
+        <tr *ngFor="let pedido of pedidos">
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='10%'>{{pedido.id}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='10%' style='text-align: center;'><input type='checkbox'></td>  
+        </tr> 
+        <tr>
+            <td colspan='6' style='padding:10px;text-align:right'><button class='btn btn-info btn-sm'>Registrar Entrega</button></td>
+        </tr>    
+     </table>
+     
+     <br>   
+     </div>
+
+</div>
+</div>

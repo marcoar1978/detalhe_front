@@ -161,6 +161,7 @@ export class AbrirpedidoComponent implements OnInit {
           .subscribe(res => {
                 
                 this.pedido = res;
+                this.dataService.altDataPedidoFechado(this.pedido);
                 this.recebeConfPedido = true;
                             
               }, error => {alert("Erro ao acessar o banco de dados")})
@@ -173,7 +174,7 @@ export class AbrirpedidoComponent implements OnInit {
         $('#selProtetico').fadeOut(350);
         $('#desconto').fadeOut(350);
         $('#edit').fadeOut(350);
-
+        $('#camposObsDatas').fadeOut(350);        
         $('#caixaItens').fadeOut(350, () => {
           $("#conferenciaPedido").fadeIn(350);
         }) 

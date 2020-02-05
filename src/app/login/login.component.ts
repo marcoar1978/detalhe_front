@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 submitForm(){
   this.submited = true;
   if(!this.formLogin.invalid){
-    $("#caixaMsgErro").slideDown(500, () => {
+    $("#caixaMsgErro").slideUp(500, () => {
       $("#caixaMsgAguardar").slideDown(500);
     })
     
@@ -52,6 +52,7 @@ submitForm(){
        window.localStorage.setItem("tokenDetalhe", this.credencial.token);
        this.router.navigate(['/home']);
        }, err => {
+        this.submited = false;
         $("#caixaMsgAguardar").slideUp(500, () => {
           $("#caixaMsgErro").slideDown(500);
         });

@@ -8,6 +8,7 @@ export class Pedido{
     nomePaciente:string;
     prazo:number;
     dataEntregaPrevista:string;
+    dataEntrega: string;
     obs:string;
     desconto:number;
     valorTotal:number;
@@ -15,5 +16,7 @@ export class Pedido{
     usuario:string;
     protetico:string;
     itensPadrao:Item[] = [];
+    statusPedido:string;
+    statusEntrega:string;
 
 }
