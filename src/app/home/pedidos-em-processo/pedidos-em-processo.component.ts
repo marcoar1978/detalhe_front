@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from "jquery";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Pedido } from 'src/app/model/pedido.model';
 import { Clinica } from 'src/app/model/clinica.model';
@@ -18,7 +19,8 @@ export class PedidosEmProcessoComponent implements OnInit {
   carregamentoPedidos:boolean = false;
   carregamentoClinicas:boolean = false;
   
-  constructor(private pedidosEmProcessoService: PedidosEmProcessoService ) { }
+  constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
+              private modalService: NgbModal ) { }
 
   ngOnInit() {
 
@@ -37,6 +39,11 @@ export class PedidosEmProcessoComponent implements OnInit {
       }, error => {alert("Erro ao acessar o banco de dados")});  
 
       }
+    
+    abreModalPedido(content){
+        this.modalService.open(content, { centered: true, size: 'lg' });
+    }
+
     }
 
    

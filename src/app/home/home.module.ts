@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { HomeComponent } from './home.component';
 import { AbrirpedidoComponent } from './abrirpedido/abrirpedido.component';
@@ -20,7 +21,8 @@ import { PedidosEmProcessoComponent } from './pedidos-em-processo/pedidos-em-pro
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    NgbModule
 
   ],
   providers:[
