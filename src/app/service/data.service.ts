@@ -20,6 +20,8 @@ export class DataService{
     dentistaMessage = this.dentistaSubject.asObservable();
     pedidoFechadoSubject :BehaviorSubject<Pedido> = new BehaviorSubject<Pedido>(new Pedido());
     pedidoFechadoMessage = this.pedidoFechadoSubject.asObservable();
+    pedidosAEntregarSubject :BehaviorSubject<Pedido[]> = new BehaviorSubject<Pedido[]>([]);
+    pedidosAEntregarMessage = this.pedidosAEntregarSubject.asObservable();
 
     altDataClinica(clinicas:Clinica[]){
         this.clinicaSubject.next(clinicas);
@@ -39,6 +41,10 @@ export class DataService{
 
     altDataPedidoFechado(pedidoFechado: Pedido){
         this.pedidoFechadoSubject.next(pedidoFechado);
+    }
+
+    altDataPedidosAEntregar(pedidosAEntregar: Pedido[]){
+        this.pedidosAEntregarSubject.next(pedidosAEntregar);
     }
 
 

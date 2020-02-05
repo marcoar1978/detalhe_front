@@ -13,6 +13,8 @@ import { DentistaResolve } from './service/dentista.resolve';
 import { AbrirPedidoResolve } from './service/abrirPedido.resolve';
 import { PedidoFechadoComponent } from './home/pedido-fechado/pedido-fechado.component';
 import { PedidosEmProcessoComponent } from './home/pedidos-em-processo/pedidos-em-processo.component';
+import { ConfirmEntregaComponent } from './home/confirm-entrega/confirm-entrega.component';
+
 
 
 
@@ -23,6 +25,7 @@ const routes: Routes = [
       { path: 'abrirPedido', component: AbrirpedidoComponent, resolve: {aberturaPedido: AbrirPedidoResolve } },
       { path: 'pedidoFechado/:pedidoId', component: PedidoFechadoComponent },
       { path: 'pedidosEmProcesso', component: PedidosEmProcessoComponent },
+      { path: 'confirmaEntregaPedido', component: ConfirmEntregaComponent },
       { path: 'cadastroClinica', component: CadastroclinicaComponent },
   ] }
 ];

@@ -16,6 +16,56 @@
     </div>
 </ng-template>
 
+<ng-template #conferenciaEntrega  let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Entrega - {{clinica.nomeSimp}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+   
+   <table class='table table-hover'>
+    <tr style='color:#000099'>
+      <td style='text-align: center;'><b>Id</b></td>
+      <td width='20%' style='text-align:center;'><b>Paciente</b></td>
+      <td width='30%' style='text-align:center;'><b>Dentista</b></td>
+      <td width='15%' style='text-align:center;'><b>Data Prevista</b></td>
+      <td width='15%' style='text-align:center;'><b>Valor</b></td>
+     </tr>
+      <tr *ngFor="let pedido of pedidosCheckados">
+      <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;;cursor:pointer' (click)="abreModalPedido(content, pedido.id)">{{pedido.id}}</td>
+      <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
+      <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
+      <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>
+      <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
+    
+      </tr> 
+         
+   </table>
+   <br>
+   <table class='table'>
+      <tr height="30">
+        <td style='border:none !important;'>Data Entrega</td>
+        <td style='border:none !important;'><input type='date' [(ngModel)]='dataEntrega' class='form-control' style='width:200px'></td>
+      </tr> 
+      <tr height="30">
+        <td style='border:none !important;'>Obs</td>
+        <td style='border:none !important;'><input type='text' [(ngModel)]='obs' class='form-control'></td>
+      </tr>  
+   </table>
+   <br>
+   
+ </div>
+</div>
+<div class="modal-footer">
+ 
+  <button type="button" class="btn btn-info btn-sm" (click)="modal.close('Close click')">Fechar</button>
+  <button type="button" class="btn btn-info btn-sm" (click)="confirmarEntrega();modal.close('Close click')">Confirmar Entrega</button>
+</div>
+
+</ng-template>
   
 <br>
 <div style='text-align:center' id='titulo'><b>Pedidos em Processo</b></div><br>
@@ -50,7 +100,7 @@
         </tr> 
            
      </table>
-     <div style='display:none;text-align:right' id="botaoRegistrarEntrega_{{clinica.id}}" ><button  class='btn btn-info btn-sm'>Registrar Entrega</button></div>
+     <div style='display:none;text-align:right' id="botaoRegistrarEntrega_{{clinica.id}}" ><button  class='btn btn-info btn-sm' (click)="conferirEntrega(clinica.id, conferenciaEntrega)">Registrar Entrega</button></div>
      
      <br>   
      </div>

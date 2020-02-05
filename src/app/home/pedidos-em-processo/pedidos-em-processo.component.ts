@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from "jquery";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/service/data.service';
 
 import { Pedido } from 'src/app/model/pedido.model';
 import { Clinica } from 'src/app/model/clinica.model';
 import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.service';
+
 
 
 @Component({
@@ -15,14 +18,20 @@ import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.serv
 export class PedidosEmProcessoComponent implements OnInit {
 
   pedidos:Pedido[];
+  pedidosCheckados:Pedido[];
   pedidoSelecionado:Pedido;
   clinicas:Clinica[];
+  clinica:Clinica;
   verifCheckEntrega:boolean;
   carregamentoPedidos:boolean = false;
   carregamentoClinicas:boolean = false;
+  dataEntrega:string;
+  obs:string;
   
   constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
-              private modalService: NgbModal ) { }
+              private modalService: NgbModal,
+              private router: Router,
+              private dataService: DataService ) { }
 
   ngOnInit() {
 
@@ -39,6 +48,7 @@ export class PedidosEmProcessoComponent implements OnInit {
         this.carregamentoPedidos = true;
       }, error => {alert("Erro ao acessar o banco de dados")});  
 
+      this.dataEntrega = "2020-02-05";
       }
     
     abreModalPedido(content, pedidoId){
@@ -47,6 +57,8 @@ export class PedidosEmProcessoComponent implements OnInit {
        }
     
     checkEntrega(clinicaId:number, pedidoId:number){
+     this.dataEntrega = "2020-02-05"; 
+     this.obs = ""; 
      this.verifCheckEntrega = false;
       this.pedidos.forEach(pedido => {
         if(pedido.id == pedidoId){
@@ -68,10 +80,24 @@ export class PedidosEmProcessoComponent implements OnInit {
       }
       this.verifCheckEntrega = false;  
     }
-      
+
+    conferirEntrega(clinicaId:number, conferenciaEntrega){
+      this.pedidosCheckados = this.pedidos.filter(pedido => pedido.checkEntrega == true);
+      this.clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
+      this.modalService.open(conferenciaEntrega, { centered: true, size: 'lg',scrollable: true });
+      }
+
+  confirmarEntrega(){
+      console.log(this.obs);
+      const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
+      this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
+      this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
+    }   
 
 
-    }
+   }
+
+
 
    
 
