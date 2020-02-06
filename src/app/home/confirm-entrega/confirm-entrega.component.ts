@@ -12,7 +12,8 @@ import { DataService } from 'src/app/service/data.service';
 })
 export class ConfirmEntregaComponent implements OnInit {
   
-  pedidos:Pedido[];  
+  pedidos:Pedido[]; 
+  totalEntrega:number; 
   nomeClinica: string;
   obs:string;
   dataEntrega:string;
@@ -21,15 +22,28 @@ export class ConfirmEntregaComponent implements OnInit {
               private dataService: DataService) { }
 
   ngOnInit() {
-    this.dataService.pedidosAEntregarMessage.subscribe(res => this.pedidos = res );
-    console.log(this.pedidos);
+    this.dataService.pedidosAEntregarMessage
+        .subscribe(res => { 
+          this.pedidos = res; 
+          this.totalEntrega= this.pedidos
+          .reduce((prevVal, pedido) => {return prevVal + pedido.valorLiquido },0);
+        });
+    
     this.actRoute.queryParams.subscribe(queryParams => this.nomeClinica = queryParams.nomeClinica)
-    console.log(this.nomeClinica);
+    
     this.actRoute.queryParams.subscribe(queryParams => this.obs = queryParams.obs);
-    console.log(this.obs);
+   
     this.actRoute.queryParams.subscribe(queryParams => this.dataEntrega = queryParams.dataEntrega);
-    console.log(this.dataEntrega);
+ }
 
-  }
+ imprimir(){
+  const janela = window.open('', 'PRINT', 'height=600,width=800');
+  janela.document.write('<html><head><title>Nota de Entrega nº XX</title>');
+  janela.document.write('</head><body>');  
+  janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
+  janela.document.write('</body></html>');
+  janela.print();
+  janela.close();
+}
 
 }
