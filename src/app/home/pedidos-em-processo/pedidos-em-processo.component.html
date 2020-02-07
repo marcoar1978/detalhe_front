@@ -62,7 +62,7 @@
 <div class="modal-footer">
  
   <button type="button" class="btn btn-info btn-sm" (click)="modal.close('Close click')">Fechar</button>
-  <button type="button" class="btn btn-info btn-sm" (click)="confirmarEntrega();modal.close('Close click')">Confirmar Entrega</button>
+  <button type="button" class="btn btn-info btn-sm" (click)="confirmarEntrega(clinica.id);modal.close('Close click')">Confirmar Entrega</button>
 </div>
 
 </ng-template>

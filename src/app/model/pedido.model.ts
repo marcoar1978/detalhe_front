@@ -17,7 +17,7 @@ export class Pedido{
     valorLiquido:number;
     usuario:string;
     protetico:string;
-    itensPadrao:Item[] = [];
+    itens:Item[] = [];
     statusPedido:string;
     statusEntrega:string;
     checkEntrega:boolean;

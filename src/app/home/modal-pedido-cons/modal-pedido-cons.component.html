@@ -32,12 +32,12 @@
         <td style='text-align:center'><b>Qde</b></td>
         <td style='text-align:center'><b>Total</b></td>
      </tr>
-     <tr *ngFor="let itemPadrao of pedidoSelecionado.itensPadrao; let i= index; ">
+     <tr *ngFor="let item of pedidoSelecionado.itens; let i= index; ">
         <td>{{i + 1}}</td>
-        <td>{{itemPadrao.descricao}}</td>
-        <td style='text-align:right'>{{itemPadrao.valorUnitario | currency}}</td>
-        <td style='text-align:center'>{{itemPadrao.qde}}</td>
-        <td style='text-align:right'>{{itemPadrao.valorTotal | currency}}</td>
+        <td>{{item.descricao}}</td>
+        <td style='text-align:right'>{{item.valorUnitario | currency}}</td>
+        <td style='text-align:center'>{{item.qde}}</td>
+        <td style='text-align:right'>{{item.valorTotal | currency}}</td>
      </tr> 
      <tr>
         <td  colspan='4'><b>Valor Total</b></td>

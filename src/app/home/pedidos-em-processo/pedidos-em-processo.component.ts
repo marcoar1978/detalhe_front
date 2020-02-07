@@ -44,6 +44,7 @@ export class PedidosEmProcessoComponent implements OnInit {
     this.pedidosEmProcessoService.listaPedidosPorStatusEmProcesso()
       .subscribe(res =>{
         this.pedidos = res;
+        console.log(this.pedidos);
         this.pedidos.forEach(pedido => pedido.checkEntrega = false);
         this.carregamentoPedidos = true;
       }, error => {alert("Erro ao acessar o banco de dados")});  
@@ -82,16 +83,19 @@ export class PedidosEmProcessoComponent implements OnInit {
     }
 
     conferirEntrega(clinicaId:number, conferenciaEntrega){
-      this.pedidosCheckados = this.pedidos.filter(pedido => pedido.checkEntrega == true);
+      this.pedidosCheckados = this.pedidos.filter(pedido => (pedido.checkEntrega == true && pedido.clinicaId == clinicaId));
       this.clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
       this.modalService.open(conferenciaEntrega, { centered: true, size: 'lg',scrollable: true });
       }
 
-  confirmarEntrega(){
-      console.log(this.obs);
-      const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
-      this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
-      this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
+  confirmarEntrega(clinicaId:number){
+      let pedidosId: number[];
+
+
+      
+      //const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
+      //this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
+      //this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
     }   
 
 

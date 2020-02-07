@@ -42,8 +42,8 @@ export class ConfirmEntregaComponent implements OnInit {
   janela.document.write('</head><body>');  
   janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
   janela.document.write('</body></html>');
-  janela.print();
-  janela.close();
+  //janela.print();
+  //janela.close();
 }
 
 }

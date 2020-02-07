@@ -5,11 +5,13 @@ import { Observable } from 'rxjs';
 
 import { Pedido } from '../model/pedido.model';
 import { Clinica } from '../model/clinica.model';
+import { Entrega } from '../model/entrega.model';
 
 
 @Injectable({providedIn: 'root'})
 export class PedidosEmProcessoService{
     API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
+    //API:string = "http://localhost:8080";
 
     constructor(private http: HttpClient){}
 
@@ -19,6 +21,10 @@ export class PedidosEmProcessoService{
 
     listaPedidosPorStatusEmProcesso(): Observable<Pedido[]>{
         return this.http.get<Pedido[]>(this.API +'/processos/listaPedidosPorStatusEmProcesso');
+    }
+
+    emiteEntrega(entrega: Entrega): Observable<Response>{
+        return this.http.post<Response>(this.API +'/processos/emiteEntrega', entrega );
     }
 
 

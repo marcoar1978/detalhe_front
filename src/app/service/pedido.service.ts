@@ -9,6 +9,8 @@ import { Produto } from '../model/produto.model';
 import { AbrirPedido } from '../model/abrirPedido.model';
 import { ItemPadrao } from '../model/itemPadrao.model';
 import { Pedido } from '../model/pedido.model';
+import { ItemVariavel } from '../model/itemVariavel.model';
+import { Item } from '../model/item.model';
 
 @Injectable({providedIn: 'root'})
 export class PedidoService{
@@ -24,8 +26,24 @@ export class PedidoService{
         return this.http.get<AbrirPedido>(this.API +'/pedido/abrirPedido');
     }
 
+    addItem(item: Item ):Observable<Response>{
+        return this.http.post<Response>(this.API +'/item/addItem', item );
+    }
+
+    delItem(pedidoId:number, ordem: number):Observable<Response>{
+        let httpParams:HttpParams = new HttpParams()
+            .set("pedidoIdForm", pedidoId.toString())
+            .set("ordemForm", ordem.toString());
+        return this.http.get<Response>(this.API +'/item/delItem?'+httpParams.toString());
+    }
+
+
     addItemPadrao(itemPadrao: ItemPadrao ):Observable<Response>{
         return this.http.post<Response>(this.API +'/item/addItemPadrao', itemPadrao );
+    }
+
+    addItemVariavel(itemVariavel: ItemVariavel):Observable<Response>{
+        return this.http.post<Response>(this.API +'/item/addItemVariavel', itemVariavel );
     }
 
     delItemPadrao(pedidoId:number, produtoId: number):Observable<Response>{
@@ -34,6 +52,23 @@ export class PedidoService{
             .set("produtoIdForm", produtoId.toString());
         return this.http.get<Response>(this.API +'/item/delItemPadrao?'+httpParams.toString());
     }
+
+    delItemVariavel(pedidoId:number, ordem: number):Observable<Response>{
+        let httpParams:HttpParams = new HttpParams()
+            .set("pedidoIdForm", pedidoId.toString())
+            .set("ordemForm", ordem.toString());
+        return this.http.get<Response>(this.API +'/item/delItemVariavel?'+httpParams.toString());
+    }
+
+    altDataPedido(pedidoId:number, dataPedido: string, prazo: number):Observable<Response>{
+        let httpParams:HttpParams = new HttpParams()
+            .set("pedidoIdForm", pedidoId.toString())
+            .set("dataPedidoForm", dataPedido)
+            .set("prazoForm", prazo.toString());
+        return this.http.get<Response>(this.API +'/pedido/altDataPedido?'+httpParams.toString());
+    }
+
+
 
     getClinicas(): Observable<Clinica[]>{
         return this.http.get<Clinica[]>(this.API +'/clinicas');
@@ -98,6 +133,12 @@ export class PedidoService{
         .set("prazoForm", prazo.toString());
      return this.http.get<Pedido>(this.API +'/pedido/conferirPedido?'+httpParams.toString());    
    } 
+
+   fecharPedido(pedidoId:number):Observable<Response>{
+    let httpParams:HttpParams = new HttpParams()
+        .set("pedidoIdForm", pedidoId.toString());
+    return this.http.get<Response>(this.API +'/pedido/fecharPedido?'+httpParams.toString());
+   }
    
    
     

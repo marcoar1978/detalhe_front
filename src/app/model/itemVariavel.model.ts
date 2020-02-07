@@ -1,10 +1,10 @@
-export class Item{
+export class ItemVariavel{
     pedidoId:number;
-    tipoProduto:string;
-    produtoId:number;
+    tipoId:number;
     ordem: number;
     descricao:string;
     qde:number;
     valorUnitario:number;
 	valorTotal:number;
+
 }

@@ -13,6 +13,8 @@ import { Produto } from 'src/app/model/produto.model';
 import { ItemPadrao } from 'src/app/model/itemPadrao.model';
 import { AbrirPedido } from 'src/app/model/abrirPedido.model';
 import { Pedido } from 'src/app/model/pedido.model';
+import { ItemVariavel } from 'src/app/model/itemVariavel.model';
+import { Item } from 'src/app/model/item.model';
 
 
 @Component({
@@ -41,6 +43,7 @@ export class AbrirpedidoComponent implements OnInit {
   totalPedido:number = 0;
   msgFormItem:string;
   recebeConfPedido:boolean = false;
+  ordem:number = 1
   
     
   constructor(private pedidoService:PedidoService, 
@@ -76,7 +79,9 @@ export class AbrirpedidoComponent implements OnInit {
       descProdVariavel:[],
       protetico:["", [Validators.required]],
       desconto:["0"],
-      obs:[]
+      obs:[],
+      dataPedido:[],
+      valorProdVariavel:[],
     })
     $("#tdValorProdVariavel").hide();
     
@@ -220,7 +225,7 @@ export class AbrirpedidoComponent implements OnInit {
       this.inserirProdutoPadrao();
     }
     else{
-      console.log("produto variável");
+      this.inserirProdutoVariavel();
     }
   }
 
@@ -232,7 +237,9 @@ export class AbrirpedidoComponent implements OnInit {
         $('#avisoFormItem').slideDown(350);
         return;
       }
-    const verificaProdutoRepetido = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId == produtoId);
+    
+    const produtosEscolhidosPadrao =  this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.tipoProduto == "padrao"); 
+    const verificaProdutoRepetido = produtosEscolhidosPadrao.filter(produtoEscolhido => produtoEscolhido.produtoId == produtoId);
     if(verificaProdutoRepetido.length == 1){
       this.msgFormItem = "Produto já foi inserido";
       $('#avisoFormItem').slideDown(350);
@@ -242,8 +249,9 @@ export class AbrirpedidoComponent implements OnInit {
     const produtoPadrao:Produto = this.produtos.find(produto => (produto.clinicaId == clinicaId && produto.produtoId == produtoId));
     produtoPadrao.qde = this.form.get('qdeProduto').value;
     produtoPadrao.valorTotal = produtoPadrao.valor * produtoPadrao.qde;
-     
-
+    produtoPadrao.ordem = this.ordem;
+    produtoPadrao.tipoProduto = "padrao"; 
+    console.log(produtoPadrao);
     $('#tabelaItens').fadeOut(350, () => {
       this.produtosEscolhidos.push(produtoPadrao);
       this.totalPedido = this.produtosEscolhidos
@@ -255,19 +263,71 @@ export class AbrirpedidoComponent implements OnInit {
       $('#tabelaItens').fadeIn(350);
       })
   
-  let itemPadrao:ItemPadrao = new ItemPadrao();
-  itemPadrao.pedidoId = this.aberturaPedido.pedidoId;
-  itemPadrao.produtoId = produtoPadrao.produtoId;
-  itemPadrao.qdeProdutoPadrao = produtoPadrao.qde;
-  itemPadrao.valorUnitario = produtoPadrao.valor;
-  itemPadrao.valorTotal = produtoPadrao.valorTotal;
-  this.pedidoService.addItemPadrao(itemPadrao)
+  let item:Item = new Item();
+  item.pedidoId = this.aberturaPedido.pedidoId;
+  item.tipoProduto = produtoPadrao.tipoProduto;
+  item.produtoId = produtoPadrao.produtoId;
+  item.ordem = this.ordem;
+  this.ordem++; 
+  item.descricao = produtoPadrao.nome;   
+  item.qde = produtoPadrao.qde;
+  item.valorUnitario = produtoPadrao.valor;
+  item.valorTotal = produtoPadrao.valorTotal;
+  this.pedidoService.addItem(item)
     .subscribe(res => res, error => alert("Erro ao cadastrar o ítem"));    
     
   
   }
 
-deleteItem(produtoId){
+  inserirProdutoVariavel(){
+      const descProdVariavel = this.form.get('descProdVariavel').value;
+      const valorProdVariavel = this.form.get('valorProdVariavel').value;
+      const qdeProduto = this.form.get('qdeProduto').value;
+      const tipoVariavel = this.form.get('tipoVariavel').value;
+      if((!descProdVariavel) || (!valorProdVariavel) || (!qdeProduto) || (!tipoVariavel)){
+        this.msgFormItem = "Todos os dados o Ítem devem ser preenchidos";
+         $('#avisoFormItem').slideDown(350);
+          return;
+        }
+
+     let produtoVariavel:Produto = new Produto();
+     produtoVariavel.clinicaId = this.form.get('clinica').value;
+     produtoVariavel.tipoProduto = "variavel";
+     produtoVariavel.nome = descProdVariavel;
+     produtoVariavel.ordem = this.ordem;
+     produtoVariavel.produtoId = tipoVariavel;
+     produtoVariavel.qde = qdeProduto;
+     produtoVariavel.valor = valorProdVariavel;
+     produtoVariavel.valorTotal = produtoVariavel.valor * produtoVariavel.qde;  
+     
+     $('#tabelaItens').fadeOut(350, () => {
+      this.produtosEscolhidos.push(produtoVariavel);
+      this.totalPedido = this.produtosEscolhidos
+        .reduce((prevVal, produtoEscolhido) => {return prevVal + produtoEscolhido.valorTotal },0);
+      this.valorDesconto = (this.totalPedido * this.desconto)/100;
+      this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
+      $('#tabelaItens').fadeIn(350);
+      })
+
+      let item:Item = new Item();
+
+      item.pedidoId = this.aberturaPedido.pedidoId;
+      item.tipoProduto = produtoVariavel.tipoProduto;
+      item.produtoId = Number(tipoVariavel);
+      item.ordem = this.ordem;
+      this.ordem++;
+      item.descricao = descProdVariavel;
+      item.qde = produtoVariavel.qde;
+      item.valorUnitario = valorProdVariavel;
+      item.valorTotal = produtoVariavel.valor * produtoVariavel.qde;  
+    
+      this.pedidoService.addItem(item)
+        .subscribe(res => res, error => alert("Erro ao cadastrar o ítem"));
+   }  
+
+
+deleteItem(produtoId, ordem){
+
   this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId != produtoId);
   this.totalPedido = this.produtosEscolhidos
         .reduce((prevVal, produtoEscolhido) => {return prevVal + produtoEscolhido.valorTotal },0);
@@ -275,10 +335,12 @@ deleteItem(produtoId){
   this.valorTotalLiquido = this.totalPedido - this.valorDesconto;      
   let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
   this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
+ console.log(produtoId+" - "+ordem);
  
-  $("#item_"+produtoId).hide();
-  this.pedidoService.delItemPadrao(this.aberturaPedido.pedidoId, produtoId)
+    $("#padrao_"+produtoId).hide();
+    this.pedidoService.delItem(this.aberturaPedido.pedidoId, ordem)
     .subscribe(res => res, error => error => alert("Erro ao deletar o ítem"))
+ 
 
 }
 
@@ -292,6 +354,11 @@ altObs(){
     .subscribe(res => res, error => alert("Erro ao inserir a observação") );
 }
 
+altDataPedido(){
+   //this.pedidoService.altDataPedido(this.aberturaPedido.pedidoId, this.form.get('dataPedido').value,this.aberturaPedido.prazo)
+   //.subscribe(res => res, error => alert("Erro ao inserir a observação") );
+}
+
 scaleEditMouseOver(e){
   console.log(e.type);
   $("#edit").animate({width: '60'}, 350);
@@ -301,7 +368,10 @@ scaleEditMouseOver(e){
 }
 
 fecharPedido(){
-  this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
+  
+  this.pedidoService.fecharPedido(this.aberturaPedido.pedidoId)
+    .subscribe(res => res , error => alert("Erro ao acessar o banco de dados"))
+    this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
 }
 
 imprimir(){
