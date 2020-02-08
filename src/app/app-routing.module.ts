@@ -15,9 +15,6 @@ import { PedidoFechadoComponent } from './home/pedido-fechado/pedido-fechado.com
 import { PedidosEmProcessoComponent } from './home/pedidos-em-processo/pedidos-em-processo.component';
 import { ConfirmEntregaComponent } from './home/confirm-entrega/confirm-entrega.component';
 
-
-
-
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] , 

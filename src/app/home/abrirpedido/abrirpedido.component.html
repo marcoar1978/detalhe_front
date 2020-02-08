@@ -234,14 +234,14 @@
 
 <i class="material-icons" id='edit' (click)="mostrarCampoObs()" (mouseover)="scaleEditMouseOver($event)" style='cursor:pointer;color: #FB8C00;margin-bottom:15px ;' title="Datas e Observações">edit</i>
 <div id='camposObsDatas' style='font-size:14px;display:none;margin-bottom:20px;'>
-    <!--
+    
     <table width='300px'>
         <tr>
             <td valign='top'>Dt. Pedido</td>
-            <td><input type="date" class="form-control" formControlName='dataPedido' style="margin-left: 20px;margin-bottom:20px;" [value]="aberturaPedido.dataPedido" (blur)="altDataPedido()"  ></td>
+            <td><input type="date" class="form-control" formControlName='dataPedido' style="margin-left: 20px;margin-bottom:20px;" (blur)="altDataPedido()"  ></td>
         </tr>
     </table> 
---> 
+ 
 <input type='text' class="form-control" placeholder="Observações" formControlName="obs" (blur)="altObs()" style='margin-bottom:15px;'>
 </div>
 <div style='text-align:right' id='divBotaoContinuar'>

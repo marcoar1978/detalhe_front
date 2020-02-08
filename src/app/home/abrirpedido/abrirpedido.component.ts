@@ -15,6 +15,7 @@ import { AbrirPedido } from 'src/app/model/abrirPedido.model';
 import { Pedido } from 'src/app/model/pedido.model';
 import { ItemVariavel } from 'src/app/model/itemVariavel.model';
 import { Item } from 'src/app/model/item.model';
+import { PedidoFechado } from 'src/app/model/pedido-fechado.model';
 
 
 @Component({
@@ -80,7 +81,7 @@ export class AbrirpedidoComponent implements OnInit {
       protetico:["", [Validators.required]],
       desconto:["0"],
       obs:[],
-      dataPedido:[],
+      dataPedido:[this.aberturaPedido.dataPedido],
       valorProdVariavel:[],
     })
     $("#tdValorProdVariavel").hide();
@@ -99,29 +100,29 @@ export class AbrirpedidoComponent implements OnInit {
       $('#caixaItens').fadeIn(350);
     });
 
-   this.pedidoService.altClinica(this.aberturaPedido.pedidoId, clinicaId)
-      .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
+   //this.pedidoService.altClinica(this.aberturaPedido.pedidoId, clinicaId)
+   //   .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
 
   }
 
   altDentista(){
     const dentistaId = this.form.get("dentista").value;
-    this.pedidoService.altDentista(this.aberturaPedido.pedidoId,dentistaId)
-      .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
+    //this.pedidoService.altDentista(this.aberturaPedido.pedidoId,dentistaId)
+    //  .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
   }
 
   altNomePaciente(){
     if(!this.form.get("nomePaciente").hasError("required")){
       const nomePaciente = this.form.get("nomePaciente").value;
-      this.pedidoService.altNomePaciente(this.aberturaPedido.pedidoId, nomePaciente)
-        .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
+     // this.pedidoService.altNomePaciente(this.aberturaPedido.pedidoId, nomePaciente)
+      //  .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
     }
   }
 
   altProtetico(){
     const proteticoId =  this.form.get("protetico").value;
-    this.pedidoService.altProtetico(this.aberturaPedido.pedidoId, proteticoId)
-      .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
+   // this.pedidoService.altProtetico(this.aberturaPedido.pedidoId, proteticoId)
+    //  .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
 
   }
 
@@ -161,8 +162,26 @@ export class AbrirpedidoComponent implements OnInit {
   submitForm(){
       this.submited = true;
       if(!this.form.invalid){
-               
-        this.pedidoService.conferirPedido(this.aberturaPedido.pedidoId, this.totalPedido, this.valorTotalLiquido, this.aberturaPedido.prazo)
+        this.desconto = this.form.get('desconto').value;
+        this.valorDesconto = (this.totalPedido * this.desconto)/100;
+        this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
+        console.log('dataPedido '+ this.form.get('dataPedido').value);
+        let pedidoFechado:PedidoFechado = new PedidoFechado();
+        pedidoFechado.pedidoId = this.aberturaPedido.pedidoId;
+        pedidoFechado.clinicaId = Number(this.form.get("clinica").value);
+        pedidoFechado.dentistaId = Number(this.form.get("dentista").value);
+        pedidoFechado.nomePaciente = this.form.get("nomePaciente").value;
+        pedidoFechado.proteticoId = Number(this.form.get("protetico").value);
+        pedidoFechado.desconto = Number(this.desconto);
+        pedidoFechado.dataPedido = this.form.get('dataPedido').value;
+        pedidoFechado.dataCad = this.aberturaPedido.dataPedido;
+        pedidoFechado.obs = this.form.get('obs').value;
+        pedidoFechado.prazo = this.aberturaPedido.prazo;
+        pedidoFechado.valorTotal = this.totalPedido;
+        pedidoFechado.valorLiquido = this.valorTotalLiquido;
+        
+      
+        this.pedidoService.conferirPedido(pedidoFechado)
           .subscribe(res => {
                 
                 this.pedido = res;
@@ -170,7 +189,7 @@ export class AbrirpedidoComponent implements OnInit {
                 this.recebeConfPedido = true;
                             
               }, error => {alert("Erro ao acessar o banco de dados")})
-
+          
 
         $('#titulo').fadeOut(350);
         $('#selClinica').fadeOut(350);
@@ -368,10 +387,10 @@ scaleEditMouseOver(e){
 }
 
 fecharPedido(){
-  
-  this.pedidoService.fecharPedido(this.aberturaPedido.pedidoId)
-    .subscribe(res => res , error => alert("Erro ao acessar o banco de dados"))
-    this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
+  this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
+  //this.pedidoService.fecharPedido(this.aberturaPedido.pedidoId)
+  //  .subscribe(res => res , error => alert("Erro ao acessar o banco de dados"))
+    
 }
 
 imprimir(){

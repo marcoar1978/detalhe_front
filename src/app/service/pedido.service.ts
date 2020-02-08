@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Clinica } from '../model/clinica.model';
+import { PedidoFechado } from '../model/pedido-fechado.model';
 import { Dentista } from '../model/dentista.model';
 import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
@@ -125,20 +126,18 @@ export class PedidoService{
     return this.http.post<Response>(this.API +'/pedido/altObs', {pedidoId, obs});
    }
 
-   conferirPedido(pedidoId:number, valorTotal: number,valorLiquido:number, prazo:number):Observable<Pedido>{
-    let httpParams:HttpParams = new HttpParams()
-        .set("pedidoIdForm", pedidoId.toString())
-        .set("valorTotalForm", valorTotal.toString())
-        .set("valorLiquidoForm", valorLiquido.toString())
-        .set("prazoForm", prazo.toString());
-     return this.http.get<Pedido>(this.API +'/pedido/conferirPedido?'+httpParams.toString());    
-   } 
-
+  
    fecharPedido(pedidoId:number):Observable<Response>{
     let httpParams:HttpParams = new HttpParams()
         .set("pedidoIdForm", pedidoId.toString());
     return this.http.get<Response>(this.API +'/pedido/fecharPedido?'+httpParams.toString());
    }
+   
+   conferirPedido( pedidoFechado:PedidoFechado):Observable<Pedido>{
+        return this.http.post<Pedido>(this.API +'/pedido/conferirPedido',pedidoFechado );
+   }
+  
+
    
    
     
