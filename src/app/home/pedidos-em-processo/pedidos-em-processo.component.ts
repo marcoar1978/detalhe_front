@@ -7,6 +7,7 @@ import { DataService } from 'src/app/service/data.service';
 import { Pedido } from 'src/app/model/pedido.model';
 import { Clinica } from 'src/app/model/clinica.model';
 import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.service';
+import { Entrega } from 'src/app/model/entrega.model';
 
 
 
@@ -27,6 +28,9 @@ export class PedidosEmProcessoComponent implements OnInit {
   carregamentoClinicas:boolean = false;
   dataEntrega:string;
   obs:string;
+  labelConfEntrega:string = "Confirmar Entrega";
+  disabledConfEntrega:boolean = false;
+  modalConferencia:any;
   
   constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
               private modalService: NgbModal,
@@ -85,17 +89,36 @@ export class PedidosEmProcessoComponent implements OnInit {
     conferirEntrega(clinicaId:number, conferenciaEntrega){
       this.pedidosCheckados = this.pedidos.filter(pedido => (pedido.checkEntrega == true && pedido.clinicaId == clinicaId));
       this.clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
-      this.modalService.open(conferenciaEntrega, { centered: true, size: 'lg',scrollable: true });
+      this.modalConferencia = this.modalService.open(conferenciaEntrega, { centered: true, size: 'lg',scrollable: true });
       }
 
   confirmarEntrega(clinicaId:number){
-      let pedidosId: number[];
+      console.log('clinicaId '+clinicaId);
+          
+      this.labelConfEntrega = "Aguarde um momento";
+      this.disabledConfEntrega = true;
+      let pedidosId: number[] =[];
+      this.pedidosCheckados.forEach(pedidoCheckados => pedidosId.push(pedidoCheckados.id));
 
+      let entrega:Entrega = new Entrega();
+      entrega.clinicaId = clinicaId;
+      entrega.dataEntrega = this.dataEntrega;
+      entrega.obs = this.obs;
+      entrega.pedidosId = pedidosId;
 
+      const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
+      this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
+
+      this.pedidosEmProcessoService.emiteEntrega(entrega)
+        .subscribe(res => {
+          this.modalConferencia.close();
+           this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
+           
+        }, error => {
+          this.labelConfEntrega = "Confirmar Entrega";
+          this.disabledConfEntrega = false;
+          alert("Erro ao acessar o banco de dados");})
       
-      //const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
-      //this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
-      //this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
     }   
 
 

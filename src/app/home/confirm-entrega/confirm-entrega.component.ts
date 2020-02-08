@@ -19,7 +19,8 @@ export class ConfirmEntregaComponent implements OnInit {
   dataEntrega:string;
 
   constructor(private actRoute: ActivatedRoute,
-              private dataService: DataService) { }
+              private dataService: DataService,
+              private router: Router,) { }
 
   ngOnInit() {
     this.dataService.pedidosAEntregarMessage
@@ -34,6 +35,10 @@ export class ConfirmEntregaComponent implements OnInit {
     this.actRoute.queryParams.subscribe(queryParams => this.obs = queryParams.obs);
    
     this.actRoute.queryParams.subscribe(queryParams => this.dataEntrega = queryParams.dataEntrega);
+ }
+
+ acessoPedidosEmProcesso(){
+   this.router.navigate(['home/pedidosEmProcesso']);
  }
 
  imprimir(){

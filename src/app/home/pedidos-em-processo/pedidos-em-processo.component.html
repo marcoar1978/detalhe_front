@@ -42,7 +42,6 @@
       <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
     
       </tr> 
-         
    </table>
    <br>
    <table class='table'>
@@ -62,7 +61,7 @@
 <div class="modal-footer">
  
   <button type="button" class="btn btn-info btn-sm" (click)="modal.close('Close click')">Fechar</button>
-  <button type="button" class="btn btn-info btn-sm" (click)="confirmarEntrega(clinica.id);modal.close('Close click')">Confirmar Entrega</button>
+  <button type="button" class="btn btn-info btn-sm" [disabled]="disabledConfEntrega" (click)="confirmarEntrega(clinica.id); ">{{labelConfEntrega}}</button>
 </div>
 
 </ng-template>
