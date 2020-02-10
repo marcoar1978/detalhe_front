@@ -24,9 +24,9 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" [routerLink]="['/home/abrirPedido']">Abrir </a>
-            <a class="dropdown-item" [routerLink]="['/home/pedidosEmProcesso']">Em Processo</a>
-            <a class="dropdown-item" href="#">Entrega</a>
-            <a class="dropdown-item" href="#">Fechamento</a>
+            <a class="dropdown-item" [routerLink]="['/home/pedidosEmProcesso']">Em Aberto</a>
+            <a class="dropdown-item" href="#">Concluídos</a>
+            <a class="dropdown-item" href="#">Fechamento Financeiro</a>
           </div>
         </li>
         <li class="nav-item">
@@ -35,7 +35,9 @@
       </ul>
     </div>
   </nav>
+  <div id='nomeUsuario'><b>Usuário(a)</b>: {{dadosIniciais.nomeUsuario}}</div>
   <div class="container">
+    
   <router-outlet></router-outlet>
   </div>
   

@@ -12,6 +12,7 @@ import { ItemPadrao } from '../model/itemPadrao.model';
 import { Pedido } from '../model/pedido.model';
 import { ItemVariavel } from '../model/itemVariavel.model';
 import { Item } from '../model/item.model';
+import { DadosIniciais } from '../model/dados-iniciais.model';
 
 @Injectable({providedIn: 'root'})
 export class PedidoService{
@@ -20,8 +21,11 @@ export class PedidoService{
     clinicas:Clinica[];
     proteticos:Protetico[];
     
-
     constructor(private http: HttpClient){}
+
+    getDataEUsuario():Observable<DadosIniciais>{
+        return this.http.get<DadosIniciais>(this.API +'/dadosIniciais/dataEUsuario');
+    }
 
     abrirPedido(): Observable<AbrirPedido>{
         return this.http.get<AbrirPedido>(this.API +'/pedido/abrirPedido');
@@ -135,6 +139,12 @@ export class PedidoService{
    
    conferirPedido( pedidoFechado:PedidoFechado):Observable<Pedido>{
         return this.http.post<Pedido>(this.API +'/pedido/conferirPedido',pedidoFechado );
+   }
+
+   delItensPorProduto(pedidoId:number):Observable<Response>{
+    let httpParams:HttpParams = new HttpParams()
+        .set("pedidoIdForm", pedidoId.toString());
+    return this.http.get<Response>(this.API +'/pedido/delItensPorProduto?'+httpParams.toString());
    }
   
 

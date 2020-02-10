@@ -14,11 +14,12 @@ import { AbrirPedidoResolve } from './service/abrirPedido.resolve';
 import { PedidoFechadoComponent } from './home/pedido-fechado/pedido-fechado.component';
 import { PedidosEmProcessoComponent } from './home/pedidos-em-processo/pedidos-em-processo.component';
 import { ConfirmEntregaComponent } from './home/confirm-entrega/confirm-entrega.component';
+import { DadosIniciaisResolve } from './service/dadosIniciais.resolve';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] , 
-                  resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve, produtos: ProdutoResolve, dentistas: DentistaResolve }, children:[
+                  resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve, produtos: ProdutoResolve, dentistas: DentistaResolve, dadosIniciais: DadosIniciaisResolve }, children:[
       { path: 'abrirPedido', component: AbrirpedidoComponent, resolve: {aberturaPedido: AbrirPedidoResolve } },
       { path: 'pedidoFechado/:pedidoId', component: PedidoFechadoComponent },
       { path: 'pedidosEmProcesso', component: PedidosEmProcessoComponent },

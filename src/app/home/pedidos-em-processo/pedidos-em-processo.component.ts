@@ -8,6 +8,7 @@ import { Pedido } from 'src/app/model/pedido.model';
 import { Clinica } from 'src/app/model/clinica.model';
 import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.service';
 import { Entrega } from 'src/app/model/entrega.model';
+import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 
 
 
@@ -31,6 +32,7 @@ export class PedidosEmProcessoComponent implements OnInit {
   labelConfEntrega:string = "Confirmar Entrega";
   disabledConfEntrega:boolean = false;
   modalConferencia:any;
+  dadosIniciais:DadosIniciais;
   
   constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
               private modalService: NgbModal,
@@ -53,7 +55,10 @@ export class PedidosEmProcessoComponent implements OnInit {
         this.carregamentoPedidos = true;
       }, error => {alert("Erro ao acessar o banco de dados")});  
 
-      this.dataEntrega = "2020-02-05";
+      this.dataService.dadosIniciaisSubject.subscribe(res => {
+        console.log(res);
+        this.dadosIniciais = res});
+      
       }
     
     abreModalPedido(content, pedidoId){
@@ -62,7 +67,8 @@ export class PedidosEmProcessoComponent implements OnInit {
        }
     
     checkEntrega(clinicaId:number, pedidoId:number){
-     this.dataEntrega = "2020-02-05"; 
+     
+     this.dataEntrega = this.dadosIniciais.dataHoje; 
      this.obs = ""; 
      this.verifCheckEntrega = false;
       this.pedidos.forEach(pedido => {

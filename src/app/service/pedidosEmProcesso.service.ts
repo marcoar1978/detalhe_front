@@ -7,7 +7,6 @@ import { Pedido } from '../model/pedido.model';
 import { Clinica } from '../model/clinica.model';
 import { Entrega } from '../model/entrega.model';
 
-
 @Injectable({providedIn: 'root'})
 export class PedidosEmProcessoService{
     API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";

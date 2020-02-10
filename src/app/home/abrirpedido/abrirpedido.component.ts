@@ -45,8 +45,7 @@ export class AbrirpedidoComponent implements OnInit {
   msgFormItem:string;
   recebeConfPedido:boolean = false;
   ordem:number = 1
-  
-    
+      
   constructor(private pedidoService:PedidoService, 
               private actRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -75,7 +74,7 @@ export class AbrirpedidoComponent implements OnInit {
       nomePaciente: ["", [Validators.required]],
       tipoProduto: ["padrao"],
       produtoPadrao: [""],
-      qdeProduto: [""],
+      qdeProduto: [1],
       tipoVariavel:[""],
       descProdVariavel:[],
       protetico:["", [Validators.required]],
@@ -89,19 +88,23 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
   altClinica(){
-    console.log(this.dentistas);
     const clinicaId = this.form.get("clinica").value;
+    this.produtosEscolhidos = [];
+    this.valorTotalLiquido = 0;
+    this.valorDesconto = 0;
+    this.totalPedido = 0;
+    
     this.produtosPadraoClinica = this.produtos.filter(produtoPadraoClinica => produtoPadraoClinica.clinicaId == clinicaId)
     $('#caixaItens').fadeOut(350);
     $('#divDentista').slideUp(350, () => {
       this.dentistasForm = this.dentistas.filter(dentista => dentista.clinicaId == clinicaId);
-      console.log(this.dentistasForm)
+     
       $('#divDentista').slideDown(350);
       $('#caixaItens').fadeIn(350);
     });
 
-   //this.pedidoService.altClinica(this.aberturaPedido.pedidoId, clinicaId)
-   //   .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
+   this.pedidoService.delItensPorProduto(this.aberturaPedido.pedidoId)
+      .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
 
   }
 
@@ -165,7 +168,6 @@ export class AbrirpedidoComponent implements OnInit {
         this.desconto = this.form.get('desconto').value;
         this.valorDesconto = (this.totalPedido * this.desconto)/100;
         this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
-        console.log('dataPedido '+ this.form.get('dataPedido').value);
         let pedidoFechado:PedidoFechado = new PedidoFechado();
         pedidoFechado.pedidoId = this.aberturaPedido.pedidoId;
         pedidoFechado.clinicaId = Number(this.form.get("clinica").value);
@@ -183,8 +185,9 @@ export class AbrirpedidoComponent implements OnInit {
       
         this.pedidoService.conferirPedido(pedidoFechado)
           .subscribe(res => {
-                
+                console.log(res);
                 this.pedido = res;
+                
                 this.dataService.altDataPedidoFechado(this.pedido);
                 this.recebeConfPedido = true;
                             
@@ -270,7 +273,6 @@ export class AbrirpedidoComponent implements OnInit {
     produtoPadrao.valorTotal = produtoPadrao.valor * produtoPadrao.qde;
     produtoPadrao.ordem = this.ordem;
     produtoPadrao.tipoProduto = "padrao"; 
-    console.log(produtoPadrao);
     $('#tabelaItens').fadeOut(350, () => {
       this.produtosEscolhidos.push(produtoPadrao);
       this.totalPedido = this.produtosEscolhidos
@@ -308,6 +310,12 @@ export class AbrirpedidoComponent implements OnInit {
          $('#avisoFormItem').slideDown(350);
           return;
         }
+    
+      this.form.get('descProdVariavel').setValue("");
+      this.form.get('valorProdVariavel').setValue("");
+      this.form.get('qdeProduto').setValue(1);
+      this.form.get('tipoVariavel').setValue("");    
+
 
      let produtoVariavel:Produto = new Produto();
      produtoVariavel.clinicaId = this.form.get('clinica').value;
@@ -354,8 +362,7 @@ deleteItem(produtoId, ordem){
   this.valorTotalLiquido = this.totalPedido - this.valorDesconto;      
   let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
   this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
- console.log(produtoId+" - "+ordem);
- 
+  
     $("#padrao_"+produtoId).hide();
     this.pedidoService.delItem(this.aberturaPedido.pedidoId, ordem)
     .subscribe(res => res, error => error => alert("Erro ao deletar o ítem"))

@@ -6,6 +6,7 @@ import { Protetico } from '../model/protetico.model';
 import { Produto } from '../model/produto.model';
 import { Dentista } from '../model/dentista.model';
 import { Pedido } from '../model/pedido.model';
+import { DadosIniciais } from '../model/dados-iniciais.model';
 
 
 @Injectable({providedIn: 'root'})
@@ -22,6 +23,10 @@ export class DataService{
     pedidoFechadoMessage = this.pedidoFechadoSubject.asObservable();
     pedidosAEntregarSubject :BehaviorSubject<Pedido[]> = new BehaviorSubject<Pedido[]>([]);
     pedidosAEntregarMessage = this.pedidosAEntregarSubject.asObservable();
+    dadosIniciaisSubject :BehaviorSubject<DadosIniciais> = new BehaviorSubject<DadosIniciais>(new DadosIniciais());
+    dadosIniciaisMessage = this.dadosIniciaisSubject.asObservable();
+
+
 
     altDataClinica(clinicas:Clinica[]){
         this.clinicaSubject.next(clinicas);
@@ -45,6 +50,10 @@ export class DataService{
 
     altDataPedidosAEntregar(pedidosAEntregar: Pedido[]){
         this.pedidosAEntregarSubject.next(pedidosAEntregar);
+    }
+
+    altDadosIniciais(dadosIniciais: DadosIniciais){
+        this.dadosIniciaisSubject.next(dadosIniciais);
     }
 
 
