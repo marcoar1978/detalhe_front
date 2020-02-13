@@ -25,46 +25,46 @@
             <tr height="20">
                 <td style='text-align: center;' colspan='4'><b>PEDIDO nº {{pedido.id}}</b></td>
             </tr>   
-            <tr height="30">
+            <tr height="20">
                 <td width='100'><b>Data Pedido</b></td>    
                 <td>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
             </tr>
                    
-            <tr height="30">
+            <tr height="20">
                 <td ><b>Dentista</b></td>    
                 <td >{{pedido.dentista}}</td>    
             </tr>
-            <tr height="30">
+            <tr height="20">
                 <td ><b>Paciente</b></td>    
                 <td >{{pedido.nomePaciente}}</td>    
             </tr>
         </table>
         <table style='width: 600px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; ' >
-            <tr height="30" style='border-bottom:1px solid #ccc;text-align:center;'>
+            <tr height="20" style='border-bottom:1px solid #ccc;text-align:center;'>
                 <td width="10%"></td>
                 <td width="40%" style='text-align: center;'><b>Derscrição</b></td>
                 <td width="20%" style='text-align: center;'><b>Valor Unitário</b></td>
                 <td width="10%" style='text-align: center;'><b>Qde</b></td>
                 <td width="20%" style='text-align: center;'><b>Total</b></td>
              </tr>
-             <tr height="30" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
+             <tr height="20" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
                 <td style='text-align: center;'>{{i + 1}}</td>
                 <td>{{item.descricao}}</td>
                 <td style='text-align: right;padding-right:5px'>R$ {{item.valorUnitario | number : '1.2-2'}}</td>
                 <td style='text-align: center;'>{{item.qde}}</td>
                 <td style='text-align: right;padding-right:5px'>R$ {{item.valorTotal | number : '1.2-2'}}</td>
              </tr> 
-             <tr height="30" style='border-bottom:1px solid #ccc;'>
+             <tr height="20" style='border-bottom:1px solid #ccc;'>
                 <td  colspan='4'><b>Valor Total</b></td>
                 <td style='text-align: right;padding-right:5px'> <b>R$ {{pedido.valorTotal | number : '1.2-2' }}</b></td>
                 
             <tr>
-            <tr height="30" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
+            <tr height="20" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
                 <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
                 <td style='text-align: right;padding-right:5px'><b>R$ {{pedido.valorTotal - pedido.valorLiquido | number : '1.2-2' }}</b></td>
                    
             </tr> 
-            <tr height="30" *ngIf="pedido.desconto > 0">
+            <tr height="20" *ngIf="pedido.desconto > 0">
                 <td colspan='4'><b>Valor Total Líquido</b></td>
                 <td style='text-align: right;padding-right:5px'><b>R$ {{pedido.valorLiquido | number : '1.2-2'}}</b></td>
                     
@@ -74,7 +74,7 @@
     </div>    
     <br>
     <br>
-    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Valor total dos pedidos:</b> R$ {{totalEntrega | number : '1.2-2' }}</div>
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Valor total da entrega:</b> R$ {{totalEntrega | number : '1.2-2' }}</div>
 
     <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Data da entrega:</b> ___/___/________</div>
 

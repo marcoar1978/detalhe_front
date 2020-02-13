@@ -46,7 +46,7 @@ export class ConfirmEntregaComponent implements OnInit {
 
  imprimir(){
   const janela = window.open('', 'PRINT', 'height=600,width=800');
-  janela.document.write('<html><head><title>Nota de Entrega nº XX</title>');
+  janela.document.write('<html><head><title>NotaEntrega'+this.entregaId+'</title>');
   janela.document.write('</head><body>');  
   janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
   janela.document.write('</body></html>');

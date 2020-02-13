@@ -5,6 +5,7 @@ import { Entrega } from 'src/app/model/entrega.model';
 import { EntregaService } from 'src/app/service/entregas.service';
 import { Clinica } from 'src/app/model/clinica.model';
 import { DataService } from 'src/app/service/data.service';
+import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 
 @Component({
   selector: 'app-entregas',
@@ -21,6 +22,7 @@ export class EntregasComponent implements OnInit {
   clinicas: Clinica[];
   carregamentoClinicas:boolean = false;
   carregamentoEntregas:boolean = false;
+  dadosIniciais:DadosIniciais;
   
   
 
@@ -28,7 +30,8 @@ export class EntregasComponent implements OnInit {
               private dataService: DataService,) { }
 
   ngOnInit() {
-    
+    this.dataService.dadosIniciaisMessage.subscribe(res => this.dadosIniciais = res);
+
     this.dataService.clinicaMessage
       .subscribe(res => { 
         this.clinicas = res;
@@ -39,6 +42,16 @@ export class EntregasComponent implements OnInit {
     this.entregaService.listaEntregas()
         .subscribe(res => {
           this.entregas = res;
+          this.entregas.forEach(entrega => {
+            if(entrega.recebedor){
+              entrega.displayComRecebedor = "";
+              entrega.displaySemRecebedor = "none";
+            }
+            else{
+              entrega.displayComRecebedor = "none";
+              entrega.displaySemRecebedor = "";
+            }
+          })   
           console.log(this.entregas);
           this.clinicasComEntregas = this.clinicas.filter(clinica => {
             let verifClinica:boolean = false;
@@ -54,6 +67,9 @@ export class EntregasComponent implements OnInit {
           this.escondeAlert(this.carregamentoClinicas,this.carregamentoEntregas);  
           
          })
+    
+      
+
     }
     
     escondeAlert(carregamentoClinicas:boolean,carregamentoPedidos:boolean ){
@@ -74,14 +90,38 @@ export class EntregasComponent implements OnInit {
         console.log(this.totalEntregaSelecionada);
         setTimeout(() => {
           const janela = window.open('', 'PRINT', 'height=600,width=800');
-          janela.document.write('<html><head><title>Nota de Entrega nº XX</title>');
+          janela.document.write('<html><head><title>NotaEntrega'+entregaId+'</title>');
           janela.document.write('</head><body>');  
           janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
           janela.document.write('</body></html>');
         },500 )
-        
+    }
+    
+    cadastraRecebedor(entregaId:number){
+     let recebedor = $("#textRecebedor_"+entregaId).val();
+     let dataRecebimento =  $("#dataRecebedor_"+entregaId).val();
+     if((recebedor) && (dataRecebimento)){
+       
+        $("#dataSemRecebedor_"+entregaId).fadeOut(350, () => {
+          let dataRecebSplit = dataRecebimento.split("-");
+          let dataRecebFormat = dataRecebSplit[2]+"/"+dataRecebSplit[1]+"/"+dataRecebSplit[0];
+          $("#dataComRecebedor_"+entregaId).append(dataRecebFormat);
+          $("#dataComRecebedor_"+entregaId).fadeIn(350);
+        })
 
-    }  
+        $("#nomeSemRecebedor_"+entregaId).fadeOut(350, () => {
+          $("#nomeComRecebedor_"+entregaId).append(recebedor);
+          $("#nomeComRecebedor_"+entregaId).fadeIn(350);
+        });
+
+        $("#checkSemRecebedor_"+entregaId).fadeOut(350, () => {
+           $("#checkComRecebedor_"+entregaId).fadeIn(350);
+        });
+
+
+
+     } 
+    }
     
     
   }

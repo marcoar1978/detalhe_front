@@ -13,16 +13,16 @@
             <tr height="20">
                 <td style='text-align: center;' colspan='4'><b>PEDIDO nº {{pedido.id}}</b></td>
             </tr>   
-            <tr height="30">
+            <tr height="20">
                 <td width='100'><b>Data Pedido</b></td>    
                 <td>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
             </tr>
                    
-            <tr height="30">
+            <tr height="20">
                 <td ><b>Dentista</b></td>    
                 <td >{{pedido.dentista}}</td>    
             </tr>
-            <tr height="30">
+            <tr height="20">
                 <td ><b>Paciente</b></td>    
                 <td >{{pedido.nomePaciente}}</td>    
             </tr>
@@ -35,24 +35,24 @@
                 <td width="10%" style='text-align: center;'><b>Qde</b></td>
                 <td width="20%" style='text-align: center;'><b>Total</b></td>
              </tr>
-             <tr height="30" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
+             <tr height="20" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
                 <td style='text-align: center;'>{{i + 1}}</td>
                 <td>{{item.descricao}}</td>
                 <td style='text-align: right;padding-right:5px'>R$ {{item.valorUnitario | number : '1.2-2'}}</td>
                 <td style='text-align: center;'>{{item.qde}}</td>
                 <td style='text-align: right;padding-right:5px'>R$ {{item.valorTotal | number : '1.2-2'}}</td>
              </tr> 
-             <tr height="30" style='border-bottom:1px solid #ccc;'>
+             <tr height="20" style='border-bottom:1px solid #ccc;'>
                 <td  colspan='4'><b>Valor Total</b></td>
                 <td style='text-align: right;padding-right:5px'><b>R$ {{pedido.valorTotal | number : '1.2-2' }}</b></td>
                 
             <tr>
-            <tr height="30" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
+            <tr height="20" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
                 <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
                 <td style='text-align: right;padding-right:5px'><b>R$ {{pedido.valorTotal - pedido.valorLiquido | number : '1.2-2' }}</b></td>
                    
             </tr> 
-            <tr height="30" *ngIf="pedido.desconto > 0">
+            <tr height="20" *ngIf="pedido.desconto > 0">
                 <td colspan='4'><b>Valor Total Líquido</b></td>
                 <td style='text-align: right;padding-right:5px'><b>R$ {{pedido.valorLiquido | number : '1.2-2'}}</b></td>
                     
@@ -62,12 +62,19 @@
     </div>    
     <br>
     <br>
-    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Valor total dos pedidos:</b>R$ {{totalEntregaSelecionada | number : '1.2-2' }}</div>
-
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Valor total da entrega:</b> R$ {{totalEntregaSelecionada | number : '1.2-2' }}</div>
+    <div *ngIf="!entregaSelecionada.recebedor">
     <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Data da entrega:</b> ___/___/________</div>
 
     <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;'><b>Nome legível:</b>___________________________________________</div>
+    </div>
+
+    <div *ngIf="entregaSelecionada.recebedor">
+        <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Data da entrega:</b> {{entregaSelecionada.dataEntrega | date:'dd/MM/yyyy' }}</div>
     
+        <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;'><b>Nome:</b> {{entregaSelecionada.recebedor}}</div>
+        </div>
+
     </div>
 
 
@@ -80,13 +87,14 @@
 <div>
     <table class='table table-dark' style='text-align: center;'>
         <tr>
-        <td width="10%" >Id</td>
+        <td width="10%" colspan='2' >Id</td>
 
         <td width='10%'>Emissão</td>
-        <td width='40%'>Pedidos</td>
-        <td width='15%'>Valor Total</td>
-        <td width='15%'>Recebedor</td>
-        <td width='10%'>Fechamento</td>
+        <td width='25%'>Pedidos</td>
+        <td width='10%'>Valor Total</td>
+        <td width='20%'>Dt. Entrega</td>
+        <td width='20%'>Recebedor</td>
+        <td width='5%'></td>
         </tr>
     </table> 
 
@@ -97,9 +105,9 @@
             <tr *ngFor="let entrega of entregas">
                 <td *ngIf="entrega.clinicaId == clinica.id" width="5%">{{entrega.id}}</td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width="5%"><i class="material-icons" style="cursor:pointer" (click)="abreModalEntrega(entrega.id,clinica.nomeSimp )"> assignment</i></td>
-                <td *ngIf="entrega.clinicaId == clinica.id" width='10%'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
-                <td *ngIf="entrega.clinicaId == clinica.id" width='40%'>
-                      <table style='font-size:12px' width="90%">
+                <td *ngIf="entrega.clinicaId == clinica.id" width='10%'>{{entrega.dataEmissao | date:'dd/MM/yyyy'}}</td>
+                <td *ngIf="entrega.clinicaId == clinica.id" width='25%'>
+                      <table class='table table-sm' style='font-size:12px' width="90%">
                           <tr *ngFor="let pedido of entrega.pedidos" height='20'>
                              <td style='border:none !important;' width='20%'>{{pedido.id}}</td>
                              <td style='border:none !important;' width='50%'>{{pedido.nomePaciente}}</td>
@@ -107,9 +115,22 @@
                           </tr>    
                       </table>      
                 </td>
-                <td *ngIf="entrega.clinicaId == clinica.id" width='15%'>--</td>
-                <td *ngIf="entrega.clinicaId == clinica.id" width='15%'>--</td>
-                <td *ngIf="entrega.clinicaId == clinica.id" width='10%'>--</td>
+                <td *ngIf="entrega.clinicaId == clinica.id" style='text-align: right;' width='10%'>R$ {{entrega.totalEntrega | number : '1.2-2'}}</td>
+                <td *ngIf="entrega.clinicaId == clinica.id" width='20%' style='text-align:center'>
+                    <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }" id='dataComRecebedor_{{entrega.id}}'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</div>
+                    <div [ngStyle]="{'display':entrega.recebedor ? 'none' : '' }" id='dataSemRecebedor_{{entrega.id}}'><input type='date' id='dataRecebedor_{{entrega.id}}' [value]='dadosIniciais.dataHoje' class='form-control'></div>
+                </td>
+                <td *ngIf="entrega.clinicaId == clinica.id" width='20%'>
+                    <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }" id='nomeComRecebedor_{{entrega.id}}'>{{entrega.recebedor}}</div>
+                    <div [ngStyle]="{'display':entrega.recebedor ? 'none' : '' }" id='nomeSemRecebedor_{{entrega.id}}'><input type='text' id='textRecebedor_{{entrega.id}}' (keyup.enter)="cadastraRecebedor(entrega.id)" class='form-control' ></div>
+
+                </td>
+                <td *ngIf="entrega.clinicaId == clinica.id" width='5%' syle='text-align:center'>
+                    <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }"  id='checkComRecebedor_{{entrega.id}}'><input type='checkbox'></div> 
+                    <div [ngStyle]="{'display':entrega.recebedor ? 'none' : '' }"  id='checkSemRecebedor_{{entrega.id}}'></div>     
+
+
+                </td>
             </tr>
         </table>        
 
