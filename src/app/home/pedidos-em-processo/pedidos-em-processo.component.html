@@ -8,7 +8,79 @@
       </button>
     </div>
     <div class="modal-body">
-        <app-modal-pedido-cons [pedidoSelecionado]=pedidoSelecionado></app-modal-pedido-cons>
+      <table style='width: 90%!important;margin: auto;font-size:14px;' class='table table-sm'>
+        <tr>
+            <td width='100' style='border:none !important;'><b>Data Pedido</b></td>    
+            <td style='border:none !important;'>{{pedidoSelecionado.dataPedido | date:'dd/MM/yyyy'}}</td>    
+        </tr>
+        <tr>
+            <td style='border:none !important;'><b>Clínica</b></td>    
+            <td style='border:none !important;'>{{pedidoSelecionado.clinica}}</td>    
+        </tr>
+         
+        <tr>
+            <td style='border:none !important;'><b>Dentista</b></td>    
+            <td style='border:none !important;'>{{pedidoSelecionado.dentista}}</td>    
+        </tr>
+        <tr>
+            <td style='border:none !important;'><b>Paciente</b></td>    
+            <td style='border:none !important;'>{{pedidoSelecionado.nomePaciente}}</td>    
+        </tr>
+        <tr>
+            <td style='border:none !important;'><b>Protético(a)</b></td>    
+            <td style='border:none !important;'>{{pedidoSelecionado.protetico}}</td>    
+        </tr> 
+            
+    </table>
+    <br>
+    
+    <table class='table  table-bordered table-sm' style='width: 90% !important;margin: auto;font-size:14px;' >
+        <tr>
+            <td ></td>
+            <td style='text-align:center'><b>Derscrição</b></td>
+            <td style='text-align:center'><b>Valor Unitário</b></td>
+            <td style='text-align:center'><b>Qde</b></td>
+            <td style='text-align:center'><b>Total</b></td>
+         </tr>
+         <tr *ngFor="let item of pedidoSelecionado.itens; let i= index; ">
+            <td>{{i + 1}}</td>
+            <td>{{item.descricao}}</td>
+            <td style='text-align:right'>{{item.valorUnitario | currency}}</td>
+            <td style='text-align:center'>{{item.qde}}</td>
+            <td style='text-align:right'>{{item.valorTotal | currency}}</td>
+         </tr> 
+         <tr>
+            <td  colspan='4'><b>Valor Total</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal | currency }}</b></td>
+            
+        <tr>
+        <tr *ngIf="pedidoSelecionado.desconto > 0">
+            <td colspan='4'><b>Desconto ({{pedidoSelecionado.desconto}} %)</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal - pedidoSelecionado.valorLiquido | currency }}</b></td>
+               
+        </tr> 
+        <tr *ngIf="pedidoSelecionado.desconto > 0">
+            <td colspan='4'><b>Valor Total Líquido</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorLiquido | currency }}</b></td>
+                
+        </tr>      
+    </table> 
+    <br>
+    <table style='width: 90%!important;margin: auto;font-size:14px;' class='table table-sm'>
+    <tr>
+        <td width='100' style='border:none !important;'><b>Prazo</b></td>    
+        <td style='border:none !important;'>{{pedidoSelecionado.prazo}} dias corridos</td>    
+    </tr>
+    <tr>
+        <td width='100' style='border:none !important;'><b>Previsão</b></td>    
+        <td style='border:none !important;'>{{pedidoSelecionado.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>    
+    </tr>
+    <tr>
+        <td width='100' style='border:none !important;'><b>Observações</b></td>    
+        <td style='border:none !important;'>{{pedidoSelecionado.obs}}</td>    
+    </tr>
+    </table>
+    <br>  
     </div>    
     <div class="modal-footer">
      
@@ -45,10 +117,12 @@
    </table>
    <br>
    <table class='table'>
+     <!--
       <tr height="30">
         <td style='border:none !important;'>Data Entrega</td>
         <td style='border:none !important;'><input type='date' [(ngModel)]='dataEntrega' class='form-control' style='width:200px'></td>
       </tr> 
+    -->
       <tr height="30">
         <td style='border:none !important;'>Obs</td>
         <td style='border:none !important;'><input type='text' [(ngModel)]='obs' class='form-control'></td>
@@ -69,17 +143,17 @@
 <br>
 <div style='text-align:center' id='titulo'><b>Pedidos</b></div><br>
 <div class="container">
-<div class="alert alert-info" *ngIf="!carregamentoClinicas || !carregamentoPedidos">Aguarde enquanto os dados estão sendo carregados</div>
-<div id='dadosCarregados' *ngIf="carregamentoClinicas || carregamentoPedidos">
+<div class="alert alert-info" id='divAguardarDados'>Aguarde enquanto os dados estão sendo carregados</div>
+<div id='dadosCarregados'>
     <table class='table table-dark' style='text-align: center;'>
         <tr>
-        <td colspan='2'>Id</td>
+        <td colspan='2' style='text-align: center;'>Id</td>
 
-        <td width='20%'>Paciente</td>
-        <td width='30%'>Dentista</td>
-        <td width='15%'>Data Prevista</td>
-        <td width='15%'>Valor</td>
-        <td width='10%'>Entrega</td>
+        <td width='20%' style='text-align: center;'>Paciente</td>
+        <td width='30%' style='text-align: center;'>Dentista</td>
+        <td width='20%' style='text-align: center;'>Data Prevista</td>
+        <td width='20%' style='text-align: center;'>Valor</td>
+        <td width='10%' style='text-align: center;'>Entrega</td>
         </tr>
     </table>    
     
@@ -89,8 +163,8 @@
      
      <table class='table table-hover'>
         <tr *ngFor="let pedido of pedidos">
-        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;;cursor:pointer' (click)="abreModalPedido(content, pedido.id)">{{pedido.id}}</td>
-        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer'><i class="material-icons">print </i></td>
+        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer' >{{pedido.id}}</td>
+        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer' (click)="abreModalPedido(content, pedido.id)" ><i class="material-icons">assignment </i></td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>

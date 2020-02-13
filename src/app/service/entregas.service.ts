@@ -1,0 +1,17 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { Entrega } from '../model/entrega.model';
+
+@Injectable({providedIn: 'root'})
+export class EntregaService{
+
+    API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
+
+    constructor(private http: HttpClient){}
+
+    listaEntregas(){
+        return this.http.get<Entrega[]>(this.API +'/processos/listaEntregas');
+    }
+}

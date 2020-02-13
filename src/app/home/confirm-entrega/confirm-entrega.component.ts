@@ -15,8 +15,9 @@ export class ConfirmEntregaComponent implements OnInit {
   pedidos:Pedido[]; 
   totalEntrega:number; 
   nomeClinica: string;
+  entregaId:number;
   obs:string;
-  dataEntrega:string;
+  
 
   constructor(private actRoute: ActivatedRoute,
               private dataService: DataService,
@@ -33,8 +34,10 @@ export class ConfirmEntregaComponent implements OnInit {
     this.actRoute.queryParams.subscribe(queryParams => this.nomeClinica = queryParams.nomeClinica)
     
     this.actRoute.queryParams.subscribe(queryParams => this.obs = queryParams.obs);
+
+    this.actRoute.queryParams.subscribe(queryParams => this.entregaId = queryParams.entregaId);
    
-    this.actRoute.queryParams.subscribe(queryParams => this.dataEntrega = queryParams.dataEntrega);
+    this.actRoute.queryParams.subscribe(queryParams => this.totalEntrega = queryParams.totalEntrega);
  }
 
  acessoPedidosEmProcesso(){

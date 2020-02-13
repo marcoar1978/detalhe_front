@@ -182,12 +182,13 @@ export class AbrirpedidoComponent implements OnInit {
         pedidoFechado.valorTotal = this.totalPedido;
         pedidoFechado.valorLiquido = this.valorTotalLiquido;
         
+        console.log(pedidoFechado);
       
         this.pedidoService.conferirPedido(pedidoFechado)
           .subscribe(res => {
                 console.log(res);
                 this.pedido = res;
-                
+                this.pedido.dataPedido = this.aberturaPedido.dataPedido;
                 this.dataService.altDataPedidoFechado(this.pedido);
                 this.recebeConfPedido = true;
                             

@@ -22,6 +22,7 @@ export class PedidosEmProcessoComponent implements OnInit {
   pedidos:Pedido[];
   pedidosCheckados:Pedido[];
   pedidoSelecionado:Pedido;
+  totalPedidosSelecionados:number;
   clinicas:Clinica[];
   clinica:Clinica;
   verifCheckEntrega:boolean;
@@ -45,24 +46,33 @@ export class PedidosEmProcessoComponent implements OnInit {
       .subscribe(res => {
         this.clinicas = res;
         this.carregamentoClinicas = true;
+        this.escondeAlert(this.carregamentoClinicas,this.carregamentoPedidos);
       }, error => {alert("Erro ao acessar o banco de dados")});
 
     this.pedidosEmProcessoService.listaPedidosPorStatusEmProcesso()
       .subscribe(res =>{
         this.pedidos = res;
-        console.log(this.pedidos);
         this.pedidos.forEach(pedido => pedido.checkEntrega = false);
         this.carregamentoPedidos = true;
+        this.escondeAlert(this.carregamentoClinicas,this.carregamentoPedidos);
       }, error => {alert("Erro ao acessar o banco de dados")});  
 
+
       this.dataService.dadosIniciaisSubject.subscribe(res => {
-        console.log(res);
-        this.dadosIniciais = res});
+       this.dadosIniciais = res});
       
       }
+
+    escondeAlert(carregamentoClinicas:boolean,carregamentoPedidos:boolean ){
+      
+      if((carregamentoClinicas) && (carregamentoPedidos)){
+        console.log("escondeAlert");
+        $("#divAguardarDados").slideUp(350);
+      }
+    }  
     
     abreModalPedido(content, pedidoId){
-        this.pedidos.find(pedido => this.pedidoSelecionado = pedido);
+        this.pedidoSelecionado = this.pedidos.find(pedido => pedido.id == pedidoId);
         this.modalService.open(content, { centered: true, size: 'lg',scrollable: true });
        }
     
@@ -94,29 +104,31 @@ export class PedidosEmProcessoComponent implements OnInit {
 
     conferirEntrega(clinicaId:number, conferenciaEntrega){
       this.pedidosCheckados = this.pedidos.filter(pedido => (pedido.checkEntrega == true && pedido.clinicaId == clinicaId));
+
       this.clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
       this.modalConferencia = this.modalService.open(conferenciaEntrega, { centered: true, size: 'lg',scrollable: true });
       }
 
   confirmarEntrega(clinicaId:number){
-      console.log('clinicaId '+clinicaId);
-          
       this.labelConfEntrega = "Aguarde um momento";
       this.disabledConfEntrega = true;
       let pedidosId: number[] =[];
       this.pedidosCheckados.forEach(pedidoCheckados => pedidosId.push(pedidoCheckados.id));
-
+      
       let entrega:Entrega = new Entrega();
       entrega.clinicaId = clinicaId;
-      entrega.dataEntrega = this.dataEntrega;
       entrega.obs = this.obs;
       entrega.pedidosId = pedidosId;
+      entrega.totalEntrega = this.pedidosCheckados
+              .reduce((prevVal, pedidoCheckado) => {return prevVal + pedidoCheckado.valorLiquido },0);
 
-      const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs};
+      
       this.dataService.altDataPedidosAEntregar(this.pedidosCheckados);
 
       this.pedidosEmProcessoService.emiteEntrega(entrega)
         .subscribe(res => {
+          entrega.id = res;
+          const params = {nomeClinica: this.clinica.nomeSimp, dataEntrega: this.dataEntrega, obs: this.obs, entregaId: entrega.id, totalEntrega: entrega.totalEntrega };
           this.modalConferencia.close();
            this.router.navigate(['home/confirmaEntregaPedido'], {queryParams:params })
            

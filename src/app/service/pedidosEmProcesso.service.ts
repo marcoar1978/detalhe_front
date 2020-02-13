@@ -22,8 +22,8 @@ export class PedidosEmProcessoService{
         return this.http.get<Pedido[]>(this.API +'/processos/listaPedidosPorStatusEmProcesso');
     }
 
-    emiteEntrega(entrega: Entrega): Observable<Response>{
-        return this.http.post<Response>(this.API +'/processos/emiteEntrega', entrega );
+    emiteEntrega(entrega: Entrega): Observable<number>{
+        return this.http.post<number>(this.API +'/processos/emiteEntrega', entrega );
     }
 
 

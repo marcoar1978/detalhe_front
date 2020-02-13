@@ -14,9 +14,10 @@ import { PedidoFechadoComponent } from './pedido-fechado/pedido-fechado.componen
 import { PedidosEmProcessoComponent } from './pedidos-em-processo/pedidos-em-processo.component';
 import { ModalPedidoConsComponent } from './modal-pedido-cons/modal-pedido-cons.component';
 import { ConfirmEntregaComponent } from './confirm-entrega/confirm-entrega.component';
+import { EntregasComponent } from './entregas/entregas.component';
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent],
   imports: [
     CommonModule,
     HttpClientModule,

@@ -145,7 +145,7 @@
         <table style='width: 90%!important;margin: auto;' class='table table-sm'>
             <tr>
                 <td width='100' style='border:none !important;'><b>Data Pedido</b></td>    
-                <td style='border:none !important;'>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
+                <td style='border:none !important;'>{{pedido.dataPedido | date:'dd/MM/yyyy' }}</td>    
             </tr>
             <tr>
                 <td style='border:none !important;'><b>Clínica</b></td>    
@@ -204,10 +204,6 @@
         <tr>
             <td width='100' style='border:none !important;'><b>Prazo</b></td>    
             <td style='border:none !important;'>{{pedido.prazo}} dias corridos</td>    
-        </tr>
-        <tr>
-            <td width='100' style='border:none !important;'><b>Previsão</b></td>    
-            <td style='border:none !important;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>    
         </tr>
         <tr>
             <td width='100' style='border:none !important;'><b>Observações</b></td>    

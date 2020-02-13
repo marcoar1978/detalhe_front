@@ -15,6 +15,7 @@ import { PedidoFechadoComponent } from './home/pedido-fechado/pedido-fechado.com
 import { PedidosEmProcessoComponent } from './home/pedidos-em-processo/pedidos-em-processo.component';
 import { ConfirmEntregaComponent } from './home/confirm-entrega/confirm-entrega.component';
 import { DadosIniciaisResolve } from './service/dadosIniciais.resolve';
+import { EntregasComponent } from './home/entregas/entregas.component';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: 'pedidosEmProcesso', component: PedidosEmProcessoComponent },
       { path: 'confirmaEntregaPedido', component: ConfirmEntregaComponent },
       { path: 'cadastroClinica', component: CadastroclinicaComponent },
+      { path: 'entregas', component: EntregasComponent },
   ] }
 ];
 
