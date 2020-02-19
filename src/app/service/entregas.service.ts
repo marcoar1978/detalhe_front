@@ -15,4 +15,9 @@ export class EntregaService{
     listaEntregas(){
         return this.http.get<Entrega[]>(this.API +'/processos/listaEntregas');
     }
+
+    registraRecebedor(entregaId: number, recebedor: string, dataEntrega:string){
+        const dados = {entregaId, recebedor, dataEntrega};
+        return this.http.post<Response>(this.API +'/processos/registraRecebedor', dados);
+    }
 }

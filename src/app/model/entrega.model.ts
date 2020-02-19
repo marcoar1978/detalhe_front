@@ -13,6 +13,7 @@ export class Entrega{
 
     displayComRecebedor:string;
     displaySemRecebedor:string;
+    checkFechamento:boolean = false;
 
 
 

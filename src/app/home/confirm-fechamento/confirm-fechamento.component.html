@@ -1,0 +1,59 @@
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+    <div class="col-md-4">
+     <div style='text-align: center;'>   
+    <button class="btn btn-info btn-sm"  style='margin-bottom: 20px;'>VOLTAR</button><br> 
+    <button class="btn btn-info btn-sm" >IMPRIMIR FECHAMENTO</button>    
+    </div>    
+</div>
+<div class="col-md-8">
+
+    <div style='padding:15px; text-align: center; border:1px solid #000;width:630px' id='caixaNotaFechamento'>
+        <table style='width: 600px !important;margin: auto;'>
+            <tr>
+                <td width='90px'><img src="http://www.detalheprotetico.com.br/img/logo_detalhe_web.png" width='80px'/></td>
+                <td style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099'><b>FECHAMENTO nº {{fechamento.id}} <br/>({{nomeClinica}})</b></td>
+            </tr>        
+        </table>
+         
+        <br>
+        <table style='width: 600px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:14px;padding:5px;text-align:left; ' >
+            <tr height="30" style='border-bottom:1px solid #ccc;text-align:center;'>
+                <td colspan="4" style='text-align:center'><b>ENTREGAS</b></td>
+            </tr>
+            <tr height="20" style='border-bottom:1px solid #ccc;text-align:center;'>
+                <td width="10%"></td>
+                <td width="20%" style='text-align: center;'><b>Data</b></td>
+                
+                <td width="20%" style='text-align: center;'><b>Total</b></td>
+                <td width="50%" style='text-align: center;'><b>Pedidos</b><br><span style='font-size:11px'>(Número - Paciente - Valor)</span></td>
+             </tr>
+
+            
+             <tr *ngFor='let entrega of fechamento.entregas' style='border-bottom:1px solid #ccc;'>
+                 <td style='text-align:center'>{{entrega.id}}</td>
+                 <td style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>  
+                 <td style='text-align: center;'>
+                    R$ {{entrega.totalEntrega | number : '1.2-2'}}
+                </td>  
+                 <td style='padding: 10px;'>
+                    <table class='table table-sm table-bordered' style='font-size:12px;' width="250px">
+                        <tr *ngFor="let pedido of entrega.pedidos">
+                           <td width='20%'>{{pedido.id}}</td>
+                           <td width='40%'>{{pedido.nomePaciente}}</td>
+                           <td style='text-align:right'>R$ {{pedido.valorLiquido | number : '1.2-2'}}</td>        
+                        </tr>    
+                    </table>   
+
+                 </td> 
+                 
+             </tr>
+        </table>
+    <br>    
+    <p><b>Valor Total do Fechamento:</b>: R$ {{fechamento.valor | number : '1.2-2'}}    
+               
+</div> 
+</div>   

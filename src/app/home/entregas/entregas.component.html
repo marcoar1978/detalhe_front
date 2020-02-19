@@ -77,6 +77,68 @@
 
     </div>
 
+    <ng-template #conferenciaFechamento  let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">Fechamento - {{clinica.nomeSimp}}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+         
+         <table class='table table-hover'>
+          <tr style='color:#000099'>
+            <td style='text-align: center;' width='10%'><b>Id</b></td>
+            <td width='40%' style='text-align:center;'><b>Pedidos</b></td>
+            <td width='30%' style='text-align:center;'><b>Valor Total</b></td>
+            <td width='20%' style='text-align:center;'><b>Dt. Entrega</b></td>
+           
+        </tr>
+           
+            <tr *ngFor="let entrega of entregasCheckadas">
+            <td width='5%' *ngIf="clinica.id == entrega.clinicaId" style='text-align: center;;cursor:pointer' >{{entrega.id}}</td>
+            <td *ngIf="clinica.id == entrega.clinicaId" width='40%'>
+                <table class='table table-sm table-bordered' style='font-size:12px' width="90%">
+                    <tr *ngFor="let pedido of entrega.pedidos">
+                       <td width='20%'>{{pedido.id}}</td>
+                       <td width='50%'>{{pedido.nomePaciente}}</td>
+                       <td style='text-align:right'>R$ {{pedido.valorLiquido | number : '1.2-2'}}</td>        
+                    </tr>    
+                </table>  
+
+            </td>
+            <td *ngIf="clinica.id == entrega.clinicaId" width='20%' style='text-align: right'>{{entrega.totalEntrega | number : '1.2-2'}}</td>
+            <td *ngIf="clinica.id == entrega.clinicaId" width='20%' style='text-align: center;'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
+          
+            </tr> 
+            <tr>
+                <td colspan='2' ><b>Total Fechamento</b></td>    
+                <td style='text-align:right'>{{totalFechamento | number : '1.2-2'}}</td>
+                <td></td>
+            </tr>    
+         </table>
+         <br>
+         <table class='table'>
+         
+            <tr height="30">
+              <td style='border:none !important;'>Obs</td>
+              <td style='border:none !important;'><input type='text' [(ngModel)]='obs' class='form-control'></td>
+            </tr>  
+         </table>
+         <br>
+         
+       </div>
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-info btn-sm" (click)="modal.close('Close click')">Fechar</button>
+        <button type="button" class="btn btn-info btn-sm" [disabled]="disabledConfFechamento" (click)="confirmarFechamento(clinica.id); ">{{labelConfFechamento}}</button>
+      </div>
+      
+      </ng-template>
+        
+      <br>    
 
 
 
@@ -107,11 +169,11 @@
                 <td *ngIf="entrega.clinicaId == clinica.id" width="5%"><i class="material-icons" style="cursor:pointer" (click)="abreModalEntrega(entrega.id,clinica.nomeSimp )"> assignment</i></td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='10%'>{{entrega.dataEmissao | date:'dd/MM/yyyy'}}</td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='25%'>
-                      <table class='table table-sm' style='font-size:12px' width="90%">
+                      <table class='table table-sm table-bordered' style='font-size:12px' width="90%">
                           <tr *ngFor="let pedido of entrega.pedidos" height='20'>
-                             <td style='border:none !important;' width='20%'>{{pedido.id}}</td>
-                             <td style='border:none !important;' width='50%'>{{pedido.nomePaciente}}</td>
-                             <td style='border:none !important;text-align:right'>R$ {{pedido.valorLiquido | number : '1.2-2'}}</td>        
+                             <td width='20%'>{{pedido.id}}</td>
+                             <td width='50%'>{{pedido.nomePaciente}}</td>
+                             <td style='text-align:right'>R$ {{pedido.valorLiquido | number : '1.2-2'}}</td>        
                           </tr>    
                       </table>      
                 </td>
@@ -126,13 +188,14 @@
 
                 </td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='5%' syle='text-align:center'>
-                    <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }"  id='checkComRecebedor_{{entrega.id}}'><input type='checkbox'></div> 
+                    <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }"  id='checkComRecebedor_{{entrega.id}}'><input type='checkbox' id='checkEntrega_{{entrega.id}}' (click)="checkEntrega(clinica.id, entrega.id)"></div> 
                     <div [ngStyle]="{'display':entrega.recebedor ? 'none' : '' }"  id='checkSemRecebedor_{{entrega.id}}'></div>     
 
 
                 </td>
             </tr>
-        </table>        
+        </table>
+        <div style='display:none;text-align:right' id="botaoRegistrarFechamento_{{clinica.id}}" ><button  class='btn btn-info btn-sm' (click)="conferirFechamento(clinica.id, conferenciaFechamento)">Registrar Fechamento</button></div>        
 
     </div>
 
