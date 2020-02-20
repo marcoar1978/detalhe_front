@@ -1,4 +1,5 @@
 import { Entrega } from './entrega.model';
+import { Pgto } from './pgto.model';
 
 export class Fechamento{
     id:number;
@@ -10,5 +11,6 @@ export class Fechamento{
     
     entregas:Entrega[];
     entregasId:number[];
+    pgtos:Pgto[];
 
 }
