@@ -5,8 +5,8 @@
 <div class="row">
     <div class="col-md-4">
      <div style='text-align: center;'>   
-    <button class="btn btn-info btn-sm"  style='margin-bottom: 20px;'>VOLTAR</button><br> 
-    <button class="btn btn-info btn-sm" >IMPRIMIR FECHAMENTO</button>    
+    <button class="btn btn-info btn-sm" (click)='acessoEntegas()'  style='margin-bottom: 20px;'>VOLTAR</button><br> 
+    <button class="btn btn-info btn-sm" (click)='imprimir()'>IMPRIMIR FECHAMENTO</button>    
     </div>    
 </div>
 <div class="col-md-8">
@@ -15,7 +15,7 @@
         <table style='width: 600px !important;margin: auto;'>
             <tr>
                 <td width='90px'><img src="http://www.detalheprotetico.com.br/img/logo_detalhe_web.png" width='80px'/></td>
-                <td style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099'><b>FECHAMENTO nº {{fechamento.id}} <br/>({{nomeClinica}})</b></td>
+                <td style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099'><b>FECHAMENTO nº {{fechamentoId}} <br/>({{nomeClinica}})</b></td>
             </tr>        
         </table>
          
@@ -53,7 +53,7 @@
              </tr>
         </table>
     <br>    
-    <p><b>Valor Total do Fechamento:</b>: R$ {{fechamento.valor | number : '1.2-2'}}    
+    <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Valor Total do Fechamento:</b>: R$ {{fechamento.valorTotal | number : '1.2-2'}}    
                
 </div> 
 </div>   

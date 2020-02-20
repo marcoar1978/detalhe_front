@@ -4,8 +4,8 @@ export class Fechamento{
     id:number;
     clinicaId:number;
     dataFechamento:string;
-    valor:number;
-    valorPagamento:number;
+    valorTotal:number;
+    valorPgto:number;
     obs:string;
     
     entregas:Entrega[];

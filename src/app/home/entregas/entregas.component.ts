@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from "jquery";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { Entrega } from 'src/app/model/entrega.model';
 import { EntregaService } from 'src/app/service/entregas.service';
@@ -9,6 +10,7 @@ import { Clinica } from 'src/app/model/clinica.model';
 import { DataService } from 'src/app/service/data.service';
 import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 import { Fechamento } from 'src/app/model/fechamento.model';
+
 
 
 @Component({
@@ -172,20 +174,30 @@ export class EntregasComponent implements OnInit {
     }
 
     confirmarFechamento(clinicaId:number){
-      //this.labelConfFechamento = "Aguarde um momento";
-      //this.disabledConfFechamento = true;
+      this.labelConfFechamento = "Aguarde um momento";
+      this.disabledConfFechamento = true;
       this.entregasCheckadas.forEach(entrega => { this.entregasId.push(entrega.id)});
 
       let fechamento:Fechamento = new Fechamento();
+      fechamento.clinicaId = this.clinica.id;
       fechamento.dataFechamento = this.dadosIniciais.dataHoje;
       fechamento.entregas = this.entregasCheckadas;
       fechamento.entregasId = this.entregasId;
       fechamento.obs = this.obs;
-      fechamento.valor = this.totalFechamento;
+      fechamento.valorTotal = this.totalFechamento;
 
-      this.modalConferencia.close();
-      this.dataService.altDataFechamentoConf(fechamento);
-      this.router.navigate(['/home/confirmFechamento'], {queryParams: {nomeClinica: this.clinica.nomeSimp }});
+
+      this.entregaService.registrarFechamento(fechamento)
+        .subscribe(fechamentoId => {
+          
+          this.modalConferencia.close();
+          this.dataService.altDataFechamentoConf(fechamento);
+          this.router.navigate(['/home/confirmFechamento'], {queryParams: {nomeClinica: this.clinica.nomeSimp, fechamentoId }});
+        }, error => {
+          this.labelConfFechamento = "Confirmar Fechamento";
+          this.disabledConfFechamento = false;
+          alert("Problemas no Banco de Dados")});
+      
 
     }
     

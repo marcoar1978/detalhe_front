@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Entrega } from '../model/entrega.model';
+import { Fechamento } from '../model/fechamento.model';
 
 @Injectable({providedIn: 'root'})
 export class EntregaService{
@@ -19,5 +20,9 @@ export class EntregaService{
     registraRecebedor(entregaId: number, recebedor: string, dataEntrega:string){
         const dados = {entregaId, recebedor, dataEntrega};
         return this.http.post<Response>(this.API +'/processos/registraRecebedor', dados);
+    }
+
+    registrarFechamento(fechamento:Fechamento){
+        return this.http.post<Response>(this.API + '/processos/registrarFechamento', fechamento);
     }
 }
