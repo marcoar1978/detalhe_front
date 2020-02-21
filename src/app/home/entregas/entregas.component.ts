@@ -68,7 +68,7 @@ export class EntregasComponent implements OnInit {
               entrega.displaySemRecebedor = "";
             }
           })   
-          console.log(this.entregas);
+          
           this.clinicasComEntregas = this.clinicas.filter(clinica => {
             let verifClinica:boolean = false;
             for(let i = 0; i < this.entregas.length; i++){
