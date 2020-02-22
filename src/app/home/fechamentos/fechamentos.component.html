@@ -18,15 +18,15 @@
     <table class='table table-hover'>
         <tr *ngFor="let fechamento of fechamentos">
             <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'>{{fechamento.id}}</td>
-            <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'><i class="material-icons" style="cursor:pointer" (click)="abreModalFechamento(fechamento.id, clinica.nomeSimp)"> assignment</i></td>
+            <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'><i class="material-icons" style="cursor:pointer" title='Nota de Fechamento {{fechamento.id}}' (click)="abreModalFechamento(fechamento.id, clinica.nomeSimp)"> assignment</i></td>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="20%" style='text-align:center'>{{fechamento.dataFechamento | date:'dd/MM/yyyy'}}</td>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="20%" style='text-align:right'>{{fechamento.valorTotal | number : '1.2-2' }}</td>
-            <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'><i class="material-icons" style='cursor: pointer;' (click)="abreModalPagamento(fechamento.id, cadastroPagamento)">note_add </i></td>
-            <td *ngIf="fechamento.clinicaId == clinica.id" width="15%" style='text-align:right'>{{fechamento.valorPago | number : '1.2-2' }}</td>
+            <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'><i class="material-icons" style='cursor: pointer;' title='Inserção e consulta de pagamentos' (click)="abreModalPagamento(fechamento.id, cadastroPagamento)">note_add </i></td>
+            <td *ngIf="fechamento.clinicaId == clinica.id" width="15%" style='text-align:right'><div id='divValorPago_{{fechamento.id}}'>{{fechamento.valorPago | number : '1.2-2' }}</div></td>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="30%" style='text-align:center'>
                 <table class='table table-sm table-bordered' style='font-size:12px' width="280px">
                     <tr *ngFor='let entrega of fechamento.entregas '>
-                        <td width='10%' style='text-align:center;cursor:pointer;' (click)="abreModalEntrega(fechamento.id, entrega.id, clinica.nomeSimp)"><i class="material-icons" style='font-size:12px'>search </i></td>
+                        <td width='10%' style='text-align:center;cursor:pointer;'  title='Nota de Entrega {{entrega.id}}' (click)="abreModalEntrega(fechamento.id, entrega.id, clinica.nomeSimp)"><i class="material-icons" style='font-size:12px'>search </i></td>
 
                         <td width='10%' style='text-align:center'>{{entrega.id}}</td>
                         <td width='40%' style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
@@ -180,18 +180,25 @@
           <div class="container">
            
                    <br>
-                   <table class='table'>
+                   <table class='table' *ngIf='saldoFechamento > 0'>
                       <tr>
                         <td width='30%' style='border:none !important;'><input type='date' [(ngModel)]='dataCadastroPgto' class='form-control'></td>
-                        <td width='30%' style='border:none !important;'> <input type='number' [(ngModel)]='valorCadastroPgto' class='form-control' pattern="^\d+(?:\.\d{1,2})?$"></td>
+                        <td width='30%' style='border:none !important;'> <input type='number' [value]='saldoFechamento' class='form-control' step='0.01' id='inputValorPgto'></td>
                         <td width='40%' style='border:none !important;'><input type='text' class='form-control' [(ngModel)]='obsCadastroPgto'  placeholder="Observações"  ></td>
                     </tr>
                     <tr>
+                         <td colspan='3'>
+                             <div class='alert alert-warning' id="alertValor" style='display:none'>{{msgAlertValor}}</div>
+                        
+                        </td>   
+                    </tr>    
+                    <tr>
                         <td colspan='3' style='text-align:right;border:none !important;'>
-                            <button type="button" class="btn btn-info btn-sm" [disabled]="disabledConfPgto" (click)="inserirPagamento(fechamento.id); ">{{labelConfPgto}}</button>
+                            <button type="button" class="btn btn-info btn-sm" [disabled]="disabledConfPgto" (click)="inserirPgto(fechamentoSelecionado.id); ">{{labelConfPgto}}</button>
                         </td>
                     </tr>    
                     </table>
+
                     <br>
 
                     <table *ngIf="pagamentosEfetuados.length" class='table table-sm table-bordered' style='background-color: #aec6cf'>
@@ -204,9 +211,9 @@
                             <td style='text-align:center' width='40%'><b>Obs</b></td>
                         </tr>  
                         <tr *ngFor="let pagamentoEfetuado of pagamentosEfetuados"> 
-                            <td>{{pagamentoEfetuado.dataPagamento | date:'dd/MM/yyyy' }}</td>
-                            <td style='text-align:right'> R$ {{pagamentoEfetuado.valor | number : '1.2-2' }}</td>
-                            <td>--</td> 
+                            <td style='text-align:center'>{{pagamentoEfetuado.dataPagamento | date:'dd/MM/yyyy' }}</td>
+                            <td style='text-align:center'> R$ {{pagamentoEfetuado.valor | number : '1.2-2' }}</td>
+                            <td>{{pagamentoEfetuado.obs}}</td> 
                         </tr>    
                     </table>    
                     <br>

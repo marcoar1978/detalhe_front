@@ -30,10 +30,11 @@ export class FechamentosComponent implements OnInit {
   modalCadastro:any;
   pagamentosEfetuados:Pgto[] = [];
   dataCadastroPgto:string;
-  valorCadastroPgto:number;
+  saldoFechamento:number;
   labelConfPgto:string = "Inserir Pagamento";
   disabledConfPgto:boolean = false;
   obsCadastroPgto:string;
+  msgAlertValor:string;
 
   constructor(private fechamentoService: FechamentoService,
     private modalService: NgbModal,
@@ -105,11 +106,61 @@ export class FechamentosComponent implements OnInit {
   }
 
   abreModalPagamento(fechamentoId:number, cadastroPagamento ){
+    this.dataCadastroPgto = this.dadosIniciais.dataHoje;;
+    this.obsCadastroPgto = "";
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
-    this.valorCadastroPgto = this.fechamentoSelecionado.valorTotal - this.fechamentoSelecionado.valorPgto;
-    this.valorCadastroPgto.toFixed(2);
+    this.saldoFechamento = this.fechamentoSelecionado.valorTotal - this.fechamentoSelecionado.valorPgto;
     this.pagamentosEfetuados = this.fechamentoSelecionado.pgtos;
     this.modalCadastro = this.modalService.open(cadastroPagamento, { centered: true, size: 'lg',scrollable: true });
   }
+
+  inserirPgto(fechamentoId:number){
+     if(!(this.verifValor())){
+        let pgto:Pgto = new Pgto();
+        pgto.dataPagamento = this.dataCadastroPgto;
+        pgto.valor = Number($("#inputValorPgto").val());
+        pgto.obs = this.obsCadastroPgto;
+
+        this.fechamentos.forEach(fechamento => 
+        {
+          if(fechamento.id == fechamentoId){
+            fechamento.valorPgto += Number($("#inputValorPgto").val());
+            fechamento.pgtos.push(pgto);
+            $('#divValorPago_'+fechamentoId).empty();
+            $('#divValorPago_'+fechamentoId).append(fechamento.valorPgto.toFixed(2));
+          }
+        })
+
+        
+  
+        this.modalCadastro.close();
+    }
+    
+  }
+
+  verifValor(){
+    let inputValorPgto:number = Number($("#inputValorPgto").val());
+    let verifError:boolean = false;
+    if(inputValorPgto > this.saldoFechamento){
+      this.msgAlertValor = "Valor não pode ser maior que R$ "+this.saldoFechamento.toFixed(2);
+      verifError = true;
+     }
+
+    if(inputValorPgto < 0){
+      this.msgAlertValor ="Valor não pode ser menor que R$ 0.00";
+      verifError = true;
+     }
+
+    if(verifError){
+      $("#inputValorPgto").val(this.saldoFechamento.toFixed(2));
+      $("#alertValor").slideDown(350, () => {
+        setTimeout(() => {
+          $("#alertValor").slideUp(350)
+        },1500);
+      })
+    }
+    
+    return verifError;
+  }  
 
 }
