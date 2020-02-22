@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LOCALE_ID } from '@angular/core';
 
 import { HomeComponent } from './home.component';
 import { AbrirpedidoComponent } from './abrirpedido/abrirpedido.component';
@@ -17,6 +18,8 @@ import { ConfirmEntregaComponent } from './confirm-entrega/confirm-entrega.compo
 import { EntregasComponent } from './entregas/entregas.component';
 import { ConfirmFechamentoComponent } from './confirm-fechamento/confirm-fechamento.component';
 import { FechamentosComponent } from './fechamentos/fechamentos.component';
+
+
 
 @NgModule({
   declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent],
@@ -35,7 +38,8 @@ import { FechamentosComponent } from './fechamentos/fechamentos.component';
       useClass: InterceptorService,
       multi:true
 
-    }
+    },
+    { provide: LOCALE_ID, useValue: "pt-BR" }
   ]
 })
 export class HomeModule { }

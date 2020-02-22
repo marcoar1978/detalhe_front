@@ -91,7 +91,6 @@ export class EntregasComponent implements OnInit {
     escondeAlert(carregamentoClinicas:boolean,carregamentoPedidos:boolean ){
       
       if((carregamentoClinicas) && (carregamentoPedidos)){
-        console.log(this.clinicasComEntregas); 
         $("#divAguardarDados").slideUp(350);
       }
     }
@@ -101,9 +100,7 @@ export class EntregasComponent implements OnInit {
         this.entregaSelecionada = this.entregas.find(entrega => entrega.id == entregaId);
         this.totalEntregaSelecionada= this.entregaSelecionada.pedidos
           .reduce((prevVal, pedido) => {return prevVal + pedido.valorLiquido },0);
-          
-        console.log(this.entregaSelecionada);
-        console.log(this.totalEntregaSelecionada);
+               
         setTimeout(() => {
           const janela = window.open('', 'PRINT', 'height=600,width=800');
           janela.document.write('<html><head><title>NotaEntrega'+entregaId+'</title>');
@@ -170,8 +167,7 @@ export class EntregasComponent implements OnInit {
 
       this.clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
       this.modalConferencia = this.modalService.open(conferenciaFechamento, { centered: true, size: 'lg',scrollable: true });
-    console.log(this.entregasCheckadas);
-    }
+       }
 
     confirmarFechamento(clinicaId:number){
       this.labelConfFechamento = "Aguarde um momento";
@@ -185,6 +181,7 @@ export class EntregasComponent implements OnInit {
       fechamento.entregasId = this.entregasId;
       fechamento.obs = this.obs;
       fechamento.valorTotal = this.totalFechamento;
+      fechamento.valorPgto = 0;
 
 
       this.entregaService.registrarFechamento(fechamento)

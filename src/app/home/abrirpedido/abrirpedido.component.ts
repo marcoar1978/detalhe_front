@@ -181,12 +181,10 @@ export class AbrirpedidoComponent implements OnInit {
         pedidoFechado.prazo = this.aberturaPedido.prazo;
         pedidoFechado.valorTotal = this.totalPedido;
         pedidoFechado.valorLiquido = this.valorTotalLiquido;
-        
-        console.log(pedidoFechado);
+               
       
         this.pedidoService.conferirPedido(pedidoFechado)
           .subscribe(res => {
-                console.log(res);
                 this.pedido = res;
                 this.pedido.dataPedido = this.aberturaPedido.dataPedido;
                 this.dataService.altDataPedidoFechado(this.pedido);
@@ -387,18 +385,14 @@ altDataPedido(){
 }
 
 scaleEditMouseOver(e){
-  console.log(e.type);
+ 
   $("#edit").animate({width: '60'}, 350);
-  //$("#edit").css("color","blue");
-  
-  
+ 
 }
 
 fecharPedido(){
   this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
-  //this.pedidoService.fecharPedido(this.aberturaPedido.pedidoId)
-  //  .subscribe(res => res , error => alert("Erro ao acessar o banco de dados"))
-    
+     
 }
 
 imprimir(){

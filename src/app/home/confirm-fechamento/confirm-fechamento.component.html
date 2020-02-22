@@ -37,14 +37,14 @@
                  <td style='text-align:center'>{{entrega.id}}</td>
                  <td style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>  
                  <td style='text-align: center;'>
-                    R$ {{entrega.totalEntrega | number : '1.2-2'}}
+                    {{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}
                 </td>  
                  <td style='padding: 10px;'>
                     <table class='table table-sm table-bordered' style='font-size:12px;' width="250px">
                         <tr *ngFor="let pedido of entrega.pedidos">
                            <td width='20%'>{{pedido.id}}</td>
                            <td width='40%'>{{pedido.nomePaciente}}</td>
-                           <td style='text-align:right'>R$ {{pedido.valorLiquido | number : '1.2-2'}}</td>        
+                           <td style='text-align:right'>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>        
                         </tr>    
                     </table>   
 
@@ -53,7 +53,7 @@
              </tr>
         </table>
     <br>    
-    <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Valor Total do Fechamento:</b>: R$ {{fechamento.valorTotal | number : '1.2-2'}}    
+    <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Valor Total do Fechamento:</b> {{fechamento.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}    
                
 </div> 
 </div>   

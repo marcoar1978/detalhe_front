@@ -20,8 +20,7 @@ export class PedidoFechadoComponent implements OnInit {
   ngOnInit() {
     this.pedidoId = this.actRoute.snapshot.params.pedidoId;
     this.dataService.pedidoFechadoMessage.subscribe(res => { this.pedidoFechado = res });  
-    console.log(this.pedidoFechado);
-  }
+    }
 
   abrirNovoPedido(){
     this.router.navigate(['home/abrirPedido']);

@@ -17,7 +17,6 @@
             <td style='border:none !important;'><b>Clínica</b></td>    
             <td style='border:none !important;'>{{pedidoSelecionado.clinica}}</td>    
         </tr>
-         
         <tr>
             <td style='border:none !important;'><b>Dentista</b></td>    
             <td style='border:none !important;'>{{pedidoSelecionado.dentista}}</td>    
@@ -45,23 +44,23 @@
          <tr *ngFor="let item of pedidoSelecionado.itens; let i= index; ">
             <td>{{i + 1}}</td>
             <td>{{item.descricao}}</td>
-            <td style='text-align:right'>{{item.valorUnitario | currency}}</td>
+            <td style='text-align:right'>{{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
             <td style='text-align:center'>{{item.qde}}</td>
-            <td style='text-align:right'>{{item.valorTotal | currency}}</td>
+            <td style='text-align:right'>{{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
          </tr> 
          <tr>
             <td  colspan='4'><b>Valor Total</b></td>
-            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal | currency }}</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
             
         <tr>
         <tr *ngIf="pedidoSelecionado.desconto > 0">
             <td colspan='4'><b>Desconto ({{pedidoSelecionado.desconto}} %)</b></td>
-            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal - pedidoSelecionado.valorLiquido | currency }}</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorTotal - pedidoSelecionado.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                
         </tr> 
         <tr *ngIf="pedidoSelecionado.desconto > 0">
             <td colspan='4'><b>Valor Total Líquido</b></td>
-            <td style='text-align:right'><b>{{pedidoSelecionado.valorLiquido | currency }}</b></td>
+            <td style='text-align:right'><b>{{pedidoSelecionado.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                 
         </tr>      
     </table> 
@@ -107,11 +106,11 @@
       <td width='15%' style='text-align:center;'><b>Valor</b></td>
      </tr>
       <tr *ngFor="let pedido of pedidosCheckados">
-      <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;;cursor:pointer' (click)="abreModalPedido(content, pedido.id)">{{pedido.id}}</td>
+      <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;;cursor:pointer'  (click)="abreModalPedido(content, pedido.id)">{{pedido.id}}</td>
       <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
       <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
       <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>
-      <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
+      <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
     
       </tr> 
    </table>
@@ -164,11 +163,11 @@
      <table class='table table-hover'>
         <tr *ngFor="let pedido of pedidos">
         <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer' >{{pedido.id}}</td>
-        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer' (click)="abreModalPedido(content, pedido.id)" ><i class="material-icons">assignment </i></td>
+        <td width='5%' *ngIf="clinica.nomeSimp == pedido.clinica" style='text-align: center;cursor:pointer' title='Detalhes do pedido nº {{pedido.id}}' (click)="abreModalPedido(content, pedido.id)" ><i class="material-icons">assignment </i></td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='20%'>{{pedido.nomePaciente}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica"  width='30%'>{{pedido.dentista}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: center;'>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>
-        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency}}</td>
+        <td *ngIf="clinica.nomeSimp == pedido.clinica" width='15%' style='text-align: right;'>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
         <td *ngIf="clinica.nomeSimp == pedido.clinica" width='10%' style='text-align: center;'><input type='checkbox' id='checkEntrega_{{pedido.id}}' (click)="checkEntrega(clinica.id, pedido.id)"></td>  
         </tr> 
            

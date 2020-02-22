@@ -48,23 +48,23 @@
          <tr height="30" *ngFor="let item of pedidoFechado.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
             <td>{{i + 1}}</td>
             <td>{{item.descricao}}</td>
-            <td >{{item.valorUnitario | currency}}</td>
+            <td >{{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
             <td >{{item.qde}}</td>
-            <td >{{item.valorTotal | currency}}</td>
+            <td >{{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
          </tr> 
          <tr height="30" style='border-bottom:1px solid #ccc;'>
             <td  colspan='4'><b>Valor Total</b></td>
-            <td><b>{{pedidoFechado.valorTotal | currency }}</b></td>
+            <td><b>{{pedidoFechado.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
             
         <tr>
         <tr height="30" *ngIf="pedidoFechado.desconto > 0" style='border-bottom:1px solid #ccc;'>
             <td colspan='4'><b>Desconto ({{pedidoFechado.desconto}} %)</b></td>
-            <td><b>{{pedidoFechado.valorTotal - pedidoFechado.valorLiquido | currency }}</b></td>
+            <td><b>{{pedidoFechado.valorTotal - pedidoFechado.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                
         </tr> 
         <tr height="30" *ngIf="pedidoFechado.desconto > 0">
             <td colspan='4'><b>Valor Total Líquido</b></td>
-            <td><b>{{pedidoFechado.valorLiquido | currency }}</b></td>
+            <td><b>{{pedidoFechado.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                 
         </tr>      
     </table> 

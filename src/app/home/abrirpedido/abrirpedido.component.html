@@ -67,7 +67,7 @@
        
         <select class='form-control' formControlName="produtoPadrao" id='selProdutoPadrao' (click)="resetAvisoFormItem();" style='width:250px'>
             <option value='' disabled>Produto</option>
-            <option *ngFor="let produtoPadrao of produtosPadraoClinica" [value]="produtoPadrao.produtoId">{{produtoPadrao.nome}} - R$ {{produtoPadrao.valor}}</option>
+            <option *ngFor="let produtoPadrao of produtosPadraoClinica" [value]="produtoPadrao.produtoId">{{produtoPadrao.nome}} - {{produtoPadrao.valor | currency:'BRL':'symbol':'0.2-2':'pt' }}</option>
         </select>
        <input type='text' formControlName="descProdVariavel" id="descProdVariavel" class='form-control' placeholder="Descrição" style="display:none;" (click)="resetAvisoFormItem();" >
     
@@ -109,24 +109,24 @@
                 <tr *ngFor="let produtoEscolhido of produtosEscolhidos; let i= index" id='{{produtoEscolhido.tipoProduto}}_{{produtoEscolhido.produtoId}}'>
                     <td>{{i + 1}}</td>
                     <td>{{produtoEscolhido.nome}}</td>
-                    <td>{{produtoEscolhido.valor | currency }}</td>
+                    <td>{{produtoEscolhido.valor | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
                     <td>{{produtoEscolhido.qde}}</td>
-                    <td>{{produtoEscolhido.valorTotal | currency }}</td>
+                    <td>{{produtoEscolhido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
                     <td><i class="material-icons" (click)="deleteItem(produtoEscolhido.produtoId, produtoEscolhido.ordem)" style='cursor:pointer;color: #FB8C00;'>delete_outline</i></td>
                 </tr> 
                 <tr>
                     <td  colspan='4'><b>Valor Total</b></td>
-                    <td><b>{{totalPedido | currency }}</b></td>
+                    <td><b>{{totalPedido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                     <td></td>
                 <tr>
                 <tr *ngIf="desconto > 0">
                     <td colspan='4'><b>Desconto ({{desconto}} %)</b></td>
-                    <td><b>{{valorDesconto | currency }}</b></td>
+                    <td><b>{{valorDesconto | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                     <td></td>    
                 </tr> 
                 <tr *ngIf="desconto > 0">
                     <td colspan='4'><b>Valor Total Líquido</b></td>
-                    <td><b>{{valorTotalLiquido | currency }}</b></td>
+                    <td><b>{{valorTotalLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                     <td></td>    
                 </tr>       
              </tbody>
@@ -179,23 +179,23 @@
              <tr *ngFor="let item of pedido.itens; let i= index; ">
                 <td>{{i + 1}}</td>
                 <td>{{item.descricao}}</td>
-                <td >{{item.valorUnitario | currency}}</td>
+                <td >{{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
                 <td >{{item.qde}}</td>
-                <td >{{item.valorTotal | currency}}</td>
+                <td >{{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
              </tr> 
              <tr>
                 <td  colspan='4'><b>Valor Total</b></td>
-                <td><b>{{pedido.valorTotal | currency }}</b></td>
+                <td><b>{{pedido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                 
             <tr>
             <tr *ngIf="pedido.desconto > 0">
                 <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
-                <td><b>{{pedido.valorTotal - pedido.valorLiquido | currency }}</b></td>
+                <td><b>{{pedido.valorTotal - pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                    
             </tr> 
             <tr *ngIf="pedido.desconto > 0">
                 <td colspan='4'><b>Valor Total Líquido</b></td>
-                <td><b>{{pedido.valorLiquido | currency }}</b></td>
+                <td><b>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
                     
             </tr>      
         </table> 

@@ -47,7 +47,6 @@ export class FechamentosComponent implements OnInit {
     this.dataService.clinicaMessage
       .subscribe(res => { 
         this.clinicas = res;
-        console.log(this.clinicas);
         this.carregamentoClinicas = true;
        this.escondeAlert();
       });
@@ -55,8 +54,7 @@ export class FechamentosComponent implements OnInit {
       this.fechamentoService.listaFechamentos()
         .subscribe(res => {
           this.fechamentos = res;
-          
-          console.log(this.fechamentos);
+                  
           this.clinicasComFechamento = this.clinicas.filter(clinica => {
             let verifClinicaComFechamento = false;
             for(let i = 0; i < this.fechamentos.length; i++){
@@ -66,7 +64,6 @@ export class FechamentosComponent implements OnInit {
             }
             return verifClinicaComFechamento;
           })
-          console.log(this.clinicasComFechamento);
           this.carregamentoFechamentos = true;
           this.escondeAlert();
         })
@@ -116,24 +113,33 @@ export class FechamentosComponent implements OnInit {
 
   inserirPgto(fechamentoId:number){
      if(!(this.verifValor())){
+        this.labelConfPgto = "Aguarde um momento";
+        this.disabledConfPgto = true;
         let pgto:Pgto = new Pgto();
+        pgto.fechamentoId = fechamentoId;
         pgto.dataPagamento = this.dataCadastroPgto;
         pgto.valor = Number($("#inputValorPgto").val());
         pgto.obs = this.obsCadastroPgto;
 
-        this.fechamentos.forEach(fechamento => 
-        {
-          if(fechamento.id == fechamentoId){
-            fechamento.valorPgto += Number($("#inputValorPgto").val());
-            fechamento.pgtos.push(pgto);
-            $('#divValorPago_'+fechamentoId).empty();
-            $('#divValorPago_'+fechamentoId).append(fechamento.valorPgto.toFixed(2));
-          }
-        })
-
-        
-  
-        this.modalCadastro.close();
+        this.fechamentoService.addPgto(pgto)
+          .subscribe(res => {
+            this.labelConfPgto = "Inserir Pagamento";
+            this.disabledConfPgto = false;
+            this.fechamentos.forEach(fechamento => 
+              {
+                if(fechamento.id == fechamentoId){
+                  fechamento.valorPgto += Number($("#inputValorPgto").val());
+                  fechamento.pgtos.push(pgto);
+                  $('#divValorPago_'+fechamentoId).empty();
+                  $('#divValorPago_'+fechamentoId).append("R$ "+fechamento.valorPgto.toFixed(2).replace(".",","));
+                }
+              })
+              this.modalCadastro.close();
+         }, error =>{
+            this.labelConfPgto = "Inserir Pagamento";
+            this.disabledConfPgto = false;
+            alert("Erro ao acessar o banco de dados")});
+      
     }
     
   }
