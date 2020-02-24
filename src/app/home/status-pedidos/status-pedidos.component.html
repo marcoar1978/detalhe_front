@@ -25,7 +25,7 @@
         <td style='text-align:center'>--</td>
         <td style='text-align:center'>--</td>
         <td style='text-align:center'>{{valorPedidosAbertos | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'><i class="material-icons" style='cursor:pointer'>print</i></td>
+        <td style='text-align:center'><i class="material-icons" style='cursor:pointer' (click)="imprimirPedidos()">print</i></td>
     </tr> 
     <tr>
         <td>Concluídos</td>
@@ -33,7 +33,7 @@
         <td style='text-align:center'>{{qdeEntregas}}</td>
         <td style='text-align:center'>--</td>
         <td style='text-align:center'>{{valorPedidosConcluidos | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'><i class="material-icons" style='cursor:pointer'>print</i></td>
+        <td style='text-align:center'></td>
     </tr> 
     <tr>
         <td>Fechados</td>
@@ -41,7 +41,7 @@
         <td style='text-align:center'>{{qdeEntregasFechadas}}</td>
         <td style='text-align:center'>{{qdeFechamentos}}</td>
         <td style='text-align:center'>{{valorPedidosFechados | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'><i class="material-icons" style='cursor:pointer'>print</i></td>
+        <td style='text-align:center'></td>
     </tr> 
     <tr>
         <td><b>Total</b></td>
@@ -54,9 +54,8 @@
 
 </table>    
 </div>
-
-
-
-
-
 </div>
+
+<div id='impressaoPedidos' style='display:none'>
+    <app-impressao-pedidos [pedidosInput]='pedidos'></app-impressao-pedidos>
+</div>    

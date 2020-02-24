@@ -136,7 +136,9 @@ export class PedidosEmProcessoComponent implements OnInit {
           this.disabledConfEntrega = false;
           alert("Erro ao acessar o banco de dados");})
       
-    }   
+    }
+    
+   
 
 
    }

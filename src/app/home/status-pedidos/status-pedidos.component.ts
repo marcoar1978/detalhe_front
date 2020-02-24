@@ -94,4 +94,15 @@ export class StatusPedidosComponent implements OnInit {
     }
   }
 
+  imprimirPedidos(){
+    const janela = window.open('', 'PRINT', 'height=500,width=700');
+    janela.document.write('<html><head><title>Pedidos</title>');
+    janela.document.write('</head><body>');  
+    janela.document.write(document.getElementById("impressaoPedidos").innerHTML);
+    janela.document.write('</body></html>');
+    //janela.print();
+    //janela.close();
+
+  }
+
  }

@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LOCALE_ID } from '@angular/core';
+import {NgPrintModule} from 'ng-print';
 
 import { HomeComponent } from './home.component';
 import { AbrirpedidoComponent } from './abrirpedido/abrirpedido.component';
@@ -20,19 +21,21 @@ import { ConfirmFechamentoComponent } from './confirm-fechamento/confirm-fechame
 import { FechamentosComponent } from './fechamentos/fechamentos.component';
 import { StatusPedidosComponent } from './status-pedidos/status-pedidos.component';
 import { InicioHomeComponent } from './inicio-home/inicio-home.component';
+import { ImpressaoPedidosComponent } from './impressao-pedidos/impressao-pedidos.component';
 
 
 
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent],
   imports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    NgPrintModule
 
   ],
   providers:[
