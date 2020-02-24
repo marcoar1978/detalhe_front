@@ -177,7 +177,7 @@
                           </tr>    
                       </table>      
                 </td>
-                <td *ngIf="entrega.clinicaId == clinica.id" style='text-align: right;' width='10%'>R$ {{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+                <td *ngIf="entrega.clinicaId == clinica.id" style='text-align: right;' width='10%'>{{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='20%' style='text-align:center'>
                     <div [ngStyle]="{'display':entrega.recebedor ? '' : 'none' }" id='dataComRecebedor_{{entrega.id}}'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</div>
                     <div [ngStyle]="{'display':entrega.recebedor ? 'none' : '' }" id='dataSemRecebedor_{{entrega.id}}'><input type='date' id='dataRecebedor_{{entrega.id}}' [value]='dadosIniciais.dataHoje' class='form-control'></div>

@@ -50,7 +50,7 @@ submitForm(){
       .subscribe(res=> {
        this.credencial = res;
        window.localStorage.setItem("tokenDetalhe", this.credencial.token);
-       this.router.navigate(['/home']);
+       this.router.navigate(['/home/inicioHome']);
        }, err => {
         this.submited = false;
         $("#caixaMsgAguardar").slideUp(500, () => {

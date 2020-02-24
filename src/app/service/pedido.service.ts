@@ -16,8 +16,8 @@ import { DadosIniciais } from '../model/dados-iniciais.model';
 
 @Injectable({providedIn: 'root'})
 export class PedidoService{
-    //API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
-    API:string = "http://localhost:8080";
+    API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
+    //API:string = "http://localhost:8080";
     clinicas:Clinica[];
     proteticos:Protetico[];
     

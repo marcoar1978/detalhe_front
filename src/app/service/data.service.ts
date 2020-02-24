@@ -28,7 +28,8 @@ export class DataService{
     dadosIniciaisMessage = this.dadosIniciaisSubject.asObservable();
     fechamentoConfSubject: BehaviorSubject<Fechamento> = new BehaviorSubject<Fechamento>(new Fechamento());
     fechamentoConfMessage = this.fechamentoConfSubject.asObservable();
-
+    verifDadosPrincipaisSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    verifDadosPrincipaisMessage = this.verifDadosPrincipaisSubject.asObservable();
 
     altDataClinica(clinicas:Clinica[]){
         this.clinicaSubject.next(clinicas);
@@ -60,6 +61,10 @@ export class DataService{
 
     altDataFechamentoConf(fechamento: Fechamento){
         this.fechamentoConfSubject.next(fechamento);
+    }
+
+    altDataDadosPrincipais(dadosPrincipais: boolean){
+        this.verifDadosPrincipaisSubject.next(dadosPrincipais);
     }
 
 

@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 @Injectable({providedIn: 'root'})
 export class FechamentoService{
 
- //API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
- API:string = "http://localhost:8080";
+ API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
+ //API:string = "http://localhost:8080";
 
  constructor(private http: HttpClient){}
 

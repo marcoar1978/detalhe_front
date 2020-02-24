@@ -18,11 +18,13 @@ import { DadosIniciaisResolve } from './service/dadosIniciais.resolve';
 import { EntregasComponent } from './home/entregas/entregas.component';
 import { ConfirmFechamentoComponent } from './home/confirm-fechamento/confirm-fechamento.component';
 import { FechamentosComponent } from './home/fechamentos/fechamentos.component';
+import { StatusPedidosComponent } from './home/status-pedidos/status-pedidos.component';
+import { InicioHomeComponent } from './home/inicio-home/inicio-home.component';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] , 
-                  resolve: {clinicas: ClinicaResolve, proteticos: ProteticoResolve, produtos: ProdutoResolve, dentistas: DentistaResolve, dadosIniciais: DadosIniciaisResolve }, children:[
+      resolve: {dadosIniciais: DadosIniciaisResolve }, children:[
       { path: 'abrirPedido', component: AbrirpedidoComponent, resolve: {aberturaPedido: AbrirPedidoResolve } },
       { path: 'pedidoFechado/:pedidoId', component: PedidoFechadoComponent },
       { path: 'pedidosEmProcesso', component: PedidosEmProcessoComponent },
@@ -31,6 +33,8 @@ const routes: Routes = [
       { path: 'entregas', component: EntregasComponent },
       { path: 'confirmFechamento', component: ConfirmFechamentoComponent },
       { path: 'fechamentos', component: FechamentosComponent },
+      { path: 'statusPedidos', component: StatusPedidosComponent },
+      { path: 'inicioHome', component: InicioHomeComponent },
   ] }
 ];
 

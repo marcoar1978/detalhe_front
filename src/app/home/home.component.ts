@@ -22,10 +22,10 @@ export class HomeComponent implements OnInit {
               private dataService: DataService) { }
 
   ngOnInit() {
-    this.dataService.altDataClinica(this.actRoute.snapshot.data['clinicas']); 
-    this.dataService.altDataProtetico(this.actRoute.snapshot.data['proteticos']);
-    this.dataService.altDataProduto(this.actRoute.snapshot.data['produtos']);
-    this.dataService.altDataDentista(this.actRoute.snapshot.data['dentistas']);
+    //this.dataService.altDataClinica(this.actRoute.snapshot.data['clinicas']); 
+    //this.dataService.altDataProtetico(this.actRoute.snapshot.data['proteticos']);
+    //this.dataService.altDataProduto(this.actRoute.snapshot.data['produtos']);
+    //this.dataService.altDataDentista(this.actRoute.snapshot.data['dentistas']);
     this.dataService.altDadosIniciais(this.actRoute.snapshot.data['dadosIniciais']);
     this.dadosIniciais = this.actRoute.snapshot.data['dadosIniciais'];
 
