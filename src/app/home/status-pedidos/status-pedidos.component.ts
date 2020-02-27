@@ -73,7 +73,7 @@ export class StatusPedidosComponent implements OnInit {
         this.qdePedidosConcluidos = this.entregas.reduce((prevVal, entrega) => {return prevVal + entrega.pedidos.length}, 0);
         this.qdeEntregas = this.entregas.length;
 
-        this.valorPedidosFechados = this.fechamentos.reduce((prevVal, fechamento) => {return prevVal + fechamento.valorTotal},0);
+        this.valorPedidosFechados = this.fechamentos.reduce((prevVal, fechamento) => {return prevVal + (fechamento.valorTotal - fechamento.valorPgto)},0);
         this.fechamentos.forEach(fechamento => {
            fechamento.entregas.forEach(entrega => {
              this.qdePedidosFechados = entrega.pedidos.length + this.qdePedidosFechados;

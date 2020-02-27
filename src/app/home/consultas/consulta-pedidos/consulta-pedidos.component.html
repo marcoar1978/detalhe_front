@@ -1,0 +1,22 @@
+
+<div style='text-align:center' id='titulo'><b>Consulta de Pedidos</b></div><br>
+<div class='container'>
+ <br>   
+<div id='divFormConsulta' >
+    
+    <button class="btn btn-outline-primary" style='margin:10px' (click)='expandeFormConsulta()'>{{labelButtonForm}}</button> 
+    <div id='formConsulta'>
+    <input type='text' class='form-control' placeholder="Por número do pedido" style='width:300px;margin:10px'>
+    <input type='text' class='form-control' placeholder="Por paciente" style='width:300px;margin:10px'>
+    
+    <select class='form-control' style='width:300px;margin:10px'>
+        <option value='' disabled>Por clínica</option>
+        <option *ngFor='let clinica of clinicas' [value]='clinica.id'>{{clinica.nomeSimp}}
+    </select> 
+    <input type="month" class='form-control' style='width:300px;margin:10px' id='mesAno' (blur)='valueMesAno()'>   
+    </div>  
+</div>
+<br><br><br>fffffff
+</div>
+
+

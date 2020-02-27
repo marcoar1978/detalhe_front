@@ -20,6 +20,8 @@ import { ConfirmFechamentoComponent } from './home/confirm-fechamento/confirm-fe
 import { FechamentosComponent } from './home/fechamentos/fechamentos.component';
 import { StatusPedidosComponent } from './home/status-pedidos/status-pedidos.component';
 import { InicioHomeComponent } from './home/inicio-home/inicio-home.component';
+import { ConsultaEntregasComponent } from './home/consultas/consulta-entregas/consulta-entregas.component';
+import { ConsultaPedidosComponent } from './home/consultas/consulta-pedidos/consulta-pedidos.component';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
@@ -35,6 +37,8 @@ const routes: Routes = [
       { path: 'fechamentos', component: FechamentosComponent },
       { path: 'statusPedidos', component: StatusPedidosComponent },
       { path: 'inicioHome', component: InicioHomeComponent },
+      { path: 'consultaPedidos', component: ConsultaPedidosComponent },
+      { path: 'consultaEntregas', component: ConsultaEntregasComponent },
   ] }
 ];
 

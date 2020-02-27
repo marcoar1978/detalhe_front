@@ -22,12 +22,11 @@ import { FechamentosComponent } from './fechamentos/fechamentos.component';
 import { StatusPedidosComponent } from './status-pedidos/status-pedidos.component';
 import { InicioHomeComponent } from './inicio-home/inicio-home.component';
 import { ImpressaoPedidosComponent } from './impressao-pedidos/impressao-pedidos.component';
-
-
-
+import { ConsultaEntregasComponent } from './consultas/consulta-entregas/consulta-entregas.component';
+import { ConsultaPedidosComponent } from './consultas/consulta-pedidos/consulta-pedidos.component';
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent, ConsultaEntregasComponent, ConsultaPedidosComponent],
   imports: [
     CommonModule,
     HttpClientModule,
