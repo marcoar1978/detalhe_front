@@ -43,7 +43,7 @@ export class InicioHomeComponent implements OnInit {
           this.escondeAlert();   
         }, error => {alert("Erro ao acessar o banco de dados")})
         
-      this.pedidoService.getProdutos()
+      this.pedidoService.detPrecos()
         .subscribe(produtos => {
           this.dataService.altDataProduto(produtos);
           this.verifCarregamento[2] = true;

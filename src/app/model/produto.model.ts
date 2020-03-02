@@ -9,5 +9,6 @@ export class Produto{
     qde:number;
     valorTotal:number;
     padraoPrazoEntrega: number;
+    listaId:number;
 
 }

@@ -4,25 +4,23 @@ import { Observable } from 'rxjs';
 
 import { Entrega } from '../model/entrega.model';
 import { Fechamento } from '../model/fechamento.model';
+import { API } from '../../environments/api';
 
 @Injectable({providedIn: 'root'})
 export class EntregaService{
 
-    API:string = "http://ec2-54-82-227-244.compute-1.amazonaws.com";
-    //API:string = "http://localhost:8080";
-
     constructor(private http: HttpClient){}
 
     listaEntregas(){
-        return this.http.get<Entrega[]>(this.API +'/processos/listaEntregas');
+        return this.http.get<Entrega[]>(API +'/processos/listaEntregas');
     }
 
     registraRecebedor(entregaId: number, recebedor: string, dataEntrega:string){
         const dados = {entregaId, recebedor, dataEntrega};
-        return this.http.post<Response>(this.API +'/processos/registraRecebedor', dados);
+        return this.http.post<Response>(API +'/processos/registraRecebedor', dados);
     }
 
     registrarFechamento(fechamento:Fechamento){
-        return this.http.post<Response>(this.API + '/processos/registrarFechamento', fechamento);
+        return this.http.post<Response>(API + '/processos/registrarFechamento', fechamento);
     }
 }

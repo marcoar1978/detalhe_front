@@ -25,6 +25,7 @@ import { PedidoFechado } from 'src/app/model/pedido-fechado.model';
 })
 export class AbrirpedidoComponent implements OnInit {
   pedido:Pedido = new Pedido();
+  clinica:Clinica;
   clinicas:Clinica[];
   dentistas:Dentista[];
   dentistasForm:Dentista[];
@@ -89,12 +90,13 @@ export class AbrirpedidoComponent implements OnInit {
 
   altClinica(){
     const clinicaId = this.form.get("clinica").value;
+    let clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
     this.produtosEscolhidos = [];
     this.valorTotalLiquido = 0;
     this.valorDesconto = 0;
     this.totalPedido = 0;
-    
-    this.produtosPadraoClinica = this.produtos.filter(produtoPadraoClinica => produtoPadraoClinica.clinicaId == clinicaId)
+    console.log(clinica);
+    this.produtosPadraoClinica = this.produtos.filter(produtoPadraoClinica => produtoPadraoClinica.listaId == clinica.listaId)
     $('#caixaItens').fadeOut(350);
     $('#divDentista').slideUp(350, () => {
       this.dentistasForm = this.dentistas.filter(dentista => dentista.clinicaId == clinicaId);
@@ -251,8 +253,10 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
   inserirProdutoPadrao(){
+    console.log(this.form.get('qdeProduto').value);
     const produtoId = this.form.get('produtoPadrao').value;
     const clinicaId = this.form.get('clinica').value;
+    const clinica = this.clinicas.find(clinica => clinica.id = clinicaId);
     if(!(produtoId) || !(this.form.get('qdeProduto').value)){
       this.msgFormItem = "Todos os dados o Ítem devem ser preenchidos";
         $('#avisoFormItem').slideDown(350);
@@ -266,9 +270,9 @@ export class AbrirpedidoComponent implements OnInit {
       $('#avisoFormItem').slideDown(350);
       return;
     }  
-   
-    const produtoPadrao:Produto = this.produtos.find(produto => (produto.clinicaId == clinicaId && produto.produtoId == produtoId));
-    produtoPadrao.qde = this.form.get('qdeProduto').value;
+       
+    const produtoPadrao:Produto = this.produtos.find(produto => (produto.listaId == clinica.listaId && produto.produtoId == produtoId));
+    produtoPadrao.qde = Number(this.form.get('qdeProduto').value);
     produtoPadrao.valorTotal = produtoPadrao.valor * produtoPadrao.qde;
     produtoPadrao.ordem = this.ordem;
     produtoPadrao.tipoProduto = "padrao"; 
