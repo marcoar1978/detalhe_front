@@ -1,4 +1,5 @@
 import { Item } from './item.model';
+import { Entrega } from './entrega.model';
 
 export class Pedido{
     
@@ -21,6 +22,7 @@ export class Pedido{
     statusPedido:string;
     statusEntrega:string;
     checkEntrega:boolean;
+    entrega:Entrega;
     
 
 }

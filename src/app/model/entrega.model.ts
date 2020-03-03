@@ -1,4 +1,5 @@
 import { Pedido } from './pedido.model';
+import { Fechamento } from './fechamento.model';
 
 export class Entrega{
     id:number;
@@ -10,10 +11,12 @@ export class Entrega{
     pedidos:Pedido[];
     pedidosId: number[];
     totalEntrega:number;
+    fechamento:Fechamento;
 
     displayComRecebedor:string;
     displaySemRecebedor:string;
     checkFechamento:boolean = false;
+
 
 
 

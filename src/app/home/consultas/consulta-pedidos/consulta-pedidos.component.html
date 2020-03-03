@@ -2,20 +2,31 @@
 <div style='text-align:center' id='titulo'><b>Consulta de Pedidos</b></div><br>
 <div class='container'>
  <br>   
+ 
 <div id='divFormConsulta' >
     
     <button class="btn btn-outline-primary" style='margin:10px' (click)='expandeFormConsulta()'>{{labelButtonForm}}</button> 
     <div id='formConsulta'>
-    <input type='text' class='form-control' placeholder="Por número do pedido" style='width:300px;margin:10px'>
-    <input type='text' class='form-control' placeholder="Por paciente" style='width:300px;margin:10px'>
-    
-    <select class='form-control' style='width:300px;margin:10px'>
+        <div class="row">
+            <div class="col-md-6">   
+    <input type='number' class='form-control' (keyup.enter)="consultaPorId()" id="pedidoId" ngbTooltip="Digite o número do pedido e tecle enter" placeholder="Por número do pedido" style='width:300px;margin:10px'>
+    <input type='text' class='form-control' id="nomePaciente" ngbTooltip="Digite o nome do paciente e tecle enter" placeholder="Por paciente" style='width:300px;margin:10px'>
+            </div>
+            <div class="col-md-6">    
+    <select class='form-control' id="clinicaId" ngbTooltip="Escolha a clínica, mes e ano e clique em Consultar" style='width:300px;margin:10px'>
         <option value='' disabled>Por clínica</option>
+        <option value='todos'>Todas as clínicas
         <option *ngFor='let clinica of clinicas' [value]='clinica.id'>{{clinica.nomeSimp}}
     </select> 
-    <input type="month" class='form-control' style='width:300px;margin:10px' id='mesAno' (blur)='valueMesAno()'>   
-    </div>  
-</div>
+    <input type="month" class='form-control' id="anoMes" style='width:300px;margin:10px' id='mesAno' value='2020-03' (blur)='valueMesAno()'>   
+        <button class="btn btn-info btn-sm" style='margin:10px;'>Consultar</button>   
+        </div>
+        </div>
+    </div>
+  
+</div> 
+ 
+<div>
 <br><br><br>fffffff
 </div>
 

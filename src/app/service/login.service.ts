@@ -13,6 +13,7 @@ export class LoginService{
     constructor(private http: HttpClient){}
 
     autenticar(email:string, senha:string): Observable<JWT>{
+        console.log(API);
         return  this.http.post<JWT>(API+"/auth", {email, senha});
     }
 }

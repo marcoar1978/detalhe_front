@@ -150,7 +150,25 @@ export class PedidoService{
         .set("pedidoIdForm", pedidoId.toString());
     return this.http.get<Response>(API +'/pedido/delItensPorProduto?'+httpParams.toString());
    }
-  
+
+   consultaPorId(pedidoId:number):Observable<Pedido>{
+        return this.http.get<Pedido>(API+"/pedido/consultaPorId/"+pedidoId);
+    }
+    
+    consultaPorPaciente(nomePaciente:string):Observable<Pedido[]>{
+        let httpParams:HttpParams = new HttpParams()
+          .set("nomePaciente", nomePaciente);
+        return this.http.get<Pedido[]>(API+"/pedido/consultaPorPaciente?"+httpParams.toString());
+    }
+    
+    consultaPorClinica(clinicaId:number, ano:string, mes:string):Observable<Pedido[]>{
+        let httpParams:HttpParams = new HttpParams()
+          .set("clinicaIdForm", clinicaId.toString())
+          .set("anoForm", ano)
+          .set("mesForm", mes);
+       return this.http.get<Pedido[]>(API+"/pedido/consultaPorClinica?"+httpParams.toString());   
+
+    }
 
    
    
