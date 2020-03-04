@@ -22,6 +22,10 @@ export class FechamentoService{
     return this.http.post<Response>(API + '/fechamento/addPgto', pgto);
  }
 
+ getFechamento(fechamentoId:number){
+     return this.http.get<Fechamento>(API+"/fechamento/"+fechamentoId.toString());
+ }
+
 }
 
 

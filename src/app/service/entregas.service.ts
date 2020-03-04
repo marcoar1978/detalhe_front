@@ -23,4 +23,9 @@ export class EntregaService{
     registrarFechamento(fechamento:Fechamento){
         return this.http.post<Response>(API + '/processos/registrarFechamento', fechamento);
     }
+
+    getEntrega(entregaId:number){
+        return this.http.get<Entrega>(API+"/processos/getEntrega/"+entregaId.toString());
+
+    }
 }

@@ -83,9 +83,6 @@ export class EntregasComponent implements OnInit {
           this.escondeAlert(this.carregamentoClinicas,this.carregamentoEntregas);  
           
          })
-    
-      
-
     }
     
     escondeAlert(carregamentoClinicas:boolean,carregamentoPedidos:boolean ){
