@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChildren, QueryList, EventEmitter } from '@angular/core';
 import * as $ from "jquery";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,8 @@ import { EntregaService } from 'src/app/service/entregas.service';
 import { Entrega } from 'src/app/model/entrega.model';
 import { Fechamento } from 'src/app/model/fechamento.model';
 import { FechamentoService } from 'src/app/service/fechamento.service';
+import { NgbdSortableHeader } from 'src/app/diretivas/sort.diretiva';
+import { SortEvent, compare } from 'src/app/diretivas/sort.interface';
 
 @Component({
   selector: 'app-consulta-pedidos',
@@ -25,15 +27,19 @@ export class ConsultaPedidosComponent implements OnInit {
   clinicas:Clinica[];
   clinica:Clinica = new Clinica();
   dadosIniciais:DadosIniciais;
+  pedidosSelecionados:Pedido[] = [];
   pedidoSelecionado:Pedido = new Pedido();
   pedidos:Pedido[];
   form:FormGroup;
   mgsPedidoId:string;
-  modalPedido:any;
+  msgNomePaciente:string;
+  msgClinica:string;
   entregaSelecionada:Entrega = new Entrega();
   totalEntregaSelecionada:number;
   situacaoPgto:string;
   fechamentoSelecionado:Fechamento = new Fechamento();
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  anoMes:string;
   
   constructor(private dataService: DataService,
               private formBuilder: FormBuilder,
@@ -52,7 +58,11 @@ export class ConsultaPedidosComponent implements OnInit {
        });
     
     this.dataService.dadosIniciaisMessage
-      .subscribe(res => { this.dadosIniciais = res})   
+      .subscribe(res => { 
+        this.dadosIniciais = res;
+        const dataSplit = this.dadosIniciais.dataHoje.split("-");
+        this.anoMes = dataSplit[0]+"-"+dataSplit[1];
+       })   
     
   }
  
@@ -89,10 +99,6 @@ export class ConsultaPedidosComponent implements OnInit {
   }  
   }
 
-  valueMesAno(){
-    console.log($("#mesAno").val());
-  }
-
   consultaPorId(content){
     let pedidoId = $("#pedidoId").val();
     if(!pedidoId){
@@ -123,7 +129,7 @@ export class ConsultaPedidosComponent implements OnInit {
             this.situacaoPgto = "Incompleto";
            }
           }
-        this.modalService.open(content, { centered: true, size: 'lg',scrollable: true });
+        this.modalService.open(content, { centered: true, size: 'lg', scrollable: true });
       }, error => {
           $('#divMgsPedidoId').slideUp(350, () => {
           this.mgsPedidoId = "";
@@ -136,12 +142,132 @@ export class ConsultaPedidosComponent implements OnInit {
              })
              }
            else{
+            $('#divMgsPedidoId').slideUp(350);
              alert("Problemas para acessar o banco de dados");
            }  
         });
         
       });
   }
+
+  consultaNomePaciente(){
+    let nomePaciente = $("#nomePaciente").val();
+    if(!nomePaciente){
+      alert("Digite o nome do paciente");
+      return;
+    }
+
+    $('#divMsgNomePaciente').slideUp(350, () => {
+      $('#divMsgNomePaciente').css('font-weight','normal');
+      $('#divMsgNomePaciente').css('color','green');
+      this.msgNomePaciente = "Aguarde um momento";
+      $('#divMsgNomePaciente').slideDown(350);
+    });
+  
+  this.pedidoService.consultaPorPaciente(nomePaciente)
+    .subscribe(res => {
+       $("#nomePaciente").val(""); 
+       this.pedidosSelecionados = res;
+       if(this.pedidosSelecionados.length == 0){
+        
+        $('#divMsgNomePaciente').slideUp(350, () => {
+          $('#divMsgNomePaciente').css('font-weight','bold');
+          $('#divMsgNomePaciente').css('color','red');
+          this.msgNomePaciente = "Nome deste paciente não existe";
+          $('#divMsgNomePaciente').slideDown(350, () => {
+            setTimeout( () => { $('#divMsgNomePaciente').slideUp(350);}, 4000);
+          });
+        });
+        return;
+       } 
+
+
+
+       this.pedidosSelecionados.forEach(pedidoSelecionado => {
+          const clinica: Clinica = this.clinicas.find(clinica => clinica.id == pedidoSelecionado.clinicaId);
+          pedidoSelecionado.clinica = clinica.nomeSimp;
+       })
+       
+       $('#divMsgNomePaciente').slideUp(350, () => {
+        $("#formConsulta").fadeOut(250, () => {
+          $("#divFormConsulta").animate({height: "55px"},  () => {
+            $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
+            $("#divFormConsulta").css('box-shadow','');
+            this.mgsPedidoId = "";
+            $("#tabelaPedidos").fadeOut(350, () => {
+              this.labelButtonForm = "Expandir";
+              $("#tabelaPedidos").fadeIn(350);
+            }); 
+            
+        })  
+      });
+    });
+  }, error => {
+    $('divMsgNomePaciente').slideUp(350);
+    alert("Problemas ao acessar o banco de dados");})  
+}
+
+consultaPorClinica(){
+  const data = $("#mesAno").val();
+  const dataSplit = data.split("-");
+  const ano = dataSplit[0];
+  const mes = dataSplit[1];
+  const clinicaId = $("#clinicaId").val();
+
+  if(!clinicaId){
+    alert("Selecione a clínica");
+    return;
+  }
+
+  $('#divMsgClinica').slideUp(350, () => {
+    $('#divMsgClinica').css('font-weight','normal');
+    $('#divMsgClinica').css('color','green');
+    this.msgClinica = "Aguarde um momento";
+    $('#divMsgClinica').slideDown(350);
+  });
+
+ this.pedidoService.consultaPorClinica(clinicaId, ano, mes )
+  .subscribe(res => {
+    this.pedidosSelecionados = res;
+    if(this.pedidosSelecionados.length == 0){
+      
+     $('#divMsgClinica').slideUp(350, () => {
+       $('#divMsgClinica').css('font-weight','bold');
+       $('#divMsgClinica').css('color','red');
+       this.msgClinica = "Não há registros neste período";
+       $('#divMsgClinica').slideDown(350, () => {
+         setTimeout( () => { $('#divMsgClinica').slideUp(350);}, 4000);
+       });
+     });
+     return;
+    }
+    
+    this.pedidosSelecionados.forEach(pedidoSelecionado => {
+      const clinica: Clinica = this.clinicas.find(clinica => clinica.id == pedidoSelecionado.clinicaId);
+      pedidoSelecionado.clinica = clinica.nomeSimp;
+   });
+   
+   $('#divMsgClinica').slideUp(350, () => {
+    $("#formConsulta").fadeOut(250, () => {
+      $("#divFormConsulta").animate({height: "55px"},  () => {
+        $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
+        $("#divFormConsulta").css('box-shadow','');
+        this.mgsPedidoId = "";
+        $("#tabelaPedidos").fadeOut(350, () => {
+          this.labelButtonForm = "Expandir";
+          $("#tabelaPedidos").fadeIn(350);
+        }); 
+        
+    })  
+  });
+});
+    
+
+  }, error => {
+    $('#divMsgClinica').slideUp(350);
+    alert("Problemas ao acessar o banco de dados");})
+  
+}
 
   escondeDivConsulta(){
     $("#formConsulta").fadeOut(250, () => {
@@ -198,5 +324,44 @@ getFechamento(fechamentoId:number){
 
     })
 }
+
+consultaDetPedidoCliente(pedidoId:number, content){
+
+  this.pedidoService.consultaPorId(pedidoId)
+  .subscribe(res => {
+    
+    this.pedidoSelecionado = res;
+    if(this.pedidoSelecionado.entrega.fechamento){
+      if((this.pedidoSelecionado.entrega.fechamento.valorTotal - this.pedidoSelecionado.entrega.fechamento.valorPgto) == 0){
+          this.situacaoPgto = "Pago";
+       }
+       else{
+        this.situacaoPgto = "Incompleto";
+       }
+      }
+    this.modalService.open(content, { centered: true, size: 'lg',scrollable: true });
+  }, error => { alert("Problemas para acessar o banco de dados"); });
+    
+ 
+
+  }
+
+  onSort({column, direction}: SortEvent) {
+        
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    if (direction === '') {
+      this.pedidosSelecionados =  this.pedidosSelecionados;
+    } else {
+      this.pedidosSelecionados = [...this.pedidosSelecionados].sort((a, b) => {
+        const res = compare(a[column], b[column]);
+        return direction === 'asc' ? res : -res;
+      });
+    }
+  }
 
 }

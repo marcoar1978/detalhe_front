@@ -1,7 +1,7 @@
 
 
 <ng-template #content  let-modal id='modalPedido'>
-    <div #content2>
+     
     <div class="modal-header">
       
       <h4 class="modal-title">Pedido nº {{pedidoSelecionado.id}}</h4>
@@ -83,14 +83,15 @@
     </table>
     <br>  
     </div> 
-  </div>   
+   
     <div class="modal-footer">
      
       <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Fechar</button>
-      <button type="button" class="btn btn-light" (click)="modal.close('Close click')" [elementToPrint]="content2" ngPrint>Imprimir</button>
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')" [elementToPrint]="content" ngPrint>Imprimir</button>
     </div>
-    
+      
 </ng-template>
+
 
 <ng-template #conferenciaEntrega  let-modal>
   <div class="modal-header">

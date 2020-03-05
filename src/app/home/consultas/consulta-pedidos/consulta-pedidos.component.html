@@ -11,7 +11,9 @@
             <div class="col-md-6">   
     <input type='number' class='form-control' (keyup.enter)="consultaPorId(content)" id="pedidoId" ngbTooltip="Digite o número do pedido e tecle enter" placeholder="Por número do pedido" style='width:300px;margin:10px'>
     <div style='color:green;font-size:14px;text-align: center;' id='divMgsPedidoId'>{{mgsPedidoId}}</div>
-    <input type='text' class='form-control' id="nomePaciente" ngbTooltip="Digite o nome do paciente e tecle enter" placeholder="Por paciente" style='width:300px;margin:10px'>
+    <input type='text' class='form-control' (keyup.enter)="consultaNomePaciente()" id="nomePaciente" ngbTooltip="Digite o nome do paciente e tecle enter" placeholder="Por paciente" style='width:300px;margin:10px'>
+    <div style='color:green;font-size:14px;text-align: center;' id='divMsgNomePaciente'>{{msgNomePaciente}}</div>      
+
             </div>
             <div class="col-md-6">    
     <select class='form-control' id="clinicaId" ngbTooltip="Escolha a clínica, mes e ano e clique em Consultar" style='width:300px;margin:10px'>
@@ -19,8 +21,9 @@
         <option value='todos'>Todas as clínicas
         <option *ngFor='let clinica of clinicas' [value]='clinica.id'>{{clinica.nomeSimp}}
     </select> 
-    <input type="month" class='form-control' id="anoMes" style='width:300px;margin:10px' id='mesAno' value='2020-03' (blur)='valueMesAno()'>   
-        <button class="btn btn-info btn-sm" style='margin:10px;'>Consultar</button>   
+    <input type="month" class='form-control' id="anoMes" style='width:300px;margin:10px' id='mesAno' [value]='anoMes'>   
+        <button class="btn btn-info btn-sm" style='margin:10px;' (click)="consultaPorClinica()">Consultar</button>  
+        <div style='color:green;font-size:14px;text-align: center;' id='divMsgClinica'>{{msgClinica}}</div>     
         </div>
         </div>
     </div>
@@ -28,7 +31,34 @@
 </div> 
  
 <div>
-<br><br><br>fffffff
+    
+<div id='tabelaPedidos' style='display:none;margin-top:70px'>
+    <table class='table table-hover' style='text-align: center;font-size:14px;'>
+        <thead>
+        <tr>
+        <th colspan='2' scope="col" style='text-align: center;'>Id</th>
+        <th width='20%' scope="col" sortable="dataPedido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Data Pedido</th>
+        <th width='20%' scope="col" sortable="clinica" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Clínica</th>    
+        <th width='20%' scope="col" sortable="nomePaciente" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Paciente</th>
+        <th width='20%' scope="col" sortable="dentista" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Dentista</th>
+        <th scope="col" sortable="valorLiquido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let pedido of pedidosSelecionados'>
+            <th scope="row" width='5%' style='text-align: center;cursor:pointer' >{{pedido.id}}</th>
+            <td width='5%' style='text-align: center;cursor:pointer' title='Detalhes do pedido nº {{pedido.id}}' (click)="consultaDetPedidoCliente(pedido.id, content)" ><i class="material-icons">assignment </i></td>
+            <td style='text-align: center' >{{pedido.dataPedido  | date:'dd/MM/yyyy' }}</td>
+            <td style='text-align: left'>{{pedido.clinica}}</td>
+            <td style='text-align: left'>{{pedido.nomePaciente}}</td>
+            <td style='text-align: left'>{{pedido.dentista}}</td>
+            <td style='text-align: right'>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+
+        </tr>
+    </tbody>   
+    </table> 
+
+</div>    
 </div>
 
 
@@ -38,8 +68,8 @@
 
 
 
-<ng-template #content  let-modal id='modalPedido'>
-    <div #content2>
+<ng-template #content  let-modal>
+    
     <div class="modal-header">
       
       <h4 class="modal-title">Pedido nº {{pedidoSelecionado.id}}</h4>
@@ -169,13 +199,13 @@
 
     <br>  
     </div> 
-  </div>   
+    
     <div class="modal-footer">
      
       <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Fechar</button>
-      <button type="button" class="btn btn-light" (click)="modal.close('Close click')" [elementToPrint]="content2" ngPrint>Imprimir</button>
+     <!-- <button type="button" class="btn btn-light" (click)="modal.close('Close click')" [elementToPrint]="content2" ngPrint>Imprimir</button> -->
     </div>
-    
+  
 </ng-template>
 
 
