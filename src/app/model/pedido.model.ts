@@ -23,6 +23,8 @@ export class Pedido{
     statusEntrega:string;
     checkEntrega:boolean;
     entrega:Entrega;
+    status:string;
+    corFonteStatus:string;
     
 
 }

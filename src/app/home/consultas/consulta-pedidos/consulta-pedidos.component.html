@@ -5,7 +5,7 @@
  
 <div id='divFormConsulta' >
     
-    <button class="btn btn-outline-primary" style='margin:10px' (click)='expandeFormConsulta()'>{{labelButtonForm}}</button> 
+    <button class="btn btn-outline-primary" id="buttonExpandeFormConsulta" style='margin:10px' (click)='expandeFormConsulta()'>{{labelButtonForm}}</button> 
     <div id='formConsulta'>
         <div class="row">
             <div class="col-md-6">   
@@ -36,23 +36,26 @@
     <table class='table table-hover' style='text-align: center;font-size:14px;'>
         <thead>
         <tr>
-        <th colspan='2' scope="col" style='text-align: center;'>Id</th>
-        <th width='20%' scope="col" sortable="dataPedido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Data Pedido</th>
-        <th width='20%' scope="col" sortable="clinica" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Clínica</th>    
-        <th width='20%' scope="col" sortable="nomePaciente" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Paciente</th>
+        <th colspan='3' scope="col" style='text-align: center;'>Id</th>
+        <th width='15%' scope="col" sortable="dataPedido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Data Pedido</th>
+        <th width='15%' scope="col" sortable="clinica" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Clínica</th>    
+        <th width='15%' scope="col" sortable="nomePaciente" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Paciente</th>
         <th width='20%' scope="col" sortable="dentista" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Dentista</th>
-        <th scope="col" sortable="valorLiquido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Valor</th>
+        <th width='10%' scope="col" sortable="valorLiquido" (sort)="onSort($event)" style='text-align: center;cursor:pointer;'>Valor</th>
+        <th style='text-align: center;'>Processo</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor='let pedido of pedidosSelecionados'>
             <th scope="row" width='5%' style='text-align: center;cursor:pointer' >{{pedido.id}}</th>
             <td width='5%' style='text-align: center;cursor:pointer' title='Detalhes do pedido nº {{pedido.id}}' (click)="consultaDetPedidoCliente(pedido.id, content)" ><i class="material-icons">assignment </i></td>
+            <td width='2%'>  <div class="msgDetalhePedido" id="msgDetalhePedido_{{pedido.id}}">Aguarde um momento</div></td>
             <td style='text-align: center' >{{pedido.dataPedido  | date:'dd/MM/yyyy' }}</td>
             <td style='text-align: left'>{{pedido.clinica}}</td>
             <td style='text-align: left'>{{pedido.nomePaciente}}</td>
             <td style='text-align: left'>{{pedido.dentista}}</td>
             <td style='text-align: right'>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+            <td style='text-align: center;font-size:12px;' [ngStyle]="{'color':pedido.corFonteStatus}" ><b>{{pedido.status}}</b></td>
 
         </tr>
     </tbody>   
@@ -191,7 +194,7 @@
         </div> 
     
     </div>
-    <div *ngIf="!pedidoSelecionado.entrega">* Este pedido ainda não foi concluído e entrega ao cliente.</div>
+    <div *ngIf="!pedidoSelecionado.entrega">* Este pedido ainda não foi entregue.</div>
 
     
 

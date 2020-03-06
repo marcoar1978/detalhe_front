@@ -28,4 +28,12 @@ export class EntregaService{
         return this.http.get<Entrega>(API+"/processos/getEntrega/"+entregaId.toString());
 
     }
+
+    consultaEntregaPorClinica(clinicaId:number, ano: string, mes: string){
+        let httpParams:HttpParams = new HttpParams()
+          .set("clinicaIdForm", clinicaId.toString())
+          .set("anoForm", ano)
+          .set("mesForm", mes);
+        return this.http.get<Entrega[]>(API+"/processos/consultaEntregaPorClinica?"+httpParams.toString());
+    }
 }

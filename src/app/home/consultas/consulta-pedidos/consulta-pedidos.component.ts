@@ -67,7 +67,7 @@ export class ConsultaPedidosComponent implements OnInit {
   }
  
   expandeFormConsulta() {
-        
+    $("#buttonExpandeFormConsulta").prop("disabled", true);    
     if(this.formExpandido == false){
       $("#divFormConsulta").animate({width: "680px"}, 200, "linear", () => {
         $("#divFormConsulta").animate({height: "280px"}, 
@@ -75,6 +75,7 @@ export class ConsultaPedidosComponent implements OnInit {
           $("#formConsulta").fadeIn(250); 
           $("#divFormConsulta").css('box-shadow','10px 10px 10px -6px rgba(0,0,0,0.75)');
           $("#pedidoId").focus();
+          $("#buttonExpandeFormConsulta").prop("disabled", false); 
          }})
         }
      );
@@ -85,6 +86,7 @@ export class ConsultaPedidosComponent implements OnInit {
         $("#divFormConsulta").animate({height: "55px"},  () => {
           $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
           $("#divFormConsulta").css('box-shadow','');
+          $("#buttonExpandeFormConsulta").prop("disabled", false); 
       })  
     });
   }
@@ -121,7 +123,8 @@ export class ConsultaPedidosComponent implements OnInit {
           this.mgsPedidoId = ""; 
         });
         this.pedidoSelecionado = res;
-        if(this.pedidoSelecionado.entrega.fechamento){
+
+        if(this.pedidoSelecionado.entrega && this.pedidoSelecionado.entrega.fechamento){
           if((this.pedidoSelecionado.entrega.fechamento.valorTotal - this.pedidoSelecionado.entrega.fechamento.valorPgto) == 0){
               this.situacaoPgto = "Pago";
            }
@@ -129,6 +132,7 @@ export class ConsultaPedidosComponent implements OnInit {
             this.situacaoPgto = "Incompleto";
            }
           }
+
         this.modalService.open(content, { centered: true, size: 'lg', scrollable: true });
       }, error => {
           $('#divMgsPedidoId').slideUp(350, () => {
@@ -136,7 +140,7 @@ export class ConsultaPedidosComponent implements OnInit {
           if(error.status == 400){
             $('#divMgsPedidoId').css('font-weight','bold');
             $('#divMgsPedidoId').css('color','red');
-            this.mgsPedidoId = "Número do pedido não existe";
+            this.mgsPedidoId = "Número da entrega não existe";
             $('#divMgsPedidoId').slideDown(350, () => { 
               setTimeout(() => $('#divMgsPedidoId').slideUp(350), 4000); 
              })
@@ -180,12 +184,25 @@ export class ConsultaPedidosComponent implements OnInit {
         });
         return;
        } 
-
-
-
+      
        this.pedidosSelecionados.forEach(pedidoSelecionado => {
           const clinica: Clinica = this.clinicas.find(clinica => clinica.id == pedidoSelecionado.clinicaId);
           pedidoSelecionado.clinica = clinica.nomeSimp;
+
+          if(!pedidoSelecionado.entrega){
+            pedidoSelecionado.status = "Aberto";
+            pedidoSelecionado.corFonteStatus = "blue";
+            }
+          else if(pedidoSelecionado.entrega && !pedidoSelecionado.entrega.fechamento){
+            pedidoSelecionado.status = "Entrega";
+            pedidoSelecionado.corFonteStatus = "orange";
+          }
+          else if(pedidoSelecionado.entrega && pedidoSelecionado.entrega.fechamento){
+            pedidoSelecionado.status = "Fechamento";
+            pedidoSelecionado.corFonteStatus = "green";
+          }  
+
+
        })
        
        $('#divMsgNomePaciente').slideUp(350, () => {
@@ -245,6 +262,19 @@ consultaPorClinica(){
     this.pedidosSelecionados.forEach(pedidoSelecionado => {
       const clinica: Clinica = this.clinicas.find(clinica => clinica.id == pedidoSelecionado.clinicaId);
       pedidoSelecionado.clinica = clinica.nomeSimp;
+
+      if(!pedidoSelecionado.entrega){
+        pedidoSelecionado.status = "Aberto";
+        pedidoSelecionado.corFonteStatus = "blue";
+        }
+      else if(pedidoSelecionado.entrega && !pedidoSelecionado.entrega.fechamento){
+        pedidoSelecionado.status = "Entrega";
+        pedidoSelecionado.corFonteStatus = "orange";
+      }
+      else if(pedidoSelecionado.entrega && pedidoSelecionado.entrega.fechamento){
+        pedidoSelecionado.status = "Fechamento";
+        pedidoSelecionado.corFonteStatus = "green";
+      }  
    });
    
    $('#divMsgClinica').slideUp(350, () => {
@@ -326,12 +356,13 @@ getFechamento(fechamentoId:number){
 }
 
 consultaDetPedidoCliente(pedidoId:number, content){
-
+  $(`#msgDetalhePedido_${pedidoId}`).fadeIn(250);
   this.pedidoService.consultaPorId(pedidoId)
   .subscribe(res => {
+    $(`#msgDetalhePedido_${pedidoId}`).fadeOut(250);
     
     this.pedidoSelecionado = res;
-    if(this.pedidoSelecionado.entrega.fechamento){
+    if(this.pedidoSelecionado.entrega && this.pedidoSelecionado.entrega.fechamento){
       if((this.pedidoSelecionado.entrega.fechamento.valorTotal - this.pedidoSelecionado.entrega.fechamento.valorPgto) == 0){
           this.situacaoPgto = "Pago";
        }

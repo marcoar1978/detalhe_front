@@ -1,5 +1,6 @@
 import { Pedido } from './pedido.model';
 import { Fechamento } from './fechamento.model';
+import { Clinica } from './clinica.model';
 
 export class Entrega{
     id:number;
@@ -16,6 +17,7 @@ export class Entrega{
     displayComRecebedor:string;
     displaySemRecebedor:string;
     checkFechamento:boolean = false;
+    clinica:Clinica;
 
 
 

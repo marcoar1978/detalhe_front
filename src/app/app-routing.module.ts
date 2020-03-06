@@ -24,7 +24,6 @@ import { ConsultaEntregasComponent } from './home/consultas/consulta-entregas/co
 import { ConsultaPedidosComponent } from './home/consultas/consulta-pedidos/consulta-pedidos.component';
 import { NgbdTableSortable } from './teste/sort';
 
-
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] , 
@@ -41,7 +40,7 @@ const routes: Routes = [
       { path: 'inicioHome', component: InicioHomeComponent },
       { path: 'consultaPedidos', component: ConsultaPedidosComponent },
       { path: 'consultaEntregas', component: ConsultaEntregasComponent },
-  ] }
+    ] }
 ];
 
 @NgModule({
