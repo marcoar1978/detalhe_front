@@ -1,5 +1,6 @@
 import { Entrega } from './entrega.model';
 import { Pgto } from './pgto.model';
+import { Clinica } from './clinica.model';
 
 export class Fechamento{
     id:number;
@@ -12,5 +13,7 @@ export class Fechamento{
     entregas:Entrega[];
     entregasId:number[];
     pgtos:Pgto[];
+
+    clinica:Clinica;
 
 }

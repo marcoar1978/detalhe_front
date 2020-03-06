@@ -188,6 +188,9 @@ export class ConsultaEntregasComponent implements OnInit {
 
     });
    
+      }, error => {
+        $('#divMsgClinica').slideUp(350);
+        alert("Problemas para acessar o banco de dados");
       })
    }
   

@@ -26,6 +26,14 @@ export class FechamentoService{
      return this.http.get<Fechamento>(API+"/fechamento/"+fechamentoId.toString());
  }
 
+ consultaPorClinica(clinicaId: number, ano: string, mes: string){
+    let httpParams:HttpParams = new HttpParams()
+    .set("clinicaIdForm", clinicaId.toString())
+    .set("anoForm", ano)
+    .set("mesForm", mes);
+     return this.http.get<Fechamento[]>(API+"/fechamento/consultaPorClinica?"+httpParams.toString());
+ }
+
 }
 
 

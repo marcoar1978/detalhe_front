@@ -24,6 +24,7 @@ export class ConsultaFechamentosComponent implements OnInit {
   clinicas:Clinica[];
   clinica:Clinica = new Clinica();
   fechamentoSelecionado:Fechamento = new Fechamento();
+  fechamentos:Fechamento[] = [];
   
   constructor(private dataService: DataService,
               private modalService: NgbModal,
@@ -113,6 +114,66 @@ consultaPorFechamentoId(){
       },500 );
 
     })
+}
+
+consultaPorClinica(){
+    const clinicaId = $("#clinicaId").val();
+    const data = $("#anoMes").val();
+    const dataSplit = data.split("-");
+    const ano = dataSplit[0];
+    const mes = dataSplit[1];
+
+    if(!clinicaId){
+      alert("Selecione a clínica");
+      return;
+    }
+
+    $('#divMsgClinica').slideUp(350, () => {
+      $('#divMsgClinica').css('font-weight','normal');
+      $('#divMsgClinica').css('color','green');
+      this.msgClinica = "Aguarde um momento";
+      $('#divMsgClinica').slideDown(350);
+    });
+
+    this.fechamentoService.consultaPorClinica(clinicaId, ano, mes)
+      .subscribe(res => {
+        this.fechamentos = res;
+        if(this.fechamentos.length == 0){
+          $('#divMsgClinica').slideUp(350, () => {
+            $('#divMsgClinica').css('font-weight','bold');
+            $('#divMsgClinica').css('color','red');
+            this.msgClinica = "Não há registros neste período";
+            $('#divMsgClinica').slideDown(350, () => {
+              setTimeout( () => { $('#divMsgClinica').slideUp(350);}, 4000);
+            });
+          });
+          return;
+        }
+       
+        this.fechamentos.forEach(fechamento => {
+          fechamento.clinica = this.clinicas.find(clinica => clinica.id == fechamento.clinicaId);
+        });
+
+        $('#divMsgClinica').slideUp(350, () => {
+          $("#formConsulta").fadeOut(250, () => {
+            $("#divFormConsulta").animate({height: "55px"},  () => {
+              $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
+              $("#divFormConsulta").css('box-shadow','');
+              this.msgClinica = "";
+              $("#tabelaFechamentos").fadeOut(350, () => {
+                $("#tabelaFechamentos").fadeIn(350);
+              })
+    
+          })  
+        });
+    
+        });
+
+      });
+}
+
+abreModalFechamento(fechamentoId: number){
+  
 }
 
 }

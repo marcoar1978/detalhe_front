@@ -17,13 +17,51 @@
                     <option *ngFor='let clinica of clinicas' [value]='clinica.id'>{{clinica.nomeSimp}}
                 </select>  
                 <input type="month" class='form-control' id="anoMes" style='width:300px;margin:10px' id='anoMes' [value]='anoMes'> 
-                <button class="btn btn-info btn-sm" style='margin:10px;'>Consultar</button>  
-                <div style='color:green;font-size:14px;text-align: center;' id='divMsgClinica'>{{msgClinica}}</div> 
+                <button class="btn btn-info btn-sm" (click)="consultaPorClinica()" style='margin:10px;'>Consultar</button>  
+                <div style='color:green;font-size:14px;text-align: center;'  id='divMsgClinica'>{{msgClinica}}</div> 
             </div>
         </div>
-        
-        
-</div> 
+    </div> 
+</div>
+
+
+
+<div id='tabelaFechamentos' style='display:none;margin-top:70px'>
+<table class='table table-hover' style='text-align: center;'>
+    <thead>
+    <tr>
+    <th width="10%" colspan='2' >Id</th>
+
+    <th width='15%'>Data<br>Fechamento</th>
+    <th width='15%'>Clínica</th>
+    <th width='15%'>Valor Total</th>
+    <th width='15%' >Valor Pago</th>
+    <th width='30%'>Entregas<br><span style='font-size:11px'>(Número - Data Entrega - Valor)</span></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let fechamento of fechamentos">
+            <th width="5%" style='text-align:center'>{{fechamento.id}}</th>
+            <td width="5%" style='text-align:center'><i class="material-icons" style="cursor:pointer" title='Nota de Fechamento nº {{fechamento.id}}' (click)="abreModalFechamento(fechamento.id)"> assignment</i></td>
+            <td style='text-align:center'>{{fechamento.dataFechamento | date:'dd/MM/yyyy'}}</td>
+            <td style='text-align:left'>{{fechamento.clinica.nomeSimp}}</td>
+            <td style='text-align:right'>{{fechamento.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
+            <td style='text-align:right'><div id='divValorPago_{{fechamento.id}}'>{{fechamento.valorPgto | currency:'BRL':'symbol':'0.2-2':'pt' }}</div></td>
+            <td style='text-align:center'>
+                <table class='table table-sm table-bordered' style='font-size:12px' width="280px">
+                    <tr *ngFor='let entrega of fechamento.entregas '>
+                        <td width='10%' style='text-align:center;cursor:pointer;'  title='Nota de Entrega nº {{entrega.id}}' (click)="abreModalEntrega(fechamento.id, entrega.id, clinica.nomeSimp)"><i class="material-icons" style='font-size:12px'>search </i></td>
+
+                        <td width='10%' style='text-align:center'>{{entrega.id}}</td>
+                        <td width='40%' style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
+                        <td width='40%' style='text-align:center'> {{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+
+                    </tr>    
+                </table>    
+            </td>
+        </tr>       
+    </tbody>    
+</table>
 </div>
 
 <div style='padding:15px; text-align: center; border:1px solid #000;width:630px;display:none' id='caixaNotaFechamento'>
