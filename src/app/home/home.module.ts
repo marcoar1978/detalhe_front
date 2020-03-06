@@ -25,10 +25,11 @@ import { ImpressaoPedidosComponent } from './impressao-pedidos/impressao-pedidos
 import { ConsultaEntregasComponent } from './consultas/consulta-entregas/consulta-entregas.component';
 import { ConsultaPedidosComponent } from './consultas/consulta-pedidos/consulta-pedidos.component';
 import { NgbdTableSortable, NgbdSortableHeader } from '../teste/sort';
+import { ConsultaFechamentosComponent } from './consultas/consulta-fechamentos/consulta-fechamentos.component';
 
 
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent, ConsultaEntregasComponent, ConsultaPedidosComponent, NgbdTableSortable, NgbdSortableHeader],
+  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent, ConsultaEntregasComponent, ConsultaPedidosComponent, NgbdTableSortable, NgbdSortableHeader, ConsultaFechamentosComponent],
   imports: [
     CommonModule,
     HttpClientModule,

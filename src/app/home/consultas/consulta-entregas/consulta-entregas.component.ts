@@ -208,7 +208,11 @@ abreModalEntrega(entregaId:number){
       
     },500 );
    
-  }, error => { alert("Problemas para acessar o banco de dados"); });
+  }, error => { 
+    $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250, () => {
+      alert("Problemas para acessar o banco de dados"); });
+    });
+    
   
 
 }  

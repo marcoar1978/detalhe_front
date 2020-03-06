@@ -371,11 +371,13 @@ consultaDetPedidoCliente(pedidoId:number, content){
        }
       }
     this.modalService.open(content, { centered: true, size: 'lg',scrollable: true });
-  }, error => { alert("Problemas para acessar o banco de dados"); });
+  }, error => { 
+    $(`#msgDetalhePedido_${pedidoId}`).fadeOut(250, () => {
+      alert("Problemas para acessar o banco de dados"); 
+    });
     
- 
-
-  }
+  });
+ }
 
   onSort({column, direction}: SortEvent) {
         

@@ -23,6 +23,7 @@ import { InicioHomeComponent } from './home/inicio-home/inicio-home.component';
 import { ConsultaEntregasComponent } from './home/consultas/consulta-entregas/consulta-entregas.component';
 import { ConsultaPedidosComponent } from './home/consultas/consulta-pedidos/consulta-pedidos.component';
 import { NgbdTableSortable } from './teste/sort';
+import { ConsultaFechamentosComponent } from './home/consultas/consulta-fechamentos/consulta-fechamentos.component';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
       { path: 'inicioHome', component: InicioHomeComponent },
       { path: 'consultaPedidos', component: ConsultaPedidosComponent },
       { path: 'consultaEntregas', component: ConsultaEntregasComponent },
+      { path: 'consultaFechamentos', component: ConsultaFechamentosComponent },
     ] }
 ];
 
