@@ -66,7 +66,7 @@ export class PedidosEmProcessoComponent implements OnInit {
     escondeAlert(carregamentoClinicas:boolean,carregamentoPedidos:boolean ){
       
       if((carregamentoClinicas) && (carregamentoPedidos)){
-        $("#divAguardarDados").slideUp(350);
+        $("#divAguardar").slideUp(350);
       }
     }  
     

@@ -148,7 +148,7 @@
 
 <div style='text-align:center' id='titulo'><b>Entregas</b></div><br>
 <div class="container">
-<div class="alert alert-info" id='divAguardarDados'>Aguarde enquanto os dados estão sendo carregados</div>
+<div class="alert alert-info" id='divAguardar'>Aguarde enquanto os dados estão sendo carregados</div>
 <div>
     <table class='table table-dark' style='text-align: center;'>
         <tr>
@@ -167,8 +167,9 @@
         <div style='margin-bottom:20px;color:#000099;font-size:18px;text-align:center'>{{clinica.nomeSimp}}</div>
 
         <table class='table table-hover'>
+            <tbody>
             <tr *ngFor="let entrega of entregas">
-                <td *ngIf="entrega.clinicaId == clinica.id" width="5%">{{entrega.id}}</td>
+                <th *ngIf="entrega.clinicaId == clinica.id" width="5%">{{entrega.id}}</th>
                 <td *ngIf="entrega.clinicaId == clinica.id" width="5%"><i class="material-icons" style="cursor:pointer" (click)="abreModalEntrega(entrega.id,clinica.nomeSimp )" title='Nota de entrega nº {{entrega.id}}'> assignment</i></td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='10%'>{{entrega.dataEmissao | date:'dd/MM/yyyy'}}</td>
                 <td *ngIf="entrega.clinicaId == clinica.id" width='25%'>
@@ -197,6 +198,7 @@
 
                 </td>
             </tr>
+            </tbody>
         </table>
         <div style='display:none;text-align:right' id="botaoRegistrarFechamento_{{clinica.id}}" ><button  class='btn btn-info btn-sm' (click)="conferirFechamento(clinica.id, conferenciaFechamento)">Registrar Fechamento</button></div>        
 

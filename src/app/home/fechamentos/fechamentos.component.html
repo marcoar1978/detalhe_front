@@ -1,6 +1,6 @@
 <div style='text-align:center' id='titulo'><b>Fechamentos</b></div><br>
 <div class="container">
-<div class="alert alert-info" id='divAguardarDados'>Aguarde enquanto os dados estão sendo carregados</div>
+<div class="alert alert-info" id='divAguardar'>Aguarde enquanto os dados estão sendo carregados</div>
 </div>
 
 <table class='table table-dark table-bordered' style='text-align: center;'>
@@ -16,8 +16,9 @@
 <div *ngFor="let clinica of clinicasComFechamento">
     <div style='margin-bottom:20px;color:#000099;font-size:18px;text-align:center'>{{clinica.nomeSimp}}</div>
     <table class='table table-hover'>
+        <tbody>
         <tr *ngFor="let fechamento of fechamentos">
-            <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'>{{fechamento.id}}</td>
+            <th *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'>{{fechamento.id}}</th>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="5%" style='text-align:center'><i class="material-icons" style="cursor:pointer" title='Nota de Fechamento nº {{fechamento.id}}' (click)="abreModalFechamento(fechamento.id, clinica.nomeSimp)"> assignment</i></td>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="20%" style='text-align:center'>{{fechamento.dataFechamento | date:'dd/MM/yyyy'}}</td>
             <td *ngIf="fechamento.clinicaId == clinica.id" width="20%" style='text-align:right'>{{fechamento.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
@@ -35,7 +36,8 @@
                     </tr>    
                 </table>    
             </td>
-        </tr>    
+        </tr>
+        </tbody>    
     </table>
 
 </div> 

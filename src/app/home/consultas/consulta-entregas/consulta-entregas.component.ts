@@ -215,9 +215,6 @@ abreModalEntrega(entregaId:number){
     $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250, () => {
       alert("Problemas para acessar o banco de dados"); });
     });
-    
-  
-
-}  
+  }  
 
 }

@@ -7,6 +7,8 @@ import { Clinica } from 'src/app/model/clinica.model';
 import { DataService } from 'src/app/service/data.service';
 import { FechamentoService } from 'src/app/service/fechamento.service';
 import { Fechamento } from 'src/app/model/fechamento.model';
+import { EntregaService } from 'src/app/service/entregas.service';
+import { Entrega } from 'src/app/model/entrega.model';
 
 @Component({
   selector: 'app-consulta-fechamentos',
@@ -25,10 +27,12 @@ export class ConsultaFechamentosComponent implements OnInit {
   clinica:Clinica = new Clinica();
   fechamentoSelecionado:Fechamento = new Fechamento();
   fechamentos:Fechamento[] = [];
+  entregaSelecionada:Entrega = new Entrega();
   
   constructor(private dataService: DataService,
               private modalService: NgbModal,
-              private fechamentoService: FechamentoService) { }
+              private fechamentoService: FechamentoService,
+              private entregaService: EntregaService) { }
 
   ngOnInit() {
     this.dataService.dadosIniciaisMessage
@@ -173,7 +177,52 @@ consultaPorClinica(){
 }
 
 abreModalFechamento(fechamentoId: number){
-  
+  $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250);
+  this.fechamentoService.getFechamento(fechamentoId)
+    .subscribe(res => {
+      $(`#msgDetalheFechamento_${fechamentoId}`).fadeOut(250);
+      this.fechamentoSelecionado = res;
+      this.clinica = this.clinicas.find(clinica => clinica.id == this.fechamentoSelecionado.clinicaId);
+
+      setTimeout(() => {
+        const janela = window.open('', 'PRINT', 'height=600,width=800');
+        janela.document.write('<html><head><title>NotaFechamento'+fechamentoId+'</title>');
+        janela.document.write('</head><body>');  
+        janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
+        janela.document.write('</body></html>');
+        
+      },500 );
+
+    }, error => {
+      $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250, () => {
+        alert("Problemas para acessar o banco de dados"); });
+      })
+}
+
+abreModalEntrega(entregaId:number){
+  $(`#msgDetalheEntrega_${entregaId}`).fadeIn(250);
+  this.entregaService.getEntrega(entregaId)
+    .subscribe(res => {
+        $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
+        this.entregaSelecionada = res;
+        this.clinica = this.clinicas.find(clinica => clinica.id == this.entregaSelecionada.clinicaId);
+
+        setTimeout(() => {
+          const janela = window.open('', 'PRINT', 'height=600,width=800');
+          janela.document.write('<html><head><title>NotaFechamento'+entregaId+'</title>');
+          janela.document.write('</head><body>');  
+          janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
+          janela.document.write('</body></html>');
+          
+        },500 );
+
+        
+    }, error => { 
+      $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
+      alert("Problemas para acessar o banco de dados")
+    } );
+
+
 }
 
 }

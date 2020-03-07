@@ -72,7 +72,7 @@ export class FechamentosComponent implements OnInit {
   escondeAlert(){
       
     if((this.carregamentoClinicas) && (this.carregamentoFechamentos)){
-      $("#divAguardarDados").slideUp(350);
+      $("#divAguardar").slideUp(350);
     }
   }
 

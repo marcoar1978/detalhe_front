@@ -30,19 +30,20 @@
 <table class='table table-hover' style='text-align: center;'>
     <thead>
     <tr>
-    <th width="10%" colspan='2' >Id</th>
+    <th width="12%" colspan='3' >Id</th>
 
     <th width='15%'>Data<br>Fechamento</th>
     <th width='15%'>Clínica</th>
     <th width='15%'>Valor Total</th>
     <th width='15%' >Valor Pago</th>
-    <th width='30%'>Entregas<br><span style='font-size:11px'>(Número - Data Entrega - Valor)</span></th>
+    <th>Entregas<br><span style='font-size:11px'>(Número - Data Entrega - Valor)</span></th>
     </tr>
     </thead>
     <tbody>
         <tr *ngFor="let fechamento of fechamentos">
             <th width="5%" style='text-align:center'>{{fechamento.id}}</th>
             <td width="5%" style='text-align:center'><i class="material-icons" style="cursor:pointer" title='Nota de Fechamento nº {{fechamento.id}}' (click)="abreModalFechamento(fechamento.id)"> assignment</i></td>
+            <td width='2%'>  <div class="msgDetalhe" id="msgDetalheFechamento_{{fechamento.id}}">Aguarde um momento</div></td>
             <td style='text-align:center'>{{fechamento.dataFechamento | date:'dd/MM/yyyy'}}</td>
             <td style='text-align:left'>{{fechamento.clinica.nomeSimp}}</td>
             <td style='text-align:right'>{{fechamento.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
@@ -50,11 +51,12 @@
             <td style='text-align:center'>
                 <table class='table table-sm table-bordered' style='font-size:12px' width="280px">
                     <tr *ngFor='let entrega of fechamento.entregas '>
-                        <td width='10%' style='text-align:center;cursor:pointer;'  title='Nota de Entrega nº {{entrega.id}}' (click)="abreModalEntrega(fechamento.id, entrega.id, clinica.nomeSimp)"><i class="material-icons" style='font-size:12px'>search </i></td>
+                        <td width='10%' style='text-align:center;cursor:pointer;'  title='Nota de Entrega nº {{entrega.id}}' (click)="abreModalEntrega(entrega.id)"><i class="material-icons" style='font-size:12px'>search </i></td>
 
-                        <td width='10%' style='text-align:center'>{{entrega.id}}</td>
-                        <td width='40%' style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
-                        <td width='40%' style='text-align:center'> {{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+                        <td width='10%' style='text-align:center;border-right: 1px solid #ffffff;'>{{entrega.id}}</td>
+                        <td width='2%' style='text-align:center'> <div class="msgDetalhe" id="msgDetalheEntrega_{{entrega.id}}">Aguarde um momento</div></td>
+                        <td width='39%' style='text-align:center'>{{entrega.dataEntrega | date:'dd/MM/yyyy'}}</td>
+                        <td width='39%' style='text-align:center'> {{entrega.totalEntrega | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
 
                     </tr>    
                 </table>    
@@ -109,3 +111,89 @@
 <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Valor Total do Fechamento:</b> {{fechamentoSelecionado.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}    
            
 </div> 
+
+
+
+
+
+<div style='padding:15px; text-align: center; border:1px solid #000;width:630px;display:none;' id='caixaNotaEntrega'>
+    <table style='width: 600px !important;margin: auto;'>
+        <tr>
+            <td width='90px'><img src="http://www.detalheprotetico.com.br/img/logo_detalhe_web.png" width='80px'/></td>
+            <td style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099'><b>NOTA DE ENTREGA nº {{entregaSelecionada.id}} <br/>({{clinica.nomeSimp}})</b></td>
+        </tr>        
+    </table>
+    
+    
+    <br>
+    <div *ngFor="let pedido of entregaSelecionada.pedidos">
+        <table style='width: 600px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;'>
+            <tr height="20">
+                <td style='text-align: center;' colspan='4'><b>PEDIDO nº {{pedido.id}}</b></td>
+            </tr>   
+            <tr height="20">
+                <td width='100'><b>Data Pedido</b></td>    
+                <td>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
+            </tr>
+                   
+            <tr height="20">
+                <td ><b>Dentista</b></td>    
+                <td >{{pedido.dentista}}</td>    
+            </tr>
+            <tr height="20">
+                <td ><b>Paciente</b></td>    
+                <td >{{pedido.nomePaciente}}</td>    
+            </tr>
+        </table>
+        <table style='width: 600px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; ' >
+            <tr height="30" style='border-bottom:1px solid #ccc;text-align:center;'>
+                <td width="10%"></td>
+                <td width="40%" style='text-align: center;'><b>Derscrição</b></td>
+                <td width="20%" style='text-align: center;'><b>Valor Unitário</b></td>
+                <td width="10%" style='text-align: center;'><b>Qde</b></td>
+                <td width="20%" style='text-align: center;'><b>Total</b></td>
+             </tr>
+             <tr height="20" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
+                <td style='text-align: center;'>{{i + 1}}</td>
+                <td>{{item.descricao}}</td>
+                <td style='text-align: right;padding-right:5px'> {{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+                <td style='text-align: center;'>{{item.qde}}</td>
+                <td style='text-align: right;padding-right:5px'> {{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
+             </tr> 
+             <tr height="20" style='border-bottom:1px solid #ccc;'>
+                <td  colspan='4'><b>Valor Total</b></td>
+                <td style='text-align: right;padding-right:5px'><b> {{pedido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
+                
+            <tr>
+            <tr height="20" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
+                <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
+                <td style='text-align: right;padding-right:5px'><b> {{pedido.valorTotal - pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
+                   
+            </tr> 
+            <tr height="20" *ngIf="pedido.desconto > 0">
+                <td colspan='4'><b>Valor Total Líquido</b></td>
+                <td style='text-align: right;padding-right:5px'><b> {{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt'}}</b></td>
+                    
+            </tr>      
+        </table>
+              <br>
+    </div>    
+    <br>
+    <br>
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Observações:</b> {{entregaSelecionada.obs }}</div>
+
+
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Valor total da entrega:</b> {{totalEntregaSelecionada | currency:'BRL':'symbol':'0.2-2':'pt' }}</div>
+    <div *ngIf="!entregaSelecionada.recebedor">
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Data da entrega:</b> ___/___/________</div>
+
+    <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;'><b>Nome legível:</b>___________________________________________</div>
+    </div>
+
+    <div *ngIf="entregaSelecionada.recebedor">
+        <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px'><b>Data da entrega:</b> {{entregaSelecionada.dataEntrega | date:'dd/MM/yyyy' }}</div>
+    
+        <div style='text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;'><b>Recebedor:</b> {{entregaSelecionada.recebedor}}</div>
+        </div>
+
+    </div>

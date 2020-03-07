@@ -65,7 +65,7 @@ export class StatusPedidosComponent implements OnInit {
 
   escondeAlert(){
     if(!this.verifCarregamento.includes(false)){
-        $("#divAguardarDados").fadeOut(500, () => {
+        $("#divAguardar").fadeOut(500, () => {
         this.valorPedidosAbertos = this.pedidos.reduce((prevVal, pedido) => {return prevVal + pedido.valorLiquido },0);  
         this.qdePedidosAbertos = this.pedidos.length;
        
