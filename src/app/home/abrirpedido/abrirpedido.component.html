@@ -1,250 +1,494 @@
-
-
-<br>
-<div style='text-align:center' id='titulo'><b>Abertura de Pedido</b></div>
-<br>
+<br />
+<div style="text-align:center" id="titulo"><b>Abertura de Pedido</b></div>
+<br />
 <form [formGroup]="form">
-<div class="row">
+  <div class="row">
     <div class="col-md-4">
-<select class='form-control' formControlName="clinica" id='selClinica' (change)="altClinica()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
-    <option value='' disabled>Clínica</option>
-    <option *ngFor="let clinica of clinicas" [value]="clinica.id" >{{clinica.nomeSimp}}</option>
-</select>
-<div *ngIf="submited && form.get('clinica').hasError('required')" class="avisoForm">Escolha uma clínica</div> 
+      <select
+        class="form-control"
+        formControlName="clinica"
+        id="selClinica"
+        (change)="altClinica()"
+        (click)="resetAvisoForm()"
+        style="margin-bottom: 20px;"
+      >
+        <option value="" disabled>Clínica</option>
+        <option *ngFor="let clinica of clinicas" [value]="clinica.id">{{
+          clinica.nomeSimp
+        }}</option>
+      </select>
+      <div
+        *ngIf="submited && form.get('clinica').hasError('required')"
+        class="avisoForm"
+      >
+        Escolha uma clínica
+      </div>
 
-<div id='divDentista'style='display:none;margin-bottom: 20px;' >
-    
-    <select class='form-control' formControlName="dentista" id='selDentista' (change)="altDentista()" (click)="resetAvisoForm();">
-        <option value='' disabled>Dentista</option>
-        <option *ngFor="let dentista of dentistasForm" [value]="dentista.id">{{dentista.nome}}</option>
-    </select> 
-    <div  *ngIf="submited && form.get('dentista').hasError('required')" class="avisoForm" style='width:350px'>Escolha um dentista</div> 
-    
-    </div>
-   
-    <input type='text' class='form-control' formControlName="nomePaciente" id='nomePaciente' placeholder="Nome do paciente" (blur)="altNomePaciente()" (click)="resetAvisoForm()" style="margin-bottom: 20px;">
-    <div  *ngIf="submited && form.get('nomePaciente').hasError('required')" class="avisoForm" >Digite o nome do paciente</div>  
-    
-    <select class='form-control' formControlName="protetico" id='selProtetico' (change)="altProtetico()" (click)="resetAvisoForm();" style="margin-bottom: 20px;">
-        <option value='' disabled>Protetico</option>
-        <option *ngFor="let protetico of proteticos" [value]="protetico.id">{{protetico.nome}}</option>
-    </select> 
-    <div  *ngIf="submited && form.get('protetico').hasError('required')" class="avisoForm" >Escolha um protetico</div> 
-    
-    <select formControlName="desconto" id='desconto' class='form-control' (click)="altDesconto()" style="margin-bottom: 20px;" >
-        <option value='0'>Desconto
-        <option *ngFor='let optionDesconto of optionsDesconto'>{{optionDesconto}}
-
-   </select>
-
-   
-   
-         
-</div>
-<div class="col-md-8">
-   
-    <div id="caixaItens" style='display:none'>
-    <label class="radio-inline">
-       <input type='radio' name='tipoProduto' formControlName='tipoProduto' value='padrao' (click)="mostraFormProdutoPadrao()"> Padrão
-       </label> &nbsp; &nbsp;
-       <label class="radio-inline">
-       <input type='radio' name='tipoProduto' formControlName='tipoProduto' value='variavel' (click)="mostraFormProdutoVariavel()"> Variável 
-       </label>
-       <div id='divProduto' style='margin-top:15px'>
-        <table>
-            <tr>
-                <td valign="top" padding="30px" id='tdSelTipoProdutoVariavel' style='display:none'> 
-                    <select class='form-control' formControlName="tipoVariavel" id='selTipoProdutoVariavel' (click)="resetAvisoFormItem();"  style='display:none'>
-                        <option value='' disabled>Tipo</option>
-                        <option value=10>Diversos
-                        <option value=9> Grampo
-                        <option value=8> Placa de Dente
-                    </select>
-
-                 </td>   
-
-              <td valign="top" padding="30px">  
-       
-        <select class='form-control' formControlName="produtoPadrao" id='selProdutoPadrao' (click)="resetAvisoFormItem();" style='width:250px'>
-            <option value='' disabled>Produto</option>
-            <option *ngFor="let produtoPadrao of produtosPadraoClinica" [value]="produtoPadrao.produtoId">{{produtoPadrao.nome}} - {{produtoPadrao.valor | currency:'BRL':'symbol':'0.2-2':'pt' }}</option>
+      <div id="divDentista" style="display:none;margin-bottom: 20px;">
+        <select
+          class="form-control"
+          formControlName="dentista"
+          id="selDentista"
+          (change)="altDentista()"
+          (click)="resetAvisoForm()"
+        >
+          <option value="" disabled>Dentista</option>
+          <option
+            *ngFor="let dentista of dentistasForm"
+            [value]="dentista.id"
+            >{{ dentista.nome }}</option
+          >
         </select>
-       <input type='text' formControlName="descProdVariavel" id="descProdVariavel" class='form-control' placeholder="Descrição" style="display:none;" (click)="resetAvisoFormItem();" >
-    
-       </td>
-       <td width='120' padding="30px" id='tdValorProdVariavel'>
-           <input type='number' step="0.50" min="1.00" class="form-control" placeholder='Valor' formControlName='valorProdVariavel' id='valorProdVariavel' (click)="resetAvisoFormItem();"  /></td>
-           
-      
-       <td valign="top" padding="30px">
-        <div >
-        <select formControlName="qdeProduto" class='form-control' (click)="resetAvisoFormItem();" style='width:80px' >
-            <option value=''>Qde
-            <option *ngFor='let option of options'>{{option}}
+        <div
+          *ngIf="submited && form.get('dentista').hasError('required')"
+          class="avisoForm"
+          style="width:350px"
+        >
+          Escolha um dentista
+        </div>
+      </div>
 
-       </select>
-       </div>
-        </td>
-        <td padding="30px">
-            <button class='btn btn-outline-primary' (click)='inserirProduto()'>Inserir</button>
-        </td>    
-      </tr>
-      </table> 
-      <div id='avisoFormItem' style='display:none' >{{msgFormItem}}</div>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="nomePaciente"
+        id="nomePaciente"
+        placeholder="Nome do paciente"
+        (blur)="altNomePaciente()"
+        (click)="resetAvisoForm()"
+        style="margin-bottom: 20px;"
+      />
+      <div
+        *ngIf="submited && form.get('nomePaciente').hasError('required')"
+        class="avisoForm"
+      >
+        Digite o nome do paciente
+      </div>
+
+      <select
+        class="form-control"
+        formControlName="protetico"
+        id="selProtetico"
+        (change)="altProtetico()"
+        (click)="resetAvisoForm()"
+        style="margin-bottom: 20px;"
+      >
+        <option value="" disabled>Protetico</option>
+        <option *ngFor="let protetico of proteticos" [value]="protetico.id">{{
+          protetico.nome
+        }}</option>
+      </select>
+      <div
+        *ngIf="submited && form.get('protetico').hasError('required')"
+        class="avisoForm"
+      >
+        Escolha um protetico
+      </div>
+
+      <select
+        formControlName="desconto"
+        id="desconto"
+        class="form-control"
+        (click)="altDesconto()"
+        style="margin-bottom: 20px;"
+      >
+        <option value="0">Desconto </option
+        ><option *ngFor="let optionDesconto of optionsDesconto"
+          >{{ optionDesconto }}
+        </option></select
+      >
     </div>
-    <br>   
-    <div id="tabelaItens" style='display:none' >
-        <table class="table table-hover table-sm ">
+    <div class="col-md-8">
+      <div id="caixaItens" style="display:none">
+        <label class="radio-inline">
+          <input
+            type="radio"
+            name="tipoProduto"
+            formControlName="tipoProduto"
+            value="padrao"
+            (click)="mostraFormProdutoPadrao()"
+          />
+          Padrão
+        </label>
+        &nbsp; &nbsp;
+        <label class="radio-inline">
+          <input
+            type="radio"
+            name="tipoProduto"
+            formControlName="tipoProduto"
+            value="variavel"
+            (click)="mostraFormProdutoVariavel()"
+          />
+          Variável
+        </label>
+        <div id="divProduto" style="margin-top:15px">
+          <table>
+            <tr>
+              <td
+                valign="top"
+                padding="30px"
+                id="tdSelTipoProdutoVariavel"
+                style="display:none"
+              >
+                <select
+                  class="form-control"
+                  formControlName="tipoVariavel"
+                  id="selTipoProdutoVariavel"
+                  (click)="resetAvisoFormItem()"
+                  style="display:none"
+                >
+                  <option value="" disabled>Tipo</option>
+                  <option value="10">Diversos </option
+                  ><option value="9"> Grampo </option
+                  ><option value="8"> Placa de Dente </option></select
+                >
+              </td>
+
+              <td valign="top" padding="30px">
+                <select
+                  class="form-control"
+                  formControlName="produtoPadrao"
+                  id="selProdutoPadrao"
+                  (click)="resetAvisoFormItem()"
+                  style="width:250px"
+                >
+                  <option value="" disabled>Produto</option>
+                  <option
+                    *ngFor="let produtoPadrao of produtosPadraoClinica"
+                    [value]="produtoPadrao.produtoId"
+                    >{{ produtoPadrao.nome }} -
+                    {{
+                      produtoPadrao.valor
+                        | currency: "BRL":"symbol":"0.2-2":"pt"
+                    }}</option
+                  >
+                </select>
+                <input
+                  type="text"
+                  formControlName="descProdVariavel"
+                  id="descProdVariavel"
+                  class="form-control"
+                  placeholder="Descrição"
+                  style="display:none;"
+                  (click)="resetAvisoFormItem()"
+                />
+              </td>
+              <td width="120" padding="30px" id="tdValorProdVariavel">
+                <input
+                  type="number"
+                  step="0.50"
+                  min="1.00"
+                  class="form-control"
+                  placeholder="Valor"
+                  formControlName="valorProdVariavel"
+                  id="valorProdVariavel"
+                  (click)="resetAvisoFormItem()"
+                />
+              </td>
+
+              <td valign="top" padding="30px">
+                <div>
+                  <select
+                    formControlName="qdeProduto"
+                    class="form-control"
+                    (click)="resetAvisoFormItem()"
+                    style="width:80px"
+                  >
+                    <option value="">Qde </option
+                    ><option *ngFor="let option of options"
+                      >{{ option }}
+                    </option></select
+                  >
+                </div>
+              </td>
+              <td padding="30px">
+                <button
+                  class="btn btn-outline-primary"
+                  (click)="inserirProduto()"
+                >
+                  Inserir
+                </button>
+              </td>
+            </tr>
+          </table>
+
+          <div id="avisoFormItem" style="display:none">{{ msgFormItem }}</div>
+        </div>
+        <br />
+        <div id="tabelaItens" style="display:none">
+          <table class="table table-hover table-sm ">
             <thead>
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">Derscrição</th>
-                  <th scope="col">Valor Unitário</th>
-                  <th scope="col">Qde</th>
-                  <th scope="col">Total</th>
-                  <th scope="col"></th>
-                </tr>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Derscrição</th>
+                <th scope="col">Valor Unitário</th>
+                <th scope="col">Qde</th>
+                <th scope="col">Total</th>
+                <th scope="col"></th>
+              </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let produtoEscolhido of produtosEscolhidos; let i= index" id='{{produtoEscolhido.tipoProduto}}_{{produtoEscolhido.produtoId}}'>
-                    <td>{{i + 1}}</td>
-                    <td>{{produtoEscolhido.nome}}</td>
-                    <td>{{produtoEscolhido.valor | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
-                    <td>{{produtoEscolhido.qde}}</td>
-                    <td>{{produtoEscolhido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</td>
-                    <td><i class="material-icons" (click)="deleteItem(produtoEscolhido.produtoId, produtoEscolhido.ordem)" style='cursor:pointer;color: #FB8C00;'>delete_outline</i></td>
-                </tr> 
-                <tr>
-                    <td  colspan='4'><b>Valor Total</b></td>
-                    <td><b>{{totalPedido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                    <td></td>
-                <tr>
-                <tr *ngIf="desconto > 0">
-                    <td colspan='4'><b>Desconto ({{desconto}} %)</b></td>
-                    <td><b>{{valorDesconto | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                    <td></td>    
-                </tr> 
-                <tr *ngIf="desconto > 0">
-                    <td colspan='4'><b>Valor Total Líquido</b></td>
-                    <td><b>{{valorTotalLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                    <td></td>    
-                </tr>       
-             </tbody>
-        </table>
-          
-    </div>
-    <div style='font-size: 12px;margin-top:20px'><b>Prazo:</b> {{aberturaPedido.prazo}} dias corridos</div>   
-     
-    
-   </div>
-   <div id="conferenciaPedido" style='display:none'>
-        <div style='text-align:center;'><b>CONFERÊNCIA PEDIDO nº {{aberturaPedido.pedidoId}}</b></div>
-        <br>
-        <div *ngIf="!recebeConfPedido" style="color:blue;font-size: 18px;text-align: center;">AGUARDAR O CARREGAMENTO DOS DADOS</div>
+              <tr
+                *ngFor="
+                  let produtoEscolhido of produtosEscolhidos;
+                  let i = index
+                "
+                id="{{ produtoEscolhido.tipoProduto }}_{{
+                  produtoEscolhido.produtoId
+                }}"
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ produtoEscolhido.nome }}</td>
+                <td>
+                  {{
+                    produtoEscolhido.valor
+                      | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}
+                </td>
+                <td>{{ produtoEscolhido.qde }}</td>
+                <td>
+                  {{
+                    produtoEscolhido.valorTotal
+                      | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}
+                </td>
+                <td>
+                  <i
+                    class="material-icons"
+                    (click)="
+                      deleteItem(
+                        produtoEscolhido.produtoId,
+                        produtoEscolhido.ordem
+                      )
+                    "
+                    style="cursor:pointer;color: #FB8C00;"
+                    >delete_outline</i
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4"><b>Valor Total</b></td>
+                <td>
+                  <b>{{
+                    totalPedido | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+                <td></td>
+              </tr>
+
+              <tr></tr>
+              <tr *ngIf="desconto > 0">
+                <td colspan="4">
+                  <b>Desconto ({{ desconto }} %)</b>
+                </td>
+                <td>
+                  <b>{{
+                    valorDesconto | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+                <td></td>
+              </tr>
+              <tr *ngIf="desconto > 0">
+                <td colspan="4"><b>Valor Total Líquido</b></td>
+                <td>
+                  <b>{{
+                    valorTotalLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size: 12px;margin-top:20px">
+          <b>Prazo:</b> {{ aberturaPedido.prazo }} dias corridos
+        </div>
+      </div>
+      <div id="conferenciaPedido" style="display:none">
+        <div style="text-align:center;">
+          <b>CONFERÊNCIA PEDIDO nº {{ aberturaPedido.pedidoId }}</b>
+        </div>
+        <br />
+        <div
+          *ngIf="!recebeConfPedido"
+          style="color:blue;font-size: 18px;text-align: center;"
+        >
+          AGUARDAR O CARREGAMENTO DOS DADOS
+        </div>
         <div *ngIf="recebeConfPedido">
-        <table style='width: 90%!important;margin: auto;' class='table table-sm'>
+          <table
+            style="width: 90%!important;margin: auto;"
+            class="table table-sm"
+          >
             <tr>
-                <td width='100' style='border:none !important;'><b>Data Pedido</b></td>    
-                <td style='border:none !important;'>{{pedido.dataPedido | date:'dd/MM/yyyy' }}</td>    
+              <td width="100" style="border:none !important;">
+                <b>Data Pedido</b>
+              </td>
+              <td style="border:none !important;">
+                {{ pedido.dataPedido | date: "dd/MM/yyyy" }}
+              </td>
             </tr>
             <tr>
-                <td style='border:none !important;'><b>Clínica</b></td>    
-                <td style='border:none !important;'>{{pedido.clinica}}</td>    
+              <td style="border:none !important;"><b>Clínica</b></td>
+              <td style="border:none !important;">{{ pedido.clinica }}</td>
             </tr>
-             
+
             <tr>
-                <td style='border:none !important;'><b>Dentista</b></td>    
-                <td style='border:none !important;'>{{pedido.dentista}}</td>    
-            </tr>
-            <tr>
-                <td style='border:none !important;'><b>Paciente</b></td>    
-                <td style='border:none !important;'>{{pedido.nomePaciente}}</td>    
+              <td style="border:none !important;"><b>Dentista</b></td>
+              <td style="border:none !important;">{{ pedido.dentista }}</td>
             </tr>
             <tr>
-                <td style='border:none !important;'><b>Protético(a)</b></td>    
-                <td style='border:none !important;'>{{pedido.protetico}}</td>    
-            </tr> 
-                
-        </table>
-        <br>
-        <div>
-        <table class='table  table-bordered table-sm' style='width: 90% !important;margin: auto;' >
+              <td style="border:none !important;"><b>Paciente</b></td>
+              <td style="border:none !important;">{{ pedido.nomePaciente }}</td>
+            </tr>
             <tr>
-                <td ></td>
+              <td style="border:none !important;"><b>Protético(a)</b></td>
+              <td style="border:none !important;">{{ pedido.protetico }}</td>
+            </tr>
+          </table>
+
+          <br />
+          <div>
+            <table
+              class="table  table-bordered table-sm"
+              style="width: 90% !important;margin: auto;"
+            >
+              <tr>
+                <td></td>
                 <td><b>Derscrição</b></td>
                 <td><b>Valor Unitário</b></td>
                 <td><b>Qde</b></td>
                 <td><b>Total</b></td>
-             </tr>
-             <tr *ngFor="let item of pedido.itens; let i= index; ">
-                <td>{{i + 1}}</td>
-                <td>{{item.descricao}}</td>
-                <td >{{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-                <td >{{item.qde}}</td>
-                <td >{{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-             </tr> 
-             <tr>
-                <td  colspan='4'><b>Valor Total</b></td>
-                <td><b>{{pedido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                
-            <tr>
-            <tr *ngIf="pedido.desconto > 0">
-                <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
-                <td><b>{{pedido.valorTotal - pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                   
-            </tr> 
-            <tr *ngIf="pedido.desconto > 0">
-                <td colspan='4'><b>Valor Total Líquido</b></td>
-                <td><b>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                    
-            </tr>      
-        </table> 
-        <br>
-        <table style='width: 90%!important;margin: auto;' class='table table-sm'>
-        <tr>
-            <td width='100' style='border:none !important;'><b>Prazo</b></td>    
-            <td style='border:none !important;'>{{pedido.prazo}} dias corridos</td>    
-        </tr>
-        <tr>
-            <td width='100' style='border:none !important;'><b>Observações</b></td>    
-            <td style='border:none !important;'>{{pedido.obs}}</td>    
-        </tr>
-        </table>
-        <br>  
+              </tr>
+              <tr *ngFor="let item of pedido.itens; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>
+                  {{
+                    item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}
+                </td>
+                <td>{{ item.qde }}</td>
+                <td>
+                  {{ item.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4"><b>Valor Total</b></td>
+                <td>
+                  <b>{{
+                    pedido.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+              </tr>
+
+              <tr></tr>
+              <tr *ngIf="pedido.desconto > 0">
+                <td colspan="4">
+                  <b>Desconto ({{ pedido.desconto }} %)</b>
+                </td>
+                <td>
+                  <b>{{
+                    pedido.valorTotal - pedido.valorLiquido
+                      | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+              </tr>
+              <tr *ngIf="pedido.desconto > 0">
+                <td colspan="4"><b>Valor Total Líquido</b></td>
+                <td>
+                  <b>{{
+                    pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
+                  }}</b>
+                </td>
+              </tr>
+            </table>
+
+            <br />
+            <table
+              style="width: 90%!important;margin: auto;"
+              class="table table-sm"
+            >
+              <tr>
+                <td width="100" style="border:none !important;">
+                  <b>Prazo</b>
+                </td>
+                <td style="border:none !important;">
+                  {{ pedido.prazo }} dias corridos
+                </td>
+              </tr>
+              <tr>
+                <td width="100" style="border:none !important;">
+                  <b>Observações</b>
+                </td>
+                <td style="border:none !important;">{{ pedido.obs }}</td>
+              </tr>
+            </table>
+
+            <br />
+          </div>
         </div>
-        </div>
-
-
-
+      </div>
     </div>
+  </div>
+  <br />
 
-</div>
-</div>
-<br>
+  <i
+    class="material-icons"
+    id="edit"
+    (click)="mostrarCampoObs()"
+    (mouseover)="scaleEditMouseOver($event)"
+    style="cursor:pointer;color: #FB8C00;margin-bottom:15px ;"
+    title="Datas e Observações"
+    >edit</i
+  >
+  <div
+    id="camposObsDatas"
+    style="font-size:14px;display:none;margin-bottom:20px;"
+  >
+    <table width="300px">
+      <tr>
+        <td valign="top">Dt. Pedido</td>
+        <td>
+          <input
+            type="date"
+            class="form-control"
+            formControlName="dataPedido"
+            style="margin-left: 20px;margin-bottom:20px;"
+            (blur)="altDataPedido()"
+          />
+        </td>
+      </tr>
+    </table>
 
-<i class="material-icons" id='edit' (click)="mostrarCampoObs()" (mouseover)="scaleEditMouseOver($event)" style='cursor:pointer;color: #FB8C00;margin-bottom:15px ;' title="Datas e Observações">edit</i>
-<div id='camposObsDatas' style='font-size:14px;display:none;margin-bottom:20px;'>
-    
-    <table width='300px'>
-        <tr>
-            <td valign='top'>Dt. Pedido</td>
-            <td><input type="date" class="form-control" formControlName='dataPedido' style="margin-left: 20px;margin-bottom:20px;" (blur)="altDataPedido()"  ></td>
-        </tr>
-    </table> 
- 
-<input type='text' class="form-control" placeholder="Observações" formControlName="obs" (blur)="altObs()" style='margin-bottom:15px;'>
-</div>
-<div style='text-align:right' id='divBotaoContinuar'>
-<button class="btn btn-primary" (click)="submitForm()" id='buttonSubmitForm' >CONTINUAR</button><br>
-
-</div>
-<div style='text-align:right;display:none;' id='divBotaoFechar'>
-    <button class="btn btn-info btn-sm" (click)="voltarForm()" style= 'margin-right:20px' >VOLTAR</button> <button class="btn btn-info btn-sm" (click)="fecharPedido()" >FECHAR PEDIDO</button><br>
-    
-</div>
-
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Observações"
+      formControlName="obs"
+      (blur)="altObs()"
+      style="margin-bottom:15px;"
+    />
+  </div>
+  <div style="text-align:right" id="divBotaoContinuar">
+    <button
+      class="btn btn-primary"
+      (click)="submitForm()"
+      id="buttonSubmitForm"
+    >
+      CONTINUAR</button
+    ><br />
+  </div>
+  <div style="text-align:right;display:none;" id="divBotaoFechar">
+    <button
+      class="btn btn-info btn-sm"
+      (click)="voltarForm()"
+      style="margin-right:20px"
+    >
+      VOLTAR
+    </button>
+    <button class="btn btn-info btn-sm" (click)="fecharPedido()">
+      FECHAR PEDIDO</button
+    ><br />
+  </div>
 </form>
-
-
-
- 

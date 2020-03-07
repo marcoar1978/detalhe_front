@@ -2,9 +2,10 @@
     background-color: #f5f5f5;
     border: 1px solid #bbaeae; 
     border-radius: 5px; 
-    height:55px;
-    width:110px;
-    position: absolute;
+    height:65px;
+    width:720px !important;
+    margin: auto;
+    
     }
 
 .msgDetalheEntrega{
@@ -17,6 +18,3 @@
     display:none;
     }    
 
-#formConsulta{
-    display: none;
-}

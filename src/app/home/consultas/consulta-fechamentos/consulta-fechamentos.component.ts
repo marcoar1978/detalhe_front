@@ -132,23 +132,23 @@ consultaPorClinica(){
       return;
     }
 
-    $('#divMsgClinica').slideUp(350, () => {
+    
       $('#divMsgClinica').css('font-weight','normal');
       $('#divMsgClinica').css('color','green');
       this.msgClinica = "Aguarde um momento";
-      $('#divMsgClinica').slideDown(350);
-    });
+      $('#divMsgClinica').slideDown(150);
+    
 
     this.fechamentoService.consultaPorClinica(clinicaId, ano, mes)
       .subscribe(res => {
         this.fechamentos = res;
         if(this.fechamentos.length == 0){
-          $('#divMsgClinica').slideUp(350, () => {
+          $('#divMsgClinica').slideUp(150, () => {
             $('#divMsgClinica').css('font-weight','bold');
             $('#divMsgClinica').css('color','red');
             this.msgClinica = "Não há registros neste período";
-            $('#divMsgClinica').slideDown(350, () => {
-              setTimeout( () => { $('#divMsgClinica').slideUp(350);}, 4000);
+            $('#divMsgClinica').slideDown(150, () => {
+              setTimeout( () => { $('#divMsgClinica').slideUp(150);}, 4000);
             });
           });
           return;
@@ -158,6 +158,14 @@ consultaPorClinica(){
           fechamento.clinica = this.clinicas.find(clinica => clinica.id == fechamento.clinicaId);
         });
 
+        $('#divMsgClinica').slideUp(150);
+
+        $("#tabelaFechamentos").fadeOut(350, () => {
+          this.labelButtonForm = "Expandir";
+          $("#tabelaFechamentos").fadeIn(350);
+        });
+
+        /*
         $('#divMsgClinica').slideUp(350, () => {
           $("#formConsulta").fadeOut(250, () => {
             $("#divFormConsulta").animate({height: "55px"},  () => {
@@ -172,6 +180,7 @@ consultaPorClinica(){
         });
     
         });
+        */
 
       });
 }
