@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import * as $ from "jquery";
 
 import { DataService } from 'src/app/service/data.service';
@@ -7,6 +7,8 @@ import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 import { Clinica } from 'src/app/model/clinica.model';
 import { Entrega } from 'src/app/model/entrega.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdSortableHeader } from 'src/app/diretivas/sort.diretiva';
+import { SortEvent, compare } from 'src/app/diretivas/sort.interface';
 
 @Component({
   selector: 'app-consulta-entregas',
@@ -25,6 +27,7 @@ export class ConsultaEntregasComponent implements OnInit {
   clinica: Clinica = new Clinica();
   entregaSelecionada: Entrega = new Entrega();
   entregas: Entrega[] = [];
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
   constructor(private dataService: DataService,
     private modalService: NgbModal,
@@ -226,6 +229,24 @@ export class ConsultaEntregasComponent implements OnInit {
           alert("Problemas para acessar o banco de dados");
         });
       });
+  }
+
+  onSort({ column, direction }: SortEvent) {
+
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    if (direction === '') {
+      this.entregas = this.entregas;
+    } else {
+      this.entregas = [...this.entregas].sort((a, b) => {
+        const res = compare(a[column], b[column]);
+        return direction === 'asc' ? res : -res;
+      });
+    }
   }
 
 }

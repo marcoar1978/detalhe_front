@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from "jquery";
 
@@ -9,6 +9,8 @@ import { FechamentoService } from 'src/app/service/fechamento.service';
 import { Fechamento } from 'src/app/model/fechamento.model';
 import { EntregaService } from 'src/app/service/entregas.service';
 import { Entrega } from 'src/app/model/entrega.model';
+import { NgbdSortableHeader } from 'src/app/diretivas/sort.diretiva';
+import { SortEvent, compare } from 'src/app/diretivas/sort.interface';
 
 @Component({
   selector: 'app-consulta-fechamentos',
@@ -17,143 +19,146 @@ import { Entrega } from 'src/app/model/entrega.model';
 })
 export class ConsultaFechamentosComponent implements OnInit {
 
-  formExpandido:boolean = false;
-  labelButtonForm:string = "Expandir";
-  dadosIniciais:DadosIniciais;
-  anoMes:string;
-  mgsFechamentoId:string;
-  msgClinica:string;
-  clinicas:Clinica[];
-  clinica:Clinica = new Clinica();
-  fechamentoSelecionado:Fechamento = new Fechamento();
-  fechamentos:Fechamento[] = [];
-  entregaSelecionada:Entrega = new Entrega();
-  
+  formExpandido: boolean = false;
+  labelButtonForm: string = "Expandir";
+  dadosIniciais: DadosIniciais;
+  anoMes: string;
+  mgsFechamentoId: string;
+  msgClinica: string;
+  clinicas: Clinica[];
+  clinica: Clinica = new Clinica();
+  fechamentoSelecionado: Fechamento = new Fechamento();
+  fechamentos: Fechamento[] = [];
+  entregaSelecionada: Entrega = new Entrega();
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+
   constructor(private dataService: DataService,
-              private modalService: NgbModal,
-              private fechamentoService: FechamentoService,
-              private entregaService: EntregaService) { }
+    private modalService: NgbModal,
+    private fechamentoService: FechamentoService,
+    private entregaService: EntregaService) { }
 
   ngOnInit() {
     this.dataService.dadosIniciaisMessage
-      .subscribe(res => { 
+      .subscribe(res => {
         this.dadosIniciais = res;
         const dataSplit = this.dadosIniciais.dataHoje.split("-");
-        this.anoMes = dataSplit[0]+"-"+dataSplit[1];
-       });
-       
-       this.dataService.clinicaMessage
-      .subscribe(res => { 
+        this.anoMes = dataSplit[0] + "-" + dataSplit[1];
+      });
+
+    this.dataService.clinicaMessage
+      .subscribe(res => {
         this.clinicas = res;
-       });
+      });
   }
 
   expandeFormConsulta() {
-    $("#buttonExpandeFormConsulta").prop("disabled", true);    
-    if(this.formExpandido == false){
-      $("#divFormConsulta").animate({width: "680px"}, 200, "linear", () => {
-        $("#divFormConsulta").animate({height: "280px"}, 
-        { complete: () => { 
-          $("#formConsulta").fadeIn(250); 
-          $("#divFormConsulta").css('box-shadow','10px 10px 10px -6px rgba(0,0,0,0.75)');
-         
-          $("#buttonExpandeFormConsulta").prop("disabled", false); 
-         }})
-        }
-     );
+    $("#buttonExpandeFormConsulta").prop("disabled", true);
+    if (this.formExpandido == false) {
+      $("#divFormConsulta").animate({ width: "680px" }, 200, "linear", () => {
+        $("#divFormConsulta").animate({ height: "280px" },
+          {
+            complete: () => {
+              $("#formConsulta").fadeIn(250);
+              $("#divFormConsulta").css('box-shadow', '10px 10px 10px -6px rgba(0,0,0,0.75)');
+
+              $("#buttonExpandeFormConsulta").prop("disabled", false);
+            }
+          })
+      }
+      );
     }
 
-    if(this.formExpandido == true){
+    if (this.formExpandido == true) {
       $("#formConsulta").fadeOut(250, () => {
-        $("#divFormConsulta").animate({height: "55px"},  () => {
-          $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
-          $("#divFormConsulta").css('box-shadow','');
-          $("#buttonExpandeFormConsulta").prop("disabled", false); 
-      })  
-    });
-  }
-  
-  if(this.formExpandido) {
-    this.formExpandido = false;
-    this.labelButtonForm = "Expandir";
-    }
-  else{ 
-    this.formExpandido = true;
-    this.labelButtonForm = "Reduzir";
-    }  
-  }
-
-
-consultaPorFechamentoId(){
-  const fechamentoId = $("#fechamentoId").val();
-
-  if(!fechamentoId){
-    alert("Digite o número da entrega");
-    return;
-  }
-
-  $('#divMgsFechamentoId').slideUp(350, () => {
-    $('#divMgsFechamentoId').css('font-weight','normal');
-    $('#divMgsFechamentoId').css('color','green');
-    this.mgsFechamentoId = "Aguarde um momento";
-    $('#divMgsFechamentoId').slideDown(350);
-  });
-
-  this.fechamentoService.getFechamento(fechamentoId)
-    .subscribe(res => {
-      $('#divMgsFechamentoId').slideUp(350, () => {
-        this.mgsFechamentoId = ""; 
+        $("#divFormConsulta").animate({ height: "55px" }, () => {
+          $("#divFormConsulta").animate({ width: "110px" }, 200, "linear");
+          $("#divFormConsulta").css('box-shadow', '');
+          $("#buttonExpandeFormConsulta").prop("disabled", false);
+        })
       });
+    }
 
-      this.fechamentoSelecionado = res;
-      this.clinica = this.clinicas.find(clinica => clinica.id == this.fechamentoSelecionado.clinicaId);
+    if (this.formExpandido) {
+      this.formExpandido = false;
+      this.labelButtonForm = "Expandir";
+    }
+    else {
+      this.formExpandido = true;
+      this.labelButtonForm = "Reduzir";
+    }
+  }
 
-      setTimeout(() => {
-        const janela = window.open('', 'PRINT', 'height=600,width=800');
-        janela.document.write('<html><head><title>NotaFechamento'+fechamentoId+'</title>');
-        janela.document.write('</head><body>');  
-        janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
-        janela.document.write('</body></html>');
-        
-      },500 );
 
-    })
-}
+  consultaPorFechamentoId() {
+    const fechamentoId = $("#fechamentoId").val();
 
-consultaPorClinica(){
+    if (!fechamentoId) {
+      alert("Digite o número da entrega");
+      return;
+    }
+
+    $('#divMgsFechamentoId').slideUp(350, () => {
+      $('#divMgsFechamentoId').css('font-weight', 'normal');
+      $('#divMgsFechamentoId').css('color', 'green');
+      this.mgsFechamentoId = "Aguarde um momento";
+      $('#divMgsFechamentoId').slideDown(350);
+    });
+
+    this.fechamentoService.getFechamento(fechamentoId)
+      .subscribe(res => {
+        $('#divMgsFechamentoId').slideUp(350, () => {
+          this.mgsFechamentoId = "";
+        });
+
+        this.fechamentoSelecionado = res;
+        this.clinica = this.clinicas.find(clinica => clinica.id == this.fechamentoSelecionado.clinicaId);
+
+        setTimeout(() => {
+          const janela = window.open('', 'PRINT', 'height=600,width=800');
+          janela.document.write('<html><head><title>NotaFechamento' + fechamentoId + '</title>');
+          janela.document.write('</head><body>');
+          janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
+          janela.document.write('</body></html>');
+
+        }, 500);
+
+      })
+  }
+
+  consultaPorClinica() {
     const clinicaId = $("#clinicaId").val();
     const data = $("#anoMes").val();
     const dataSplit = data.split("-");
     const ano = dataSplit[0];
     const mes = dataSplit[1];
 
-    if(!clinicaId){
+    if (!clinicaId) {
       alert("Selecione a clínica");
       return;
     }
 
-    
-      $('#divMsgClinica').css('font-weight','normal');
-      $('#divMsgClinica').css('color','green');
-      this.msgClinica = "Aguarde um momento";
-      $('#divMsgClinica').slideDown(150);
-    
+
+    $('#divMsgClinica').css('font-weight', 'normal');
+    $('#divMsgClinica').css('color', 'green');
+    this.msgClinica = "Aguarde um momento";
+    $('#divMsgClinica').slideDown(150);
+
 
     this.fechamentoService.consultaPorClinica(clinicaId, ano, mes)
       .subscribe(res => {
         this.fechamentos = res;
-        if(this.fechamentos.length == 0){
+        if (this.fechamentos.length == 0) {
           $('#divMsgClinica').slideUp(150, () => {
-            $('#divMsgClinica').css('font-weight','bold');
-            $('#divMsgClinica').css('color','red');
+            $('#divMsgClinica').css('font-weight', 'bold');
+            $('#divMsgClinica').css('color', 'red');
             this.msgClinica = "Não há registros neste período";
             $('#divMsgClinica').slideDown(150, () => {
-              setTimeout( () => { $('#divMsgClinica').slideUp(150);}, 4000);
+              setTimeout(() => { $('#divMsgClinica').slideUp(150); }, 4000);
             });
           });
           return;
         }
-       
+
         this.fechamentos.forEach(fechamento => {
           fechamento.clinica = this.clinicas.find(clinica => clinica.id == fechamento.clinicaId);
         });
@@ -183,55 +188,74 @@ consultaPorClinica(){
         */
 
       });
-}
+  }
 
-abreModalFechamento(fechamentoId: number){
-  $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250);
-  this.fechamentoService.getFechamento(fechamentoId)
-    .subscribe(res => {
-      $(`#msgDetalheFechamento_${fechamentoId}`).fadeOut(250);
-      this.fechamentoSelecionado = res;
-      this.clinica = this.clinicas.find(clinica => clinica.id == this.fechamentoSelecionado.clinicaId);
+  abreModalFechamento(fechamentoId: number) {
+    $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250);
+    this.fechamentoService.getFechamento(fechamentoId)
+      .subscribe(res => {
+        $(`#msgDetalheFechamento_${fechamentoId}`).fadeOut(250);
+        this.fechamentoSelecionado = res;
+        this.clinica = this.clinicas.find(clinica => clinica.id == this.fechamentoSelecionado.clinicaId);
 
-      setTimeout(() => {
-        const janela = window.open('', 'PRINT', 'height=600,width=800');
-        janela.document.write('<html><head><title>NotaFechamento'+fechamentoId+'</title>');
-        janela.document.write('</head><body>');  
-        janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
-        janela.document.write('</body></html>');
-        
-      },500 );
+        setTimeout(() => {
+          const janela = window.open('', 'PRINT', 'height=600,width=800');
+          janela.document.write('<html><head><title>NotaFechamento' + fechamentoId + '</title>');
+          janela.document.write('</head><body>');
+          janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
+          janela.document.write('</body></html>');
 
-    }, error => {
-      $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250, () => {
-        alert("Problemas para acessar o banco de dados"); });
+        }, 500);
+
+      }, error => {
+        $(`#msgDetalheFechamento_${fechamentoId}`).fadeIn(250, () => {
+          alert("Problemas para acessar o banco de dados");
+        });
       })
-}
+  }
 
-abreModalEntrega(entregaId:number){
-  $(`#msgDetalheEntrega_${entregaId}`).fadeIn(250);
-  this.entregaService.getEntrega(entregaId)
-    .subscribe(res => {
+  abreModalEntrega(entregaId: number) {
+    $(`#msgDetalheEntrega_${entregaId}`).fadeIn(250);
+    this.entregaService.getEntrega(entregaId)
+      .subscribe(res => {
         $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
         this.entregaSelecionada = res;
         this.clinica = this.clinicas.find(clinica => clinica.id == this.entregaSelecionada.clinicaId);
 
         setTimeout(() => {
           const janela = window.open('', 'PRINT', 'height=600,width=800');
-          janela.document.write('<html><head><title>NotaFechamento'+entregaId+'</title>');
-          janela.document.write('</head><body>');  
+          janela.document.write('<html><head><title>NotaFechamento' + entregaId + '</title>');
+          janela.document.write('</head><body>');
           janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
           janela.document.write('</body></html>');
-          
-        },500 );
 
-        
-    }, error => { 
-      $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
-      alert("Problemas para acessar o banco de dados")
-    } );
+        }, 500);
 
 
-}
+      }, error => {
+        $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
+        alert("Problemas para acessar o banco de dados")
+      });
+
+
+  }
+
+  onSort({ column, direction }: SortEvent) {
+
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    if (direction === '') {
+      this.fechamentos = this.fechamentos;
+    } else {
+      this.fechamentos = [...this.fechamentos].sort((a, b) => {
+        const res = compare(a[column], b[column]);
+        return direction === 'asc' ? res : -res;
+      });
+    }
+  }
 
 }

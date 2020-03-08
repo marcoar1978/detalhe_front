@@ -87,10 +87,38 @@
         <tr>
           <th width="12%" colspan="3">Id</th>
 
-          <th width="15%">Data<br />Fechamento</th>
-          <th width="15%">Clínica</th>
-          <th width="15%">Valor Total</th>
-          <th width="15%">Valor Pago</th>
+          <th
+            width="15%"
+            sortable="dataFechamento"
+            (sort)="onSort($event)"
+            style="text-align: center;cursor:pointer;"
+          >
+            Data<br />Fechamento
+          </th>
+          <th
+            width="15%"
+            sortable="clinica.nomeSimp"
+            (sort)="onSort($event)"
+            style="text-align: center;cursor:pointer;"
+          >
+            Clínica
+          </th>
+          <th
+            width="15%"
+            sortable="valorTotal"
+            (sort)="onSort($event)"
+            style="text-align: center;cursor:pointer;"
+          >
+            Valor Total
+          </th>
+          <th
+            width="15%"
+            sortable="valorPgto"
+            (sort)="onSort($event)"
+            style="text-align: center;cursor:pointer;"
+          >
+            Valor Pago
+          </th>
           <th>
             Entregas<br /><span style="font-size:11px"
               >(Número - Data Entrega - Valor)</span

@@ -22,7 +22,4 @@ export class NotaFechamentoComponent implements OnInit, OnChanges {
     this.fechamentoSelecionado = this.fechamentoSelecionadoInput;
     this.nomeClinica = this.nomeClinicaInput;
   }
-
-
-
 }
