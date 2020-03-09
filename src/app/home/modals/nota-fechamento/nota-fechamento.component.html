@@ -1,5 +1,4 @@
-
-  <div
+<div
   style="padding:15px; text-align: center; border:1px solid #000;width:630px !important;margin: auto;"
   id="caixaNotaFechamento"
 >
@@ -63,9 +62,7 @@
             <td width="20%">{{ pedido.id }}</td>
             <td width="40%">{{ pedido.nomePaciente }}</td>
             <td style="text-align:right">
-              {{
-                pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
-              }}
+              {{ pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt" }}
             </td>
           </tr>
         </table>

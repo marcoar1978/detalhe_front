@@ -7,11 +7,11 @@ import { Fechamento } from 'src/app/model/fechamento.model';
   styleUrls: ['./nota-fechamento.component.css']
 })
 export class NotaFechamentoComponent implements OnInit, OnChanges {
- 
-  @Input() fechamentoSelecionadoInput:Fechamento;
-  @Input() nomeClinicaInput:string;
-  fechamentoSelecionado:Fechamento;
-  nomeClinica:string;
+
+  @Input() fechamentoSelecionadoInput: Fechamento;
+  @Input() nomeClinicaInput: string;
+  fechamentoSelecionado: Fechamento;
+  nomeClinica: string;
 
   constructor() { }
 

@@ -17,24 +17,24 @@ import { Pgto } from 'src/app/model/pgto.model';
   styleUrls: ['./fechamentos.component.css']
 })
 export class FechamentosComponent implements OnInit {
-  
-  dadosIniciais:DadosIniciais;
-  fechamentos:Fechamento[];
-  fechamentoSelecionado:Fechamento = new Fechamento();
-  clinicas:Clinica[];
-  nomeClinica:string;
-  clinicasComFechamento:Clinica[];
-  carregamentoClinicas:boolean;
-  carregamentoFechamentos:boolean;
-  entregaSelecionada:Entrega = new Entrega();
-  modalCadastro:any;
-  pagamentosEfetuados:Pgto[] = [];
-  dataCadastroPgto:string;
-  saldoFechamento:number;
-  labelConfPgto:string = "Inserir Pagamento";
-  disabledConfPgto:boolean = false;
-  obsCadastroPgto:string;
-  msgAlertValor:string;
+
+  dadosIniciais: DadosIniciais;
+  fechamentos: Fechamento[];
+  fechamentoSelecionado: Fechamento = new Fechamento();
+  clinicas: Clinica[];
+  nomeClinica: string;
+  clinicasComFechamento: Clinica[];
+  carregamentoClinicas: boolean;
+  carregamentoFechamentos: boolean;
+  entregaSelecionada: Entrega = new Entrega();
+  modalCadastro: any;
+  pagamentosEfetuados: Pgto[] = [];
+  dataCadastroPgto: string;
+  saldoFechamento: number;
+  labelConfPgto: string = "Inserir Pagamento";
+  disabledConfPgto: boolean = false;
+  obsCadastroPgto: string;
+  msgAlertValor: string;
 
   constructor(private fechamentoService: FechamentoService,
     private modalService: NgbModal,
@@ -45,128 +45,123 @@ export class FechamentosComponent implements OnInit {
     this.dataService.dadosIniciaisMessage.subscribe(res => this.dadosIniciais = res);
     this.dataCadastroPgto = this.dadosIniciais.dataHoje;
     this.dataService.clinicaMessage
-      .subscribe(res => { 
+      .subscribe(res => {
         this.clinicas = res;
         this.carregamentoClinicas = true;
-       this.escondeAlert();
+        this.escondeAlert();
       });
 
-      this.fechamentoService.listaFechamentos()
-        .subscribe(res => {
-          this.fechamentos = res;
-                  
-          this.clinicasComFechamento = this.clinicas.filter(clinica => {
-            let verifClinicaComFechamento = false;
-            for(let i = 0; i < this.fechamentos.length; i++){
-              if(this.fechamentos[i].clinicaId == clinica.id){
-                verifClinicaComFechamento = true;
-              }
+    this.fechamentoService.listaFechamentos()
+      .subscribe(res => {
+        this.fechamentos = res;
+
+        this.clinicasComFechamento = this.clinicas.filter(clinica => {
+          let verifClinicaComFechamento = false;
+          for (let i = 0; i < this.fechamentos.length; i++) {
+            if (this.fechamentos[i].clinicaId == clinica.id) {
+              verifClinicaComFechamento = true;
             }
-            return verifClinicaComFechamento;
-          })
-          this.carregamentoFechamentos = true;
-          this.escondeAlert();
+          }
+          return verifClinicaComFechamento;
         })
+        this.carregamentoFechamentos = true;
+        this.escondeAlert();
+      })
   }
 
-  escondeAlert(){
-      
-    if((this.carregamentoClinicas) && (this.carregamentoFechamentos)){
+  escondeAlert() {
+    if ((this.carregamentoClinicas) && (this.carregamentoFechamentos)) {
       $("#divAguardar").slideUp(350);
     }
   }
 
-  abreModalFechamento(fechamentoId:number, nomeClinica:string){
+  abreModalFechamento(fechamentoId: number, nomeClinica: string) {
     this.nomeClinica = nomeClinica;
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
     setTimeout(() => {
       const janela = window.open('', 'PRINT', 'height=600,width=800');
-      janela.document.write('<html><head><title>NotaFechamento'+fechamentoId+'</title>');
-      janela.document.write('</head><body>');  
+      janela.document.write('<html><head><title>NotaFechamento' + fechamentoId + '</title>');
+      janela.document.write('</head><body>');
       janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
       janela.document.write('</body></html>');
-    },500 );
+    }, 500);
 
   }
 
-  abreModalEntrega(fechamentoId:number, entregaId:number, nomeClinica:string){
+  abreModalEntrega(fechamentoId: number, entregaId: number, nomeClinica: string) {
     this.nomeClinica = nomeClinica;
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
     this.entregaSelecionada = this.fechamentoSelecionado.entregas.find(entrega => entregaId == entregaId);
     setTimeout(() => {
       const janela = window.open('', 'PRINT', 'height=600,width=800');
-      janela.document.write('<html><head><title>NotaEntrega'+entregaId+'</title>');
-      janela.document.write('</head><body>');  
+      janela.document.write('<html><head><title>NotaEntrega' + entregaId + '</title>');
+      janela.document.write('</head><body>');
       janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
       janela.document.write('</body></html>');
-    },500 );
+    }, 500);
   }
 
-  abreModalPagamento(fechamentoId:number, cadastroPagamento ){
+  abreModalPagamento(fechamentoId: number, cadastroPagamento) {
     this.dataCadastroPgto = this.dadosIniciais.dataHoje;;
     this.obsCadastroPgto = "";
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
     this.saldoFechamento = this.fechamentoSelecionado.valorTotal - this.fechamentoSelecionado.valorPgto;
     this.pagamentosEfetuados = this.fechamentoSelecionado.pgtos;
-    this.modalCadastro = this.modalService.open(cadastroPagamento, { centered: true, size: 'lg',scrollable: true });
+    this.modalCadastro = this.modalService.open(cadastroPagamento, { centered: true, size: 'lg', scrollable: true });
   }
 
-  inserirPgto(fechamentoId:number){
-     if(!(this.verifValor())){
-        this.labelConfPgto = "Aguarde um momento";
-        this.disabledConfPgto = true;
-        let pgto:Pgto = new Pgto();
-        pgto.fechamentoId = fechamentoId;
-        pgto.dataPagamento = this.dataCadastroPgto;
-        pgto.valor = Number($("#inputValorPgto").val());
-        pgto.obs = this.obsCadastroPgto;
+  inserirPgto(fechamentoId: number) {
+    if (!(this.verifValor())) {
+      this.labelConfPgto = "Aguarde um momento";
+      this.disabledConfPgto = true;
+      let pgto: Pgto = new Pgto();
+      pgto.fechamentoId = fechamentoId;
+      pgto.dataPagamento = this.dataCadastroPgto;
+      pgto.valor = Number($("#inputValorPgto").val());
+      pgto.obs = this.obsCadastroPgto;
 
-        this.fechamentoService.addPgto(pgto)
-          .subscribe(res => {
-            this.labelConfPgto = "Inserir Pagamento";
-            this.disabledConfPgto = false;
-            this.fechamentos.forEach(fechamento => 
-              {
-                if(fechamento.id == fechamentoId){
-                  fechamento.valorPgto += Number($("#inputValorPgto").val());
-                  fechamento.pgtos.push(pgto);
-                  $('#divValorPago_'+fechamentoId).empty();
-                  $('#divValorPago_'+fechamentoId).append("R$ "+fechamento.valorPgto.toFixed(2).replace(".",","));
-                }
-              })
-              this.modalCadastro.close();
-         }, error =>{
-            this.labelConfPgto = "Inserir Pagamento";
-            this.disabledConfPgto = false;
-            alert("Erro ao acessar o banco de dados")});
-      
+      this.fechamentoService.addPgto(pgto)
+        .subscribe(res => {
+          this.labelConfPgto = "Inserir Pagamento";
+          this.disabledConfPgto = false;
+          this.fechamentos.forEach(fechamento => {
+            if (fechamento.id == fechamentoId) {
+              fechamento.valorPgto += Number($("#inputValorPgto").val());
+              fechamento.pgtos.push(pgto);
+              $('#divValorPago_' + fechamentoId).empty();
+              $('#divValorPago_' + fechamentoId).append("R$ " + fechamento.valorPgto.toFixed(2).replace(".", ","));
+            }
+          })
+          this.modalCadastro.close();
+        }, error => {
+          this.labelConfPgto = "Inserir Pagamento";
+          this.disabledConfPgto = false;
+          alert("Erro ao acessar o banco de dados")
+        });
     }
-    
   }
 
-  verifValor(){
-    let inputValorPgto:number = Number($("#inputValorPgto").val());
-    let verifError:boolean = false;
-    if(inputValorPgto > this.saldoFechamento){
-      this.msgAlertValor = "Valor não pode ser maior que R$ "+this.saldoFechamento.toFixed(2);
+  verifValor() {
+    let inputValorPgto: number = Number($("#inputValorPgto").val());
+    let verifError: boolean = false;
+    if (inputValorPgto > this.saldoFechamento) {
+      this.msgAlertValor = "Valor não pode ser maior que R$ " + this.saldoFechamento.toFixed(2);
       verifError = true;
-     }
-
-    if(inputValorPgto < 0){
-      this.msgAlertValor ="Valor não pode ser menor que R$ 0.00";
+    }
+    if (inputValorPgto < 0) {
+      this.msgAlertValor = "Valor não pode ser menor que R$ 0.00";
       verifError = true;
-     }
-
-    if(verifError){
+    }
+    if (verifError) {
       $("#inputValorPgto").val(this.saldoFechamento.toFixed(2));
       $("#alertValor").slideDown(350, () => {
         setTimeout(() => {
           $("#alertValor").slideUp(350)
-        },1500);
+        }, 1500);
       })
     }
-    
+
     return verifError;
-  }  
+  }
 
 }

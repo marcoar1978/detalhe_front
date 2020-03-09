@@ -225,23 +225,6 @@ export class ConsultaPedidosComponent implements OnInit {
           this.labelButtonForm = "Expandir";
           $("#tabelaPedidos").fadeIn(350);
         });
-
-        /*
-        $('#divMsgNomePaciente').slideUp(350, () => {
-         $("#formConsulta").fadeOut(250, () => {
-           $("#divFormConsulta").animate({height: "55px"},  () => {
-             $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
-             $("#divFormConsulta").css('box-shadow','');
-             this.mgsPedidoId = "";
-             $("#tabelaPedidos").fadeOut(350, () => {
-               this.labelButtonForm = "Expandir";
-               $("#tabelaPedidos").fadeIn(350);
-             }); 
-             
-         })  
-       });
-     });
-     */
       }, error => {
         $('divMsgNomePaciente').slideUp(350);
         alert("Problemas ao acessar o banco de dados");
@@ -283,16 +266,6 @@ export class ConsultaPedidosComponent implements OnInit {
             });
           })
 
-          /*  
-          $('#divMsgClinica').slideUp(350, () => {
-            $('#divMsgClinica').css('font-weight', 'bold');
-            $('#divMsgClinica').css('color', 'red');
-            this.msgClinica = "Não há registros neste período";
-            $('#divMsgClinica').slideDown(350, () => {
-              setTimeout(() => { $('#divMsgClinica').slideUp(350); }, 4000);
-            });
-          });
-          */
           return;
         }
 
@@ -320,24 +293,6 @@ export class ConsultaPedidosComponent implements OnInit {
           this.labelButtonForm = "Expandir";
           $("#tabelaPedidos").fadeIn(350);
         });
-
-        /*
-           $('#divMsgClinica').slideUp(350, () => {
-            $("#formConsulta").fadeOut(250, () => {
-              $("#divFormConsulta").animate({height: "55px"},  () => {
-                $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
-                $("#divFormConsulta").css('box-shadow','');
-                this.mgsPedidoId = "";
-                $("#tabelaPedidos").fadeOut(350, () => {
-                  this.labelButtonForm = "Expandir";
-                  $("#tabelaPedidos").fadeIn(350);
-                }); 
-                
-            })  
-          });
-        });
-         */
-
       }, error => {
         $('#divMsgClinica').slideUp(350);
         alert("Problemas ao acessar o banco de dados");
@@ -442,5 +397,4 @@ export class ConsultaPedidosComponent implements OnInit {
       });
     }
   }
-
 }

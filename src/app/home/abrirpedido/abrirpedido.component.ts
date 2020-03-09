@@ -84,7 +84,6 @@ export class AbrirpedidoComponent implements OnInit {
       valorProdVariavel: [],
     })
     $('#tdValorProdVariavel').hide();
-
   }
 
   altClinica() {
@@ -94,7 +93,6 @@ export class AbrirpedidoComponent implements OnInit {
     this.valorTotalLiquido = 0;
     this.valorDesconto = 0;
     this.totalPedido = 0;
-    console.log(clinica);
     this.produtosPadraoClinica = this.produtos.filter(produtoPadraoClinica => produtoPadraoClinica.listaId == clinica.listaId)
     $('#caixaItens').fadeOut(350);
     $('#divDentista').slideUp(350, () => {
@@ -111,23 +109,16 @@ export class AbrirpedidoComponent implements OnInit {
 
   altDentista() {
     const dentistaId = this.form.get("dentista").value;
-    //this.pedidoService.altDentista(this.aberturaPedido.pedidoId,dentistaId)
-    //  .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
   }
 
   altNomePaciente() {
     if (!this.form.get("nomePaciente").hasError("required")) {
       const nomePaciente = this.form.get("nomePaciente").value;
-      // this.pedidoService.altNomePaciente(this.aberturaPedido.pedidoId, nomePaciente)
-      //  .subscribe(res => {}, error => {alert("Erro ao acessar o banco de dados")})
     }
   }
 
   altProtetico() {
     const proteticoId = this.form.get("protetico").value;
-    // this.pedidoService.altProtetico(this.aberturaPedido.pedidoId, proteticoId)
-    //  .subscribe(res => res, error => {alert("Erro ao acessar o banco de dados")})
-
   }
 
   altDesconto() {
@@ -183,7 +174,6 @@ export class AbrirpedidoComponent implements OnInit {
       pedidoFechado.valorTotal = this.totalPedido;
       pedidoFechado.valorLiquido = this.valorTotalLiquido;
 
-
       this.pedidoService.conferirPedido(pedidoFechado)
         .subscribe(res => {
           this.pedido = res;
@@ -192,7 +182,6 @@ export class AbrirpedidoComponent implements OnInit {
           this.recebeConfPedido = true;
 
         }, error => { alert("Erro ao acessar o banco de dados") })
-
 
       $('#titulo').fadeOut(350);
       $('#selClinica').fadeOut(350);
@@ -252,7 +241,6 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
   inserirProdutoPadrao() {
-    console.log(this.form.get('qdeProduto').value);
     const produtoId = this.form.get('produtoPadrao').value;
     const clinicaId = this.form.get('clinica').value;
     const clinica = this.clinicas.find(clinica => clinica.id = clinicaId);
@@ -318,7 +306,6 @@ export class AbrirpedidoComponent implements OnInit {
     this.form.get('qdeProduto').setValue(1);
     this.form.get('tipoVariavel').setValue("");
 
-
     let produtoVariavel: Produto = new Produto();
     produtoVariavel.clinicaId = this.form.get('clinica').value;
     produtoVariavel.tipoProduto = "variavel";
@@ -380,13 +367,7 @@ export class AbrirpedidoComponent implements OnInit {
       .subscribe(res => res, error => alert("Erro ao inserir a observação"));
   }
 
-  altDataPedido() {
-    //this.pedidoService.altDataPedido(this.aberturaPedido.pedidoId, this.form.get('dataPedido').value,this.aberturaPedido.prazo)
-    //.subscribe(res => res, error => alert("Erro ao inserir a observação") );
-  }
-
   scaleEditMouseOver(e) {
-
     $("#edit").animate({ width: '60' }, 350);
 
   }

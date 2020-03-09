@@ -18,7 +18,6 @@ export class ConfirmEntregaComponent implements OnInit {
   entregaId: number;
   obs: string;
 
-
   constructor(private actRoute: ActivatedRoute,
     private dataService: DataService,
     private router: Router, ) { }
@@ -47,8 +46,5 @@ export class ConfirmEntregaComponent implements OnInit {
     janela.document.write('</head><body>');
     janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
     janela.document.write('</body></html>');
-    //janela.print();
-    //janela.close();
   }
-
 }

@@ -1,42 +1,35 @@
-
-
-.avisoForm{
+.avisoForm {
   font: bold 11px arial;
   color: crimson;
   text-align: center;
-  margin-top:10px;
-  margin-bottom:10px;
-  
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-#avisoFormItem{
+#avisoFormItem {
   font: bold 11px arial;
   color: crimson;
   text-align: center;
-  margin-top:10px;
-  margin-bottom:10px;
-  
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-#tabelaItens{
-    
+#tabelaItens {
   background-color: #f5f5f5;
-  border: 1px solid #bbaeae; 
-  box-shadow: 10px 10px 10px -6px rgba(0,0,0,0.75);  
+  border: 1px solid #bbaeae;
+  box-shadow: 10px 10px 10px -6px rgba(0, 0, 0, 0.75);
   padding: 10px;
   border-radius: 5px;
-  padding:5px;
-  font-size:14px;
+  padding: 5px;
+  font-size: 14px;
 }
 
-#conferenciaPedido{
-    
+#conferenciaPedido {
   background-color: #ffffff;
-  border: 1px solid #bbaeae; 
-  box-shadow: 10px 10px 10px -6px rgba(0,0,0,0.75);  
+  border: 1px solid #bbaeae;
+  box-shadow: 10px 10px 10px -6px rgba(0, 0, 0, 0.75);
   padding: 10px;
   border-radius: 5px;
-  padding:5px;
-  font-size:14px;
-  
+  padding: 5px;
+  font-size: 14px;
 }

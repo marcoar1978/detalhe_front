@@ -88,12 +88,11 @@ export class ConsultaFechamentosComponent implements OnInit {
     }
   }
 
-
   consultaPorFechamentoId() {
     const fechamentoId = $("#fechamentoId").val();
 
     if (!fechamentoId) {
-      alert("Digite o número da entrega");
+      alert("Digite o número do fechamento");
       return;
     }
 
@@ -122,6 +121,22 @@ export class ConsultaFechamentosComponent implements OnInit {
 
         }, 500);
 
+      }, error => {
+        $('#divMgsFechamentoId').slideUp(350, () => {
+          this.mgsFechamentoId = "";
+          if (error.status == 400) {
+            $('#divMgsFechamentoId').css('font-weight', 'bold');
+            $('#divMgsFechamentoId').css('color', 'red');
+            this.mgsFechamentoId = "Número de fechamento não existe";
+            $('#divMgsFechamentoId').slideDown(350, () => {
+              setTimeout(() => $('#divMgsFechamentoId').slideUp(350), 4000);
+            })
+          }
+          else {
+            $('#divMgsFechamentoId').slideUp(350);
+            alert("Problemas para acessar o banco de dados");
+          }
+        });
       })
   }
 
@@ -169,24 +184,6 @@ export class ConsultaFechamentosComponent implements OnInit {
           this.labelButtonForm = "Expandir";
           $("#tabelaFechamentos").fadeIn(350);
         });
-
-        /*
-        $('#divMsgClinica').slideUp(350, () => {
-          $("#formConsulta").fadeOut(250, () => {
-            $("#divFormConsulta").animate({height: "55px"},  () => {
-              $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
-              $("#divFormConsulta").css('box-shadow','');
-              this.msgClinica = "";
-              $("#tabelaFechamentos").fadeOut(350, () => {
-                $("#tabelaFechamentos").fadeIn(350);
-              })
-    
-          })  
-        });
-    
-        });
-        */
-
       });
   }
 
@@ -230,8 +227,6 @@ export class ConsultaFechamentosComponent implements OnInit {
           janela.document.write('</body></html>');
 
         }, 500);
-
-
       }, error => {
         $(`#msgDetalheEntrega_${entregaId}`).fadeOut(250);
         alert("Problemas para acessar o banco de dados")
@@ -241,7 +236,6 @@ export class ConsultaFechamentosComponent implements OnInit {
   }
 
   onSort({ column, direction }: SortEvent) {
-
     this.headers.forEach(header => {
       if (header.sortable !== column) {
         header.direction = '';
@@ -257,5 +251,4 @@ export class ConsultaFechamentosComponent implements OnInit {
       });
     }
   }
-
 }

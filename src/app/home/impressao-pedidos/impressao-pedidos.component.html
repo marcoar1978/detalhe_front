@@ -1,87 +1,127 @@
-
-     <div style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#0000cc'><b>PEDIDOS ABERTOS</b></div>
-    <br>
-    <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Data da lista: </b> {{dataRelatorio |date:'dd/MM/yyyy'}} - {{horaRelatorio}}</p>
-    <p style='text-align:center;font-family: Arial, Helvetica, sans-serif;'><b>Qde pedidos: </b> {{qdePedidos}}</p>
-    <div *ngFor="let pedido of pedidos">
-    
-        <div style='padding:15px; text-align: center; border:1px solid #000;width:600px'>
-        <div style='text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px'><b>PEDIDO nº {{pedido.id}}</b></div>
-        <br>
-        
-        
-        <table style='width: 550px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;'>
-            <tr height="30">
-                <td width='100'><b>Data Pedido</b></td>    
-                <td>{{pedido.dataPedido | date:'dd/MM/yyyy'}}</td>    
-            </tr>
-            <tr height="30">
-                <td><b>Clínica</b></td>    
-                <td>{{pedido.clinica}}</td>    
-            </tr>
-             
-            <tr height="30">
-                <td ><b>Dentista</b></td>    
-                <td >{{pedido.dentista}}</td>    
-            </tr>
-            <tr height="30">
-                <td ><b>Paciente</b></td>    
-                <td >{{pedido.nomePaciente}}</td>    
-            </tr>
-                      
-        </table>
-        <br>
-        
-        <table style='width: 550px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; ' >
-            <tr height="30" style='border-bottom:1px solid #ccc;'>
-                <td ></td>
-                <td><b>Derscrição</b></td>
-                <td><b>Valor Unitário</b></td>
-                <td><b>Qde</b></td>
-                <td><b>Total</b></td>
-             </tr>
-             <tr height="30" *ngFor="let item of pedido.itens; let i= index; " style='border-bottom:1px solid #ccc;'>
-                <td>{{i + 1}}</td>
-                <td>{{item.descricao}}</td>
-                <td >{{item.valorUnitario | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-                <td >{{item.qde}}</td>
-                <td >{{item.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-             </tr> 
-             <tr height="30" style='border-bottom:1px solid #ccc;'>
-                <td  colspan='4'><b>Valor Total</b></td>
-                <td><b>{{pedido.valorTotal | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                
-            <tr>
-            <tr height="30" *ngIf="pedido.desconto > 0" style='border-bottom:1px solid #ccc;'>
-                <td colspan='4'><b>Desconto ({{pedido.desconto}} %)</b></td>
-                <td><b>{{pedido.valorTotal - pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                   
-            </tr> 
-            <tr height="30" *ngIf="pedido.desconto > 0">
-                <td colspan='4'><b>Valor Total Líquido</b></td>
-                <td><b>{{pedido.valorLiquido | currency:'BRL':'symbol':'0.2-2':'pt' }}</b></td>
-                    
-            </tr>      
-        </table> 
-        <br>
-        <table style='width: 550px!important;margin: auto;font-family: Arial, Helvetica, sans-serif;font-size:12px;text-align:left;'>
-        <tr height="30">
-            <td width='100' ><b>Prazo</b></td>    
-            <td >{{pedido.prazo}} dias corridos</td>    
-        </tr>
-        <tr height="30">
-            <td ><b>Previsão</b></td>    
-            <td>{{pedido.dataEntregaPrevista  | date:'dd/MM/yyyy'}}</td>    
-        </tr>
-        <tr height="30">
-            <td width='100' ><b>Observações</b></td>    
-            <td >{{pedido.obs}}</td>    
-        </tr>
-        </table>
-        <br>
-        <br>
-    
+<div
+  style="text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#0000cc"
+>
+  <b>PEDIDOS ABERTOS</b>
+</div>
+<br />
+<p style="text-align:center;font-family: Arial, Helvetica, sans-serif;">
+  <b>Data da lista: </b> {{ dataRelatorio | date: "dd/MM/yyyy" }} -
+  {{ horaRelatorio }}
+</p>
+<p style="text-align:center;font-family: Arial, Helvetica, sans-serif;">
+  <b>Qde pedidos: </b> {{ qdePedidos }}
+</p>
+<div *ngFor="let pedido of pedidos">
+  <div
+    style="padding:15px; text-align: center; border:1px solid #000;width:600px"
+  >
+    <div
+      style="text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px"
+    >
+      <b>PEDIDO nº {{ pedido.id }}</b>
     </div>
-    <br>
-    </div>
+    <br />
 
+    <table
+      style="width: 550px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;"
+    >
+      <tr height="30">
+        <td width="100"><b>Data Pedido</b></td>
+        <td>{{ pedido.dataPedido | date: "dd/MM/yyyy" }}</td>
+      </tr>
+      <tr height="30">
+        <td><b>Clínica</b></td>
+        <td>{{ pedido.clinica }}</td>
+      </tr>
+
+      <tr height="30">
+        <td><b>Dentista</b></td>
+        <td>{{ pedido.dentista }}</td>
+      </tr>
+      <tr height="30">
+        <td><b>Paciente</b></td>
+        <td>{{ pedido.nomePaciente }}</td>
+      </tr>
+    </table>
+
+    <br />
+
+    <table
+      style="width: 550px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; "
+    >
+      <tr height="30" style="border-bottom:1px solid #ccc;">
+        <td></td>
+        <td><b>Derscrição</b></td>
+        <td><b>Valor Unitário</b></td>
+        <td><b>Qde</b></td>
+        <td><b>Total</b></td>
+      </tr>
+      <tr
+        height="30"
+        *ngFor="let item of pedido.itens; let i = index"
+        style="border-bottom:1px solid #ccc;"
+      >
+        <td>{{ i + 1 }}</td>
+        <td>{{ item.descricao }}</td>
+        <td>
+          {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
+        </td>
+        <td>{{ item.qde }}</td>
+        <td>{{ item.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}</td>
+      </tr>
+      <tr height="30" style="border-bottom:1px solid #ccc;">
+        <td colspan="4"><b>Valor Total</b></td>
+        <td>
+          <b>{{ pedido.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}</b>
+        </td>
+      </tr>
+
+      <tr></tr>
+      <tr
+        height="30"
+        *ngIf="pedido.desconto > 0"
+        style="border-bottom:1px solid #ccc;"
+      >
+        <td colspan="4">
+          <b>Desconto ({{ pedido.desconto }} %)</b>
+        </td>
+        <td>
+          <b>{{
+            pedido.valorTotal - pedido.valorLiquido
+              | currency: "BRL":"symbol":"0.2-2":"pt"
+          }}</b>
+        </td>
+      </tr>
+      <tr height="30" *ngIf="pedido.desconto > 0">
+        <td colspan="4"><b>Valor Total Líquido</b></td>
+        <td>
+          <b>{{
+            pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
+          }}</b>
+        </td>
+      </tr>
+    </table>
+
+    <br />
+    <table
+      style="width: 550px!important;margin: auto;font-family: Arial, Helvetica, sans-serif;font-size:12px;text-align:left;"
+    >
+      <tr height="30">
+        <td width="100"><b>Prazo</b></td>
+        <td>{{ pedido.prazo }} dias corridos</td>
+      </tr>
+      <tr height="30">
+        <td><b>Previsão</b></td>
+        <td>{{ pedido.dataEntregaPrevista | date: "dd/MM/yyyy" }}</td>
+      </tr>
+      <tr height="30">
+        <td width="100"><b>Observações</b></td>
+        <td>{{ pedido.obs }}</td>
+      </tr>
+    </table>
+
+    <br />
+    <br />
+  </div>
+  <br />
+</div>

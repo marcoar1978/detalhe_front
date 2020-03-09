@@ -1,61 +1,106 @@
 <div class="container">
-    <br>
-    <br>
-    <div class="alert alert-info" id='divAguardar'>Aguarde enquanto os dados estão sendo carregados</div> 
-<br>
-<br>
+  <br />
+  <br />
+  <div class="alert alert-info" id="divAguardar">
+    Aguarde enquanto os dados estão sendo carregados
+  </div>
+  <br />
+  <br />
 
-<div id='tabelaStatus'>
-<table class='table table-bordered table-hover'>
-    <tr>
-        <td style='text-align: center;' rowspan='2' width='200px' valign='center'><b>Status Pedidos</b></td>
-        <td style='text-align: center;' colspan='3' width='450px'><b>Quantidade</b></td>
-        <td style='text-align: center;' rowspan='2' width='150px' valign='center'><b>Valor</b></td>
-        <td style='text-align: center;' rowspan='2' width='70px'><b>Imp.</b></td>
-    </tr>
-    <tr>
-        <td style='text-align: center;' width='150px'><div style='font-size:11px'><b>Pedidos</b></div></td>    
-        <td style='text-align: center;' width='150px'><div style='font-size:11px'><b>Entregas</b></div></td>
-        <td style='text-align: center;' width='150px'><div style='font-size:11px'><b>Fechamentos</b></div></td>
-       
-    </tr>  
-    <tr>
+  <div id="tabelaStatus">
+    <table class="table table-bordered table-hover">
+      <tr>
+        <td
+          style="text-align: center;"
+          rowspan="2"
+          width="200px"
+          valign="center"
+        >
+          <b>Status Pedidos</b>
+        </td>
+        <td style="text-align: center;" colspan="3" width="450px">
+          <b>Quantidade</b>
+        </td>
+        <td
+          style="text-align: center;"
+          rowspan="2"
+          width="150px"
+          valign="center"
+        >
+          <b>Valor</b>
+        </td>
+        <td style="text-align: center;" rowspan="2" width="70px">
+          <b>Imp.</b>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: center;" width="150px">
+          <div style="font-size:11px"><b>Pedidos</b></div>
+        </td>
+        <td style="text-align: center;" width="150px">
+          <div style="font-size:11px"><b>Entregas</b></div>
+        </td>
+        <td style="text-align: center;" width="150px">
+          <div style="font-size:11px"><b>Fechamentos</b></div>
+        </td>
+      </tr>
+      <tr>
         <td>Abertos</td>
-        <td style='text-align:center'>{{qdePedidosAbertos}}</td>
-        <td style='text-align:center'>--</td>
-        <td style='text-align:center'>--</td>
-        <td style='text-align:center'>{{valorPedidosAbertos | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'><i class="material-icons" style='cursor:pointer' (click)="imprimirPedidos()">print</i></td>
-    </tr> 
-    <tr>
+        <td style="text-align:center">{{ qdePedidosAbertos }}</td>
+        <td style="text-align:center">--</td>
+        <td style="text-align:center">--</td>
+        <td style="text-align:center">
+          {{ valorPedidosAbertos | currency: "BRL":"symbol":"0.2-2":"pt" }}
+        </td>
+        <td style="text-align:center">
+          <i
+            class="material-icons"
+            style="cursor:pointer"
+            (click)="imprimirPedidos()"
+            >print</i
+          >
+        </td>
+      </tr>
+      <tr>
         <td>Concluídos</td>
-        <td style='text-align:center'>{{qdePedidosConcluidos}}</td>
-        <td style='text-align:center'>{{qdeEntregas}}</td>
-        <td style='text-align:center'>--</td>
-        <td style='text-align:center'>{{valorPedidosConcluidos | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'></td>
-    </tr> 
-    <tr>
+        <td style="text-align:center">{{ qdePedidosConcluidos }}</td>
+        <td style="text-align:center">{{ qdeEntregas }}</td>
+        <td style="text-align:center">--</td>
+        <td style="text-align:center">
+          {{ valorPedidosConcluidos | currency: "BRL":"symbol":"0.2-2":"pt" }}
+        </td>
+        <td style="text-align:center"></td>
+      </tr>
+      <tr>
         <td>Fechados</td>
-        <td style='text-align:center'>{{qdePedidosFechados}}</td>
-        <td style='text-align:center'>{{qdeEntregasFechadas}}</td>
-        <td style='text-align:center'>{{qdeFechamentos}}</td>
-        <td style='text-align:center'>{{valorPedidosFechados | currency:'BRL':'symbol':'0.2-2':'pt'}}</td>
-        <td style='text-align:center'></td>
-    </tr> 
-    <tr>
+        <td style="text-align:center">{{ qdePedidosFechados }}</td>
+        <td style="text-align:center">{{ qdeEntregasFechadas }}</td>
+        <td style="text-align:center">{{ qdeFechamentos }}</td>
+        <td style="text-align:center">
+          {{ valorPedidosFechados | currency: "BRL":"symbol":"0.2-2":"pt" }}
+        </td>
+        <td style="text-align:center"></td>
+      </tr>
+      <tr>
         <td><b>Total</b></td>
-        <td style='text-align:center'><b>{{qdeTotalPedidos}}</b></td>
-        <td style='text-align:center'><b>{{qdeTotalEntregas}}</b></td>
-        <td style='text-align:center'><b>{{qdeFechamentos}}</b></td>
-        <td style='text-align:center'><b>{{valorTotal  | currency:'BRL':'symbol':'0.2-2':'pt'}}</b></td>
+        <td style="text-align:center">
+          <b>{{ qdeTotalPedidos }}</b>
+        </td>
+        <td style="text-align:center">
+          <b>{{ qdeTotalEntregas }}</b>
+        </td>
+        <td style="text-align:center">
+          <b>{{ qdeFechamentos }}</b>
+        </td>
+        <td style="text-align:center">
+          <b>{{ valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}</b>
+        </td>
         <td></td>
-    </tr>   
-
-</table>    
+      </tr>
+    </table>
+  </div>
 </div>
-</div>
 
-<div id='impressaoPedidos' style='display:none'>
-    <app-impressao-pedidos [pedidosInput]='pedidos'></app-impressao-pedidos>
-</div>    
+<div id="impressaoPedidos" style="display:none">
+  <app-impressao-pedidos [pedidosInput]="pedidos"></app-impressao-pedidos>
+</div>

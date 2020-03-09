@@ -1,24 +1,54 @@
 <div class="container">
-    <br><br><br><br><br><br>
-    <div id='menu' style='text-align:center; display:none'>
-        <img src="http://www.detalheprotetico.com.br/img/logo_detalhe_web.png" width='240'/>   
-        <br>
-        <br>
-    <table style='width:400px !important;margin: auto;'>
-        <tr >
-            <td width='33%' style='padding:10px'><button class='btn btn-info' [disabled]='disabledAbrirPedido' [routerLink]="['/home/abrirPedido']" (click)="abrirPedido()" >{{labelAbrirPedido}}</button></td>
-            <td width='33%' style='padding:10px'><button class='btn btn-info' [routerLink]="['/home/pedidosEmProcesso']">Pedidos abertos</button></td>
-            <td style='padding:10px'><button class='btn btn-info' [routerLink]="['/home/entregas']">Entregas</button></td>
-         </tr>    
-    </table>  
-    <br>
-    <table style='width:400px !important;margin: auto;'>
-        <tr>
-            <td width='50%' style='padding:10px;text-align: right;'><button class='btn btn-info' [routerLink]="['/home/fechamentos']">Fechamentos</button></td>
-            <td style='padding:10px;text-align: left;'><button class='btn btn-info' [routerLink]="['/home/statusPedidos']">Status Consolidado</button></td>
-        </tr>
-    </table>        
-    </div>    
-    
+  <br /><br /><br /><br /><br /><br />
+  <div id="menu" style="text-align:center; display:none">
+    <img
+      src="http://www.detalheprotetico.com.br/img/logo_detalhe_web.png"
+      width="240"
+    />
+    <br />
+    <br />
+    <table style="width:400px !important;margin: auto;">
+      <tr>
+        <td width="33%" style="padding:10px">
+          <button
+            class="btn btn-info"
+            [disabled]="disabledAbrirPedido"
+            [routerLink]="['/home/abrirPedido']"
+            (click)="abrirPedido()"
+          >
+            {{ labelAbrirPedido }}
+          </button>
+        </td>
+        <td width="33%" style="padding:10px">
+          <button
+            class="btn btn-info"
+            [routerLink]="['/home/pedidosEmProcesso']"
+          >
+            Pedidos abertos
+          </button>
+        </td>
+        <td style="padding:10px">
+          <button class="btn btn-info" [routerLink]="['/home/entregas']">
+            Entregas
+          </button>
+        </td>
+      </tr>
+    </table>
 
+    <br />
+    <table style="width:400px !important;margin: auto;">
+      <tr>
+        <td width="50%" style="padding:10px;text-align: right;">
+          <button class="btn btn-info" [routerLink]="['/home/fechamentos']">
+            Fechamentos
+          </button>
+        </td>
+        <td style="padding:10px;text-align: left;">
+          <button class="btn btn-info" [routerLink]="['/home/statusPedidos']">
+            Status Consolidado
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

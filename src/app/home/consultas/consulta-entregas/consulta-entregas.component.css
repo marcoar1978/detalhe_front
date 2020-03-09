@@ -1,20 +1,18 @@
-#divFormConsulta{
-    background-color: #f5f5f5;
-    border: 1px solid #bbaeae; 
-    border-radius: 5px; 
-    height:65px;
-    width:720px !important;
-    margin: auto;
-    
-    }
+#divFormConsulta {
+  background-color: #f5f5f5;
+  border: 1px solid #bbaeae;
+  border-radius: 5px;
+  height: 65px;
+  width: 720px !important;
+  margin: auto;
+}
 
-.msgDetalheEntrega{
-    background-color:lightsteelblue;
-    border: 1px solid #bbaeae; 
-    border-radius: 5px; 
-    position:absolute;
-    padding:10px;
-    box-shadow: 10px 10px 10px -6px rgba(0,0,0,0.75);
-    display:none;
-    }    
-
+.msgDetalheEntrega {
+  background-color: lightsteelblue;
+  border: 1px solid #bbaeae;
+  border-radius: 5px;
+  position: absolute;
+  padding: 10px;
+  box-shadow: 10px 10px 10px -6px rgba(0, 0, 0, 0.75);
+  display: none;
+}

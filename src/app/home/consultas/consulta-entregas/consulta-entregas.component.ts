@@ -34,7 +34,6 @@ export class ConsultaEntregasComponent implements OnInit {
     private entregaService: EntregaService, ) { }
 
   ngOnInit() {
-
     this.dataService.dadosIniciaisMessage
       .subscribe(res => {
         this.dadosIniciais = res;
@@ -47,7 +46,6 @@ export class ConsultaEntregasComponent implements OnInit {
         this.clinicas = res;
       });
   }
-
 
   expandeFormConsulta() {
     $("#buttonExpandeFormConsulta").prop("disabled", true);
@@ -126,7 +124,7 @@ export class ConsultaEntregasComponent implements OnInit {
           if (error.status == 400) {
             $('#divMgsEntregaId').css('font-weight', 'bold');
             $('#divMgsEntregaId').css('color', 'red');
-            this.mgsEntregaId = "Número do pedido não existe";
+            this.mgsEntregaId = "Número de entrega não existe";
             $('#divMgsEntregaId').slideDown(350, () => {
               setTimeout(() => $('#divMgsEntregaId').slideUp(350), 4000);
             })
@@ -151,19 +149,15 @@ export class ConsultaEntregasComponent implements OnInit {
       return;
     }
 
-
     $('#divMsgClinica').css('font-weight', 'normal');
     $('#divMsgClinica').css('color', 'green');
     this.msgClinica = "Aguarde um momento";
     $('#divMsgClinica').slideDown(150);
 
-
     this.entregaService.consultaEntregaPorClinica(clinicaId, ano, mes)
       .subscribe(res => {
         this.entregas = res;
         if (this.entregas.length == 0) {
-
-
           $('#divMsgClinica').slideUp(150, () => {
             $('#divMsgClinica').css('font-weight', 'bold');
             $('#divMsgClinica').css('color', 'red');
@@ -185,22 +179,6 @@ export class ConsultaEntregasComponent implements OnInit {
           this.labelButtonForm = "Expandir";
           $("#tabelaEntregas").fadeIn(350);
         });
-        /*  
-      $('#divMsgClinica').slideUp(350, () => {
-        $("#formConsulta").fadeOut(250, () => {
-          $("#divFormConsulta").animate({height: "55px"},  () => {
-            $("#divFormConsulta").animate({width: "110px"}, 200, "linear");
-            $("#divFormConsulta").css('box-shadow','');
-            this.msgClinica = "";
-            $("#tabelaEntregas").fadeOut(350, () => {
-              $("#tabelaEntregas").fadeIn(350);
-            })
-  
-        })  
-      });
-  
-      });
-      */
 
       }, error => {
         $('#divMsgClinica').slideUp(350);
@@ -221,7 +199,6 @@ export class ConsultaEntregasComponent implements OnInit {
           janela.document.write('</head><body>');
           janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
           janela.document.write('</body></html>');
-
         }, 500);
 
       }, error => {
@@ -232,7 +209,6 @@ export class ConsultaEntregasComponent implements OnInit {
   }
 
   onSort({ column, direction }: SortEvent) {
-
     this.headers.forEach(header => {
       if (header.sortable !== column) {
         header.direction = '';
@@ -248,5 +224,4 @@ export class ConsultaEntregasComponent implements OnInit {
       });
     }
   }
-
 }
