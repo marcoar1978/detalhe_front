@@ -1,3 +1,22 @@
+
+<ng-template #modalCancelPedido let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Cancelamento de pedido </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Deseja cancelar o pedido {{pedidoId}}?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="cancelaPedido();" >Sim</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Não</button>
+  </div>
+  <div class="alert alert-info" style='display:none;width:250px !important;margin:auto;' id='alertCancelPedido'>Aguarde um momento</div><br>
+</ng-template>
+
+
 <ng-template #content let-modal id="modalPedido">
   <div class="modal-header">
     <h4 class="modal-title">Pedido nº {{ pedidoSelecionado.id }}</h4>
@@ -255,7 +274,14 @@
         <td width="30%" style="text-align: center;">Dentista</td>
         <td width="20%" style="text-align: center;">Data Prevista</td>
         <td width="20%" style="text-align: center;">Valor</td>
-        <td width="10%" style="text-align: center;">Entrega</td>
+        <td width="5%" style="text-align: center;">Entrega</td>
+        <td width="5%" style="text-align: center;"><i
+          class="material-icons"
+          
+          style="cursor:pointer;color: #ffffff;"
+          >delete_outline</i
+        >
+  </td>
       </tr>
     </table>
 
@@ -268,7 +294,7 @@
 
       <table class="table table-hover">
         <tbody>
-          <tr *ngFor="let pedido of pedidos">
+          <tr *ngFor="let pedido of pedidos" class='linhaPedido_{{pedido.id}}'>
             <th
               width="5%"
               *ngIf="clinica.nomeSimp == pedido.clinica"
@@ -315,6 +341,15 @@
                 id="checkEntrega_{{ pedido.id }}"
                 (click)="checkEntrega(clinica.id, pedido.id)"
               />
+            </td>
+            <td *ngIf="clinica.nomeSimp == pedido.clinica">
+              <i
+                    class="material-icons"
+                    title="Cancelar pedido"
+                    style="cursor:pointer;color: #FB8C00;"
+                    (click)="openModalCancelPedido(pedido.id, modalCancelPedido)"
+                    >delete_outline</i
+                  >
             </td>
           </tr>
         </tbody>

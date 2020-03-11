@@ -152,7 +152,6 @@ export class ConsultaFechamentosComponent implements OnInit {
       return;
     }
 
-
     $('#divMsgClinica').css('font-weight', 'normal');
     $('#divMsgClinica').css('color', 'green');
     this.msgClinica = "Aguarde um momento";

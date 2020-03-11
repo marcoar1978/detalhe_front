@@ -9,6 +9,7 @@ import { Clinica } from 'src/app/model/clinica.model';
 import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.service';
 import { Entrega } from 'src/app/model/entrega.model';
 import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
+import { PedidoService } from 'src/app/service/pedido.service';
 
 @Component({
   selector: 'app-pedidos-em-processo',
@@ -20,6 +21,7 @@ export class PedidosEmProcessoComponent implements OnInit {
   pedidos: Pedido[];
   pedidosCheckados: Pedido[];
   pedidoSelecionado: Pedido;
+  pedidoId: number;
   totalPedidosSelecionados: number;
   clinicas: Clinica[];
   clinica: Clinica;
@@ -31,9 +33,11 @@ export class PedidosEmProcessoComponent implements OnInit {
   labelConfEntrega: string = "Confirmar Entrega";
   disabledConfEntrega: boolean = false;
   modalConferencia: any;
+  modalCancelPedido: any;
   dadosIniciais: DadosIniciais;
 
   constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
+    private pedidoService: PedidoService,
     private modalService: NgbModal,
     private router: Router,
     private dataService: DataService) { }
@@ -133,8 +137,23 @@ export class PedidosEmProcessoComponent implements OnInit {
         this.disabledConfEntrega = false;
         alert("Erro ao acessar o banco de dados");
       })
-
   }
+
+  openModalCancelPedido(pedidoId: number, modalCancelPedido) {
+    this.pedidoId = pedidoId;
+    this.modalCancelPedido = this.modalService.open(modalCancelPedido, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  cancelaPedido() {
+    $(`#linhaPedido_${this.pedidoId}`).slideUp(350);
+    $("#alertCancelPedido").slideDown(150);
+    this.pedidoService.cancelarPedido(this.pedidoId)
+      .subscribe(res => {
+        this.modalCancelPedido.close();
+        $(`.linhaPedido_${this.pedidoId}`).slideUp(350);
+      }, error => { alert("Erro ao acessar o banco de dados") });
+  }
+
 }
 
 
