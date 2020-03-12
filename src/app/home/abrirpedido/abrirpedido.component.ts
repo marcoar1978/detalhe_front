@@ -57,7 +57,7 @@ export class AbrirpedidoComponent implements OnInit {
     this.aberturaPedido.prazo = 7;
     this.dataService.clinicaMessage.subscribe(res => { this.clinicas = res });
     this.dataService.proteticoMessage.subscribe(res => { this.proteticos = res });
-    this.dataService.produtoMessage.subscribe(res => { this.produtos = res });
+    this.dataService.produtoMessage.subscribe(res => { this.produtos = res; });
     this.dataService.dentistaMessage.subscribe(res => { this.dentistas = res });
 
     for (let i = 1; i <= 100; i++) {
@@ -243,7 +243,7 @@ export class AbrirpedidoComponent implements OnInit {
   inserirProdutoPadrao() {
     const produtoId = this.form.get('produtoPadrao').value;
     const clinicaId = this.form.get('clinica').value;
-    const clinica = this.clinicas.find(clinica => clinica.id = clinicaId);
+    const clinica = this.clinicas.find(clinica => clinica.id == clinicaId);
     if (!(produtoId) || !(this.form.get('qdeProduto').value)) {
       this.msgFormItem = "Todos os dados o Ítem devem ser preenchidos";
       $('#avisoFormItem').slideDown(350);

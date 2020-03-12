@@ -23,6 +23,7 @@ import { InicioHomeComponent } from './home/inicio-home/inicio-home.component';
 import { ConsultaEntregasComponent } from './home/consultas/consulta-entregas/consulta-entregas.component';
 import { ConsultaPedidosComponent } from './home/consultas/consulta-pedidos/consulta-pedidos.component';
 import { ConsultaFechamentosComponent } from './home/consultas/consulta-fechamentos/consulta-fechamentos.component';
+import { CadClinicaComponent } from './home/cadastro/cad-clinica/cad-clinica.component';
 
 const routes: Routes = [
   { path: 'auth', component: LoginComponent },
@@ -41,6 +42,8 @@ const routes: Routes = [
       { path: 'consultaPedidos', component: ConsultaPedidosComponent },
       { path: 'consultaEntregas', component: ConsultaEntregasComponent },
       { path: 'consultaFechamentos', component: ConsultaFechamentosComponent },
+      { path: 'cadClinica', component: CadClinicaComponent },
+
     ] }
 ];
 
