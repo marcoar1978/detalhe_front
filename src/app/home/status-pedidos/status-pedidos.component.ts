@@ -81,8 +81,7 @@ export class StatusPedidosComponent implements OnInit {
 
         this.qdeTotalPedidos = this.qdePedidosAbertos + this.qdePedidosConcluidos + this.qdePedidosFechados;
         this.qdeTotalEntregas = this.qdeEntregas + this.qdeEntregasFechadas;
-        this.valorTotal = this.valorPedidosAbertos + this.valorPedidosConcluidos + this.qdeEntregasFechadas;
-
+        this.valorTotal = this.valorPedidosAbertos + this.valorPedidosConcluidos + this.valorPedidosFechados;
         $("#tabelaStatus").fadeIn(500);
       });
     }

@@ -52,7 +52,10 @@ export class HomeComponent implements OnInit {
         this.dataService.altDataDentista(dentistas);
         this.verifCarregamento[3] = true;
         this.escondeAlert();
-      }, error => { alert("Erro ao acessar o banco de dados") })
+      }, error => { alert("Erro ao acessar o banco de dados") });
+
+    this.pedidoService.delPedidoEmAberto()
+      .subscribe(value => { });
 
     this.dataService.altDadosIniciais(this.actRoute.snapshot.data['dadosIniciais']);
     this.dadosIniciais = this.actRoute.snapshot.data['dadosIniciais'];

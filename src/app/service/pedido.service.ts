@@ -95,6 +95,10 @@ export class PedidoService {
         return this.http.get<Dentista[]>(API + '/dentista');
     }
 
+    delPedidoEmAberto(): Observable<Response> {
+        return this.http.get<Response>(API + "/pedido/delPedidoEmAberto");
+    }
+
     altClinica(pedidoId: number, clinicaId: number): Observable<Dentista[]> {
         let httpParams: HttpParams = new HttpParams()
             .set("pedidoIdForm", pedidoId.toString())
@@ -173,7 +177,7 @@ export class PedidoService {
     cancelarPedido(pedidoId: number) {
         let httpParams = new HttpParams()
             .set('pedidoIdForm', pedidoId.toString());
-        return this.http.get<Response>(API+"/pedido/cancelarPedido?"+ httpParams.toString());
+        return this.http.get<Response>(API + "/pedido/cancelarPedido?" + httpParams.toString());
     }
 
 

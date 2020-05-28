@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    console.log('Versão: 27.03.2020')
     this.formLogin = this.formBuilder.group({
       email: ["", [Validators.required]],
       senha: ["", [Validators.required]]
