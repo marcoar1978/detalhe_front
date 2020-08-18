@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as $ from "jquery";
+import * as uuid from 'uuid';
 
 import { PedidoService } from 'src/app/service/pedido.service';
 import { Clinica } from 'src/app/model/clinica.model';
@@ -157,8 +158,8 @@ export class AbrirpedidoComponent implements OnInit {
   submitForm() {
     this.submited = true;
     if (!this.form.invalid) {
-      this.desconto = this.form.get('desconto').value;
-      this.valorDesconto = (this.totalPedido * this.desconto) / 100;
+      //this.desconto = this.form.get('desconto').value;
+      //this.valorDesconto = (this.totalPedido * this.desconto) / 100;
       this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
       let pedidoFechado: PedidoFechado = new PedidoFechado();
       pedidoFechado.pedidoId = this.aberturaPedido.pedidoId;
@@ -166,7 +167,7 @@ export class AbrirpedidoComponent implements OnInit {
       pedidoFechado.dentistaId = Number(this.form.get("dentista").value);
       pedidoFechado.nomePaciente = this.form.get("nomePaciente").value;
       pedidoFechado.proteticoId = Number(this.form.get("protetico").value);
-      pedidoFechado.desconto = Number(this.desconto);
+      pedidoFechado.desconto = this.valorDesconto;
       pedidoFechado.dataPedido = this.form.get('dataPedido').value;
       pedidoFechado.dataCad = this.aberturaPedido.dataPedido;
       pedidoFechado.obs = this.form.get('obs').value;
@@ -177,6 +178,7 @@ export class AbrirpedidoComponent implements OnInit {
       this.pedidoService.conferirPedido(pedidoFechado)
         .subscribe(res => {
           this.pedido = res;
+          console.log(this.pedido);
           this.pedido.dataPedido = this.aberturaPedido.dataPedido;
           this.dataService.altDataPedidoFechado(this.pedido);
           this.recebeConfPedido = true;
@@ -250,6 +252,7 @@ export class AbrirpedidoComponent implements OnInit {
       return;
     }
 
+    /*
     const produtosEscolhidosPadrao = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.tipoProduto == "padrao");
     const verificaProdutoRepetido = produtosEscolhidosPadrao.filter(produtoEscolhido => produtoEscolhido.produtoId == produtoId);
     if (verificaProdutoRepetido.length == 1) {
@@ -257,17 +260,28 @@ export class AbrirpedidoComponent implements OnInit {
       $('#avisoFormItem').slideDown(350);
       return;
     }
+    */
 
-    const produtoPadrao: Produto = this.produtos.find(produto => (produto.listaId == clinica.listaId && produto.produtoId == produtoId));
+    const produto: Produto = this.produtos.find(produto => (produto.listaId == clinica.listaId && produto.produtoId == produtoId));
+
+    let produtoPadrao: Produto = new Produto();
+    produtoPadrao.produtoId = produto.produtoId;
+    produtoPadrao.clinicaId = produto.clinicaId;
+    produtoPadrao.tipoProduto = produto.tipoProduto;
+    produtoPadrao.nome = produto.nome;
     produtoPadrao.qde = Number(this.form.get('qdeProduto').value);
-    produtoPadrao.valorTotal = produtoPadrao.valor * produtoPadrao.qde;
+    produtoPadrao.valor = produto.valor;
+    produtoPadrao.valorTotal = produto.valor * produtoPadrao.qde;
     produtoPadrao.ordem = this.ordem;
+    produtoPadrao.uuid = uuid.v4();
+    produtoPadrao.desconto = 0;
     produtoPadrao.tipoProduto = "padrao";
     $('#tabelaItens').fadeOut(350, () => {
       this.produtosEscolhidos.push(produtoPadrao);
       this.totalPedido = this.produtosEscolhidos
         .reduce((prevVal, produtoEscolhido) => { return prevVal + produtoEscolhido.valorTotal }, 0);
-      this.valorDesconto = (this.totalPedido * this.desconto) / 100;
+      //this.valorDesconto = (this.totalPedido * this.desconto) / 100;
+      this.valorDesconto = this.produtosEscolhidos.reduce((acc, el) => { return acc + (el.qde * el.desconto) }, 0);
       this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
       let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
       this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
@@ -278,6 +292,7 @@ export class AbrirpedidoComponent implements OnInit {
     item.pedidoId = this.aberturaPedido.pedidoId;
     item.tipoProduto = produtoPadrao.tipoProduto;
     item.produtoId = produtoPadrao.produtoId;
+    item.uuid = produtoPadrao.uuid;
     item.ordem = this.ordem;
     this.ordem++;
     item.descricao = produtoPadrao.nome;
@@ -286,7 +301,6 @@ export class AbrirpedidoComponent implements OnInit {
     item.valorTotal = produtoPadrao.valorTotal;
     this.pedidoService.addItem(item)
       .subscribe(res => res, error => alert("Erro ao cadastrar o ítem"));
-
 
   }
 
@@ -311,6 +325,7 @@ export class AbrirpedidoComponent implements OnInit {
     produtoVariavel.tipoProduto = "variavel";
     produtoVariavel.nome = descProdVariavel;
     produtoVariavel.ordem = this.ordem;
+    produtoVariavel.uuid = uuid.v4();
     produtoVariavel.produtoId = tipoVariavel;
     produtoVariavel.qde = qdeProduto;
     produtoVariavel.valor = valorProdVariavel;
@@ -332,6 +347,7 @@ export class AbrirpedidoComponent implements OnInit {
     item.produtoId = Number(tipoVariavel);
     item.ordem = this.ordem;
     this.ordem++;
+    item.uuid = produtoVariavel.uuid;
     item.descricao = descProdVariavel;
     item.qde = produtoVariavel.qde;
     item.valorUnitario = valorProdVariavel;
@@ -342,19 +358,21 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
 
-  deleteItem(produtoId, ordem) {
+  deleteItem(uuid) {
 
-    this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.produtoId != produtoId);
+    this.produtosEscolhidos = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.uuid != uuid);
     this.totalPedido = this.produtosEscolhidos
       .reduce((prevVal, produtoEscolhido) => { return prevVal + produtoEscolhido.valorTotal }, 0);
-    this.valorDesconto = (this.totalPedido * this.desconto) / 100;
+    this.valorDesconto = this.produtosEscolhidos.reduce((acc, el) => { return acc + (el.qde * el.desconto) }, 0);
     this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
     let produtoVerifPrazo = this.produtosEscolhidos.filter(produtoEscolhido => produtoEscolhido.padraoPrazoEntrega == 10);
     this.aberturaPedido.prazo = (produtoVerifPrazo.length > 0) ? 10 : 7;
 
-    $("#padrao_" + produtoId).hide();
-    this.pedidoService.delItem(this.aberturaPedido.pedidoId, ordem)
+
+    $("#padrao_" + uuid).hide();
+    this.pedidoService.delItem(uuid)
       .subscribe(res => res, error => error => alert('Erro ao deletar o ítem'))
+
   }
 
   mostrarCampoObs() {
@@ -375,6 +393,13 @@ export class AbrirpedidoComponent implements OnInit {
   fecharPedido() {
     this.router.navigate(['home/pedidoFechado', this.aberturaPedido.pedidoId.toString()]);
 
+  }
+
+  async registraDesconto(i, uuid) {
+    this.produtosEscolhidos[i].desconto = $(`#desconto_${uuid}`).val();
+    this.valorDesconto = this.produtosEscolhidos.reduce((acc, el) => { return acc + (el.qde * el.desconto) }, 0);
+    this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
+    const res: any = await this.pedidoService.altDescItem(uuid, this.produtosEscolhidos[i].desconto).toPromise();
   }
 
   imprimir() {

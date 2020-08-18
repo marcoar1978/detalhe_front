@@ -1,5 +1,5 @@
 <br />
-<div style="text-align:center" id="titulo"><b>Abertura de Pedido</b></div>
+<div style="text-align: center;" id="titulo"><b>Abertura de Pedido</b></div>
 <br />
 <form [formGroup]="form">
   <div class="row">
@@ -24,7 +24,7 @@
         Escolha uma clínica
       </div>
 
-      <div id="divDentista" style="display:none;margin-bottom: 20px;">
+      <div id="divDentista" style="display: none; margin-bottom: 20px;">
         <select
           class="form-control"
           formControlName="dentista"
@@ -42,7 +42,7 @@
         <div
           *ngIf="submited && form.get('dentista').hasError('required')"
           class="avisoForm"
-          style="width:350px"
+          style="width: 350px;"
         >
           Escolha um dentista
         </div>
@@ -84,7 +84,7 @@
       >
         Escolha um protetico
       </div>
-
+      <!--
       <select
         formControlName="desconto"
         id="desconto"
@@ -97,9 +97,10 @@
           >{{ optionDesconto }}
         </option></select
       >
+      -->
     </div>
     <div class="col-md-8">
-      <div id="caixaItens" style="display:none">
+      <div id="caixaItens" style="display: none;">
         <label class="radio-inline">
           <input
             type="radio"
@@ -121,21 +122,21 @@
           />
           Variável
         </label>
-        <div id="divProduto" style="margin-top:15px">
+        <div id="divProduto" style="margin-top: 15px;">
           <table>
             <tr>
               <td
                 valign="top"
                 padding="30px"
                 id="tdSelTipoProdutoVariavel"
-                style="display:none"
+                style="display: none;"
               >
                 <select
                   class="form-control"
                   formControlName="tipoVariavel"
                   id="selTipoProdutoVariavel"
                   (click)="resetAvisoFormItem()"
-                  style="display:none"
+                  style="display: none;"
                 >
                   <option value="" disabled>Tipo</option>
                   <option value="10">Diversos </option
@@ -150,7 +151,7 @@
                   formControlName="produtoPadrao"
                   id="selProdutoPadrao"
                   (click)="resetAvisoFormItem()"
-                  style="width:250px"
+                  style="width: 250px;"
                 >
                   <option value="" disabled>Produto</option>
                   <option
@@ -169,7 +170,7 @@
                   id="descProdVariavel"
                   class="form-control"
                   placeholder="Descrição"
-                  style="display:none;"
+                  style="display: none;"
                   (click)="resetAvisoFormItem()"
                 />
               </td>
@@ -192,7 +193,7 @@
                     formControlName="qdeProduto"
                     class="form-control"
                     (click)="resetAvisoFormItem()"
-                    style="width:80px"
+                    style="width: 80px;"
                   >
                     <option value="">Qde </option
                     ><option *ngFor="let option of options"
@@ -212,16 +213,17 @@
             </tr>
           </table>
 
-          <div id="avisoFormItem" style="display:none">{{ msgFormItem }}</div>
+          <div id="avisoFormItem" style="display: none;">{{ msgFormItem }}</div>
         </div>
         <br />
-        <div id="tabelaItens" style="display:none">
-          <table class="table table-hover table-sm ">
+        <div id="tabelaItens" style="display: none;">
+          <table class="table table-hover table-sm">
             <thead>
               <tr>
                 <th scope="col"></th>
                 <th scope="col">Derscrição</th>
                 <th scope="col">Valor Unitário</th>
+                <th scope="col">Desconto</th>
                 <th scope="col">Qde</th>
                 <th scope="col">Total</th>
                 <th scope="col"></th>
@@ -234,7 +236,7 @@
                   let i = index
                 "
                 id="{{ produtoEscolhido.tipoProduto }}_{{
-                  produtoEscolhido.produtoId
+                  produtoEscolhido.uuid
                 }}"
               >
                 <td>{{ i + 1 }}</td>
@@ -244,6 +246,15 @@
                     produtoEscolhido.valor
                       | currency: "BRL":"symbol":"0.2-2":"pt"
                   }}
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    style="width: 50px;"
+                    value="0"
+                    id="desconto_{{ produtoEscolhido.uuid }}"
+                    (blur)="registraDesconto(i, produtoEscolhido.uuid)"
+                  />
                 </td>
                 <td>{{ produtoEscolhido.qde }}</td>
                 <td>
@@ -255,19 +266,14 @@
                 <td>
                   <i
                     class="material-icons"
-                    (click)="
-                      deleteItem(
-                        produtoEscolhido.produtoId,
-                        produtoEscolhido.ordem
-                      )
-                    "
-                    style="cursor:pointer;color: #FB8C00;"
+                    (click)="deleteItem(produtoEscolhido.uuid)"
+                    style="cursor: pointer; color: #fb8c00;"
                     >delete_outline</i
                   >
                 </td>
               </tr>
               <tr>
-                <td colspan="4"><b>Valor Total</b></td>
+                <td colspan="5"><b>Valor Total</b></td>
                 <td>
                   <b>{{
                     totalPedido | currency: "BRL":"symbol":"0.2-2":"pt"
@@ -277,9 +283,9 @@
               </tr>
 
               <tr></tr>
-              <tr *ngIf="desconto > 0">
-                <td colspan="4">
-                  <b>Desconto ({{ desconto }} %)</b>
+              <tr *ngIf="valorDesconto > 0">
+                <td colspan="5">
+                  <b>Desconto </b>
                 </td>
                 <td>
                   <b>{{
@@ -288,8 +294,8 @@
                 </td>
                 <td></td>
               </tr>
-              <tr *ngIf="desconto > 0">
-                <td colspan="4"><b>Valor Total Líquido</b></td>
+              <tr *ngIf="valorDesconto > 0">
+                <td colspan="5"><b>Valor Total Líquido</b></td>
                 <td>
                   <b>{{
                     valorTotalLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
@@ -300,58 +306,60 @@
             </tbody>
           </table>
         </div>
-        <div style="font-size: 12px;margin-top:20px">
+        <div style="font-size: 12px; margin-top: 20px;">
           <b>Prazo:</b> {{ aberturaPedido.prazo }} dias corridos
         </div>
       </div>
-      <div id="conferenciaPedido" style="display:none">
-        <div style="text-align:center;">
+      <div id="conferenciaPedido" style="display: none;">
+        <div style="text-align: center;">
           <b>CONFERÊNCIA PEDIDO nº {{ aberturaPedido.pedidoId }}</b>
         </div>
         <br />
         <div
           *ngIf="!recebeConfPedido"
-          style="color:blue;font-size: 18px;text-align: center;"
+          style="color: blue; font-size: 18px; text-align: center;"
         >
           AGUARDAR O CARREGAMENTO DOS DADOS
         </div>
         <div *ngIf="recebeConfPedido">
           <table
-            style="width: 90%!important;margin: auto;"
+            style="width: 90% !important; margin: auto;"
             class="table table-sm"
           >
             <tr>
-              <td width="100" style="border:none !important;">
+              <td width="100" style="border: none !important;">
                 <b>Data Pedido</b>
               </td>
-              <td style="border:none !important;">
+              <td style="border: none !important;">
                 {{ pedido.dataPedido | date: "dd/MM/yyyy" }}
               </td>
             </tr>
             <tr>
-              <td style="border:none !important;"><b>Clínica</b></td>
-              <td style="border:none !important;">{{ pedido.clinica }}</td>
+              <td style="border: none !important;"><b>Clínica</b></td>
+              <td style="border: none !important;">{{ pedido.clinica }}</td>
             </tr>
 
             <tr>
-              <td style="border:none !important;"><b>Dentista</b></td>
-              <td style="border:none !important;">{{ pedido.dentista }}</td>
+              <td style="border: none !important;"><b>Dentista</b></td>
+              <td style="border: none !important;">{{ pedido.dentista }}</td>
             </tr>
             <tr>
-              <td style="border:none !important;"><b>Paciente</b></td>
-              <td style="border:none !important;">{{ pedido.nomePaciente }}</td>
+              <td style="border: none !important;"><b>Paciente</b></td>
+              <td style="border: none !important;">
+                {{ pedido.nomePaciente }}
+              </td>
             </tr>
             <tr>
-              <td style="border:none !important;"><b>Protético(a)</b></td>
-              <td style="border:none !important;">{{ pedido.protetico }}</td>
+              <td style="border: none !important;"><b>Protético(a)</b></td>
+              <td style="border: none !important;">{{ pedido.protetico }}</td>
             </tr>
           </table>
 
           <br />
           <div>
             <table
-              class="table  table-bordered table-sm"
-              style="width: 90% !important;margin: auto;"
+              class="table table-bordered table-sm"
+              style="width: 90% !important; margin: auto;"
             >
               <tr>
                 <td></td>
@@ -383,18 +391,17 @@
               </tr>
 
               <tr></tr>
-              <tr *ngIf="pedido.desconto > 0">
+              <tr *ngIf="valorDesconto > 0">
                 <td colspan="4">
-                  <b>Desconto ({{ pedido.desconto }} %)</b>
+                  <b>Desconto</b>
                 </td>
                 <td>
                   <b>{{
-                    pedido.valorTotal - pedido.valorLiquido
-                      | currency: "BRL":"symbol":"0.2-2":"pt"
+                    valorDesconto | currency: "BRL":"symbol":"0.2-2":"pt"
                   }}</b>
                 </td>
               </tr>
-              <tr *ngIf="pedido.desconto > 0">
+              <tr *ngIf="valorDesconto > 0">
                 <td colspan="4"><b>Valor Total Líquido</b></td>
                 <td>
                   <b>{{
@@ -406,22 +413,22 @@
 
             <br />
             <table
-              style="width: 90%!important;margin: auto;"
+              style="width: 90% !important; margin: auto;"
               class="table table-sm"
             >
               <tr>
-                <td width="100" style="border:none !important;">
+                <td width="100" style="border: none !important;">
                   <b>Prazo</b>
                 </td>
-                <td style="border:none !important;">
+                <td style="border: none !important;">
                   {{ pedido.prazo }} dias corridos
                 </td>
               </tr>
               <tr>
-                <td width="100" style="border:none !important;">
+                <td width="100" style="border: none !important;">
                   <b>Observações</b>
                 </td>
-                <td style="border:none !important;">{{ pedido.obs }}</td>
+                <td style="border: none !important;">{{ pedido.obs }}</td>
               </tr>
             </table>
 
@@ -438,13 +445,13 @@
     id="edit"
     (click)="mostrarCampoObs()"
     (mouseover)="scaleEditMouseOver($event)"
-    style="cursor:pointer;color: #FB8C00;margin-bottom:15px ;"
+    style="cursor: pointer; color: #fb8c00; margin-bottom: 15px;"
     title="Datas e Observações"
     >edit</i
   >
   <div
     id="camposObsDatas"
-    style="font-size:14px;display:none;margin-bottom:20px;"
+    style="font-size: 14px; display: none; margin-bottom: 20px;"
   >
     <table width="300px">
       <tr>
@@ -454,7 +461,7 @@
             type="date"
             class="form-control"
             formControlName="dataPedido"
-            style="margin-left: 20px;margin-bottom:20px;"
+            style="margin-left: 20px; margin-bottom: 20px;"
             (blur)="altDataPedido()"
           />
         </td>
@@ -467,10 +474,10 @@
       placeholder="Observações"
       formControlName="obs"
       (blur)="altObs()"
-      style="margin-bottom:15px;"
+      style="margin-bottom: 15px;"
     />
   </div>
-  <div style="text-align:right" id="divBotaoContinuar">
+  <div style="text-align: right;" id="divBotaoContinuar">
     <button
       class="btn btn-primary"
       (click)="submitForm()"
@@ -479,11 +486,11 @@
       CONTINUAR</button
     ><br />
   </div>
-  <div style="text-align:right;display:none;" id="divBotaoFechar">
+  <div style="text-align: right; display: none;" id="divBotaoFechar">
     <button
       class="btn btn-info btn-sm"
       (click)="voltarForm()"
-      style="margin-right:20px"
+      style="margin-right: 20px;"
     >
       VOLTAR
     </button>

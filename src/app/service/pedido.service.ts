@@ -35,10 +35,9 @@ export class PedidoService {
         return this.http.post<Response>(API + '/item/addItem', item);
     }
 
-    delItem(pedidoId: number, ordem: number): Observable<Response> {
+    delItem(uuid: string): Observable<Response> {
         let httpParams: HttpParams = new HttpParams()
-            .set("pedidoIdForm", pedidoId.toString())
-            .set("ordemForm", ordem.toString());
+            .set("uuid", uuid);
         return this.http.get<Response>(API + '/item/delItem?' + httpParams.toString());
     }
 
@@ -172,6 +171,13 @@ export class PedidoService {
             .set("mesForm", mes);
         return this.http.get<Pedido[]>(API + "/pedido/consultaPorClinica?" + httpParams.toString());
 
+    }
+
+    altDescItem(uuid: string, desconto: number) {
+        let httpParams: HttpParams = new HttpParams()
+            .set("uuid", uuid)
+            .set("desconto", desconto.toString());
+        return this.http.get<Response>(API + "/item/altDescItem?" + httpParams.toString());
     }
 
     cancelarPedido(pedidoId: number) {
