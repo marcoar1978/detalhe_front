@@ -10,6 +10,8 @@ import { Clinica } from 'src/app/model/clinica.model';
 import { DataService } from 'src/app/service/data.service';
 import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 import { Fechamento } from 'src/app/model/fechamento.model';
+import { Pedido } from 'src/app/model/pedido.model';
+import { Item } from 'src/app/model/item.model';
 
 @Component({
   selector: 'app-entregas',
@@ -36,6 +38,8 @@ export class EntregasComponent implements OnInit {
   labelConfFechamento: string = "Confirmar Fechamento";
   disabledConfFechamento: boolean = false;
   entregasId: number[] = [];
+  pedidoSelecionado: Pedido = new Pedido();
+  itemComDesconto: Item[] = [];
 
   constructor(private entregaService: EntregaService,
     private modalService: NgbModal,
@@ -97,11 +101,12 @@ export class EntregasComponent implements OnInit {
 
     setTimeout(() => {
       const janela = window.open('', 'PRINT', 'height=600,width=800');
-      janela.document.write('<html><head><title>NotaEntrega' + entregaId + '</title>');
+      janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
+      janela.document.write('<title>NotaEntrega' + entregaId + '</title>');
       janela.document.write('</head><body>');
       janela.document.write(document.getElementById("caixaNotaEntrega").innerHTML);
       janela.document.write('</body></html>');
-    }, 500)
+    }, 1000)
   }
 
   cadastraRecebedor(entregaId: number) {
@@ -188,6 +193,19 @@ export class EntregasComponent implements OnInit {
         this.disabledConfFechamento = false;
         alert("Problemas no Banco de Dados")
       });
+  }
+
+  printModalPedido(pedido) {
+    this.pedidoSelecionado = pedido;
+    this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
+    setTimeout(() => {
+      const janela = window.open('', 'PRINT', 'height=600,width=700');
+      janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
+      janela.document.write('<title>Pedido nº ' + this.pedidoSelecionado.id + '</title>');
+      janela.document.write('</head><body><br>');
+      janela.document.write(document.getElementById("consultaPedido").innerHTML);
+      janela.document.write('</body></html>');
+    }, 500)
   }
 
 

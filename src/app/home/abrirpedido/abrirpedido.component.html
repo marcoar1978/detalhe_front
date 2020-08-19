@@ -322,38 +322,46 @@
           AGUARDAR O CARREGAMENTO DOS DADOS
         </div>
         <div *ngIf="recebeConfPedido">
-          <table
-            style="width: 90% !important; margin: auto;"
-            class="table table-sm"
-          >
-            <tr>
-              <td width="100" style="border: none !important;">
-                <b>Data Pedido</b>
-              </td>
-              <td style="border: none !important;">
-                {{ pedido.dataPedido | date: "dd/MM/yyyy" }}
-              </td>
-            </tr>
-            <tr>
-              <td style="border: none !important;"><b>Clínica</b></td>
-              <td style="border: none !important;">{{ pedido.clinica }}</td>
-            </tr>
-
-            <tr>
-              <td style="border: none !important;"><b>Dentista</b></td>
-              <td style="border: none !important;">{{ pedido.dentista }}</td>
-            </tr>
-            <tr>
-              <td style="border: none !important;"><b>Paciente</b></td>
-              <td style="border: none !important;">
-                {{ pedido.nomePaciente }}
-              </td>
-            </tr>
-            <tr>
-              <td style="border: none !important;"><b>Protético(a)</b></td>
-              <td style="border: none !important;">{{ pedido.protetico }}</td>
-            </tr>
-          </table>
+          <div class="row">
+            <div class="col-sm-6">
+              <table
+                style="width: 90% !important; margin: auto;"
+                class="table table-sm"
+              >
+                <tr>
+                  <td width="100" style="border: none !important;">
+                    <b>Data Pedido</b>
+                  </td>
+                  <td style="border: none !important;">
+                    {{ pedido.dataPedido | date: "dd/MM/yyyy" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: none !important;"><b>Clínica</b></td>
+                  <td style="border: none !important;">{{ pedido.clinica }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-sm-6">
+              <table
+                style="width: 90% !important; margin: auto;"
+                class="table table-sm"
+              >
+                <tr>
+                  <td style="border: none !important;"><b>Dentista</b></td>
+                  <td style="border: none !important;">
+                    {{ pedido.dentista }}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: none !important;"><b>Paciente</b></td>
+                  <td style="border: none !important;">
+                    {{ pedido.nomePaciente }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
 
           <br />
           <div>
@@ -412,25 +420,55 @@
             </table>
 
             <br />
-            <table
-              style="width: 90% !important; margin: auto;"
-              class="table table-sm"
-            >
-              <tr>
-                <td width="100" style="border: none !important;">
-                  <b>Prazo</b>
-                </td>
-                <td style="border: none !important;">
-                  {{ pedido.prazo }} dias corridos
-                </td>
-              </tr>
-              <tr>
-                <td width="100" style="border: none !important;">
-                  <b>Observações</b>
-                </td>
-                <td style="border: none !important;">{{ pedido.obs }}</td>
-              </tr>
-            </table>
+            <div class="row">
+              <div class="col-sm-6">
+                <table
+                  style="width: 90% !important; margin: auto;"
+                  class="table table-sm"
+                >
+                  <tr>
+                    <td width="100" style="border: none !important;">
+                      <b>Prazo</b>
+                    </td>
+                    <td style="border: none !important;">
+                      {{ pedido.prazo }} dias corridos
+                    </td>
+                  </tr>
+                  <tr *ngIf="pedido.obs != ''">
+                    <td width="100" style="border: none !important;">
+                      <b>Observações</b>
+                    </td>
+                    <td style="border: none !important;">{{ pedido.obs }}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-sm-6">
+                <table
+                  style="width: 90% !important; margin: auto;"
+                  class="table table-sm"
+                >
+                  <tr *ngIf="pedido.desconto > 0">
+                    <td>
+                      <b>Desconto(s) por ítem</b><br />
+                      <div
+                        *ngFor="let item of itemComDesconto"
+                        style="font-size: 11px;"
+                      >
+                        {{ item.descricao }}:
+                        {{
+                          item.desconto | currency: "BRL":"symbol":"0.2-2":"pt"
+                        }}
+                        x {{ item.qde }} =
+                        {{
+                          item.desconto * item.qde
+                            | currency: "BRL":"symbol":"0.2-2":"pt"
+                        }}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
 
             <br />
           </div>

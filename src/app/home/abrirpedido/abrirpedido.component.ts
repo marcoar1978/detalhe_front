@@ -45,7 +45,9 @@ export class AbrirpedidoComponent implements OnInit {
   totalPedido: number = 0;
   msgFormItem: string;
   recebeConfPedido: boolean = false;
-  ordem: number = 1
+  ordem: number = 1;
+  itemComDesconto: Item[] = [];
+
 
   constructor(private pedidoService: PedidoService,
     private actRoute: ActivatedRoute,
@@ -178,6 +180,7 @@ export class AbrirpedidoComponent implements OnInit {
       this.pedidoService.conferirPedido(pedidoFechado)
         .subscribe(res => {
           this.pedido = res;
+          this.itemComDesconto = this.pedido.itens.filter((i) => i.desconto > 0);
           console.log(this.pedido);
           this.pedido.dataPedido = this.aberturaPedido.dataPedido;
           this.dataService.altDataPedidoFechado(this.pedido);

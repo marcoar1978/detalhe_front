@@ -14,6 +14,7 @@ import { Fechamento } from 'src/app/model/fechamento.model';
 import { FechamentoService } from 'src/app/service/fechamento.service';
 import { NgbdSortableHeader } from 'src/app/diretivas/sort.diretiva';
 import { SortEvent, compare } from 'src/app/diretivas/sort.interface';
+import { Item } from 'src/app/model/item.model';
 
 @Component({
   selector: 'app-consulta-pedidos',
@@ -40,6 +41,7 @@ export class ConsultaPedidosComponent implements OnInit {
   fechamentoSelecionado: Fechamento = new Fechamento();
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   anoMes: string;
+  itemComDesconto: Item[] = [];
 
   constructor(private dataService: DataService,
     private formBuilder: FormBuilder,
@@ -125,6 +127,7 @@ export class ConsultaPedidosComponent implements OnInit {
           this.mgsPedidoId = "";
         });
         this.pedidoSelecionado = res;
+        this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
 
         if (this.pedidoSelecionado.entrega && this.pedidoSelecionado.entrega.fechamento) {
           if ((this.pedidoSelecionado.entrega.fechamento.valorTotal - this.pedidoSelecionado.entrega.fechamento.valorPgto) == 0) {
@@ -363,6 +366,8 @@ export class ConsultaPedidosComponent implements OnInit {
         $(`#msgDetalhePedido_${pedidoId}`).fadeOut(250);
 
         this.pedidoSelecionado = res;
+        this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
+
         if (this.pedidoSelecionado.entrega && this.pedidoSelecionado.entrega.fechamento) {
           if ((this.pedidoSelecionado.entrega.fechamento.valorTotal - this.pedidoSelecionado.entrega.fechamento.valorPgto) == 0) {
             this.situacaoPgto = "Pago";

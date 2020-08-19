@@ -1,8 +1,179 @@
+<div id="consultaPedido" style="display: none;">
+  <div
+    style="
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      color: #000099;
+    "
+  >
+    <b>PEDIDO nº {{ pedidoSelecionado.id }} </b>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <table
+        style="width: 90% !important; margin: auto; font-size: 14px;"
+        class="table table-sm"
+      >
+        <tr>
+          <td width="100" style="border: none !important;">
+            <b>Data Pedido</b>
+          </td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.dataPedido | date: "dd/MM/yyyy" }}
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none !important;"><b>Clínica</b></td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.clinica }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-sm-6">
+      <table
+        style="width: 90% !important; margin: auto; font-size: 14px;"
+        class="table table-sm"
+      >
+        <tr>
+          <td style="border: none !important;"><b>Dentista</b></td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.dentista }}
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none !important;"><b>Paciente</b></td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.nomePaciente }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <br />
+
+  <table
+    class="table table-bordered table-sm"
+    style="width: 90% !important; margin: auto; font-size: 14px;"
+  >
+    <tr>
+      <td></td>
+      <td style="text-align: center;"><b>Derscrição</b></td>
+      <td style="text-align: center;"><b>Valor Unitário</b></td>
+      <td style="text-align: center;"><b>Qde</b></td>
+      <td style="text-align: center;"><b>Total</b></td>
+    </tr>
+    <tr *ngFor="let item of pedidoSelecionado?.itens; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.descricao }}</td>
+      <td style="text-align: right;">
+        {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
+      </td>
+      <td style="text-align: center;">{{ item.qde }}</td>
+      <td style="text-align: right;">
+        {{ item.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4"><b>Valor Total</b></td>
+      <td style="text-align: right;">
+        <b>{{
+          pedidoSelecionado.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+
+    <tr></tr>
+    <tr *ngIf="pedidoSelecionado?.desconto > 0">
+      <td colspan="4">
+        <b>Desconto </b>
+      </td>
+      <td style="text-align: right;">
+        <b>{{
+          pedidoSelecionado.valorTotal - pedidoSelecionado.valorLiquido
+            | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+    <tr *ngIf="pedidoSelecionado?.desconto > 0">
+      <td colspan="4"><b>Valor Total Líquido</b></td>
+      <td style="text-align: right;">
+        <b>{{
+          pedidoSelecionado.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+  </table>
+
+  <br />
+  <div class="row">
+    <div class="col-sm-6">
+      <table
+        style="width: 90% !important; margin: auto; font-size: 14px;"
+        class="table table-sm"
+      >
+        <tr>
+          <td width="100" style="border: none !important;"><b>Prazo</b></td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.prazo }} dias corridos
+          </td>
+        </tr>
+        <tr>
+          <td width="100" style="border: none !important;">
+            <b>Previsão</b>
+          </td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.dataEntregaPrevista | date: "dd/MM/yyyy" }}
+          </td>
+        </tr>
+        <tr *ngIf="!pedidoSelecionado.obs">
+          <td width="100" style="border: none !important;">
+            <b>Observações</b>
+          </td>
+          <td style="border: none !important;">
+            {{ pedidoSelecionado.obs }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-sm-6">
+      <table
+        style="width: 90% !important; margin: auto; font-size: 14px;"
+        class="table table-sm"
+      >
+        <tr *ngIf="pedidoSelecionado.desconto > 0">
+          <td style="border: none !important;">
+            <b>Desconto(s) por ítem</b><br />
+            <div *ngFor="let item of itemComDesconto" style="font-size: 11px;">
+              {{ item.descricao }}:
+              {{ item.desconto | currency: "BRL":"symbol":"0.2-2":"pt" }}
+              x {{ item.qde }} =
+              {{
+                item.desconto * item.qde | currency: "BRL":"symbol":"0.2-2":"pt"
+              }}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <br />
+</div>
+
 <div
-  style="padding:15px; text-align: center; border:1px solid #000;width:630px;display:none;"
+  style="
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #000;
+    width: 630px;
+    display: none;
+  "
   id="caixaNotaEntrega"
 >
-  <table style="width: 600px !important;margin: auto;">
+  <table style="width: 600px !important; margin: auto;">
     <tr>
       <td width="90px">
         <img
@@ -11,7 +182,12 @@
         />
       </td>
       <td
-        style="text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099"
+        style="
+          text-align: center;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 14px;
+          color: #000099;
+        "
       >
         <b
           >NOTA DE ENTREGA nº {{ entregaSelecionada.id }} <br />({{
@@ -25,7 +201,13 @@
   <br />
   <div *ngFor="let pedido of entregaSelecionada.pedidos">
     <table
-      style="width: 600px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;"
+      style="
+        width: 600px !important;
+        margin: auto;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        text-align: left;
+      "
     >
       <tr height="20">
         <td style="text-align: center;" colspan="4">
@@ -48,9 +230,21 @@
     </table>
 
     <table
-      style="width: 600px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; "
+      style="
+        width: 600px !important;
+        margin: auto;
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ccc;
+        font-size: 12px;
+        padding: 5px;
+        text-align: left;
+      "
     >
-      <tr height="30" style="border-bottom:1px solid #ccc;text-align:center;">
+      <tr
+        height="30"
+        style="border-bottom: 1px solid #ccc; text-align: center;"
+      >
         <td width="10%"></td>
         <td width="40%" style="text-align: center;"><b>Derscrição</b></td>
         <td width="20%" style="text-align: center;"><b>Valor Unitário</b></td>
@@ -60,21 +254,21 @@
       <tr
         height="20"
         *ngFor="let item of pedido.itens; let i = index"
-        style="border-bottom:1px solid #ccc;"
+        style="border-bottom: 1px solid #ccc;"
       >
         <td style="text-align: center;">{{ i + 1 }}</td>
         <td>{{ item.descricao }}</td>
-        <td style="text-align: right;padding-right:5px">
+        <td style="text-align: right; padding-right: 5px;">
           {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
         </td>
         <td style="text-align: center;">{{ item.qde }}</td>
-        <td style="text-align: right;padding-right:5px">
+        <td style="text-align: right; padding-right: 5px;">
           {{ item.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}
         </td>
       </tr>
-      <tr height="20" style="border-bottom:1px solid #ccc;">
+      <tr height="20" style="border-bottom: 1px solid #ccc;">
         <td colspan="4"><b>Valor Total</b></td>
-        <td style="text-align: right;padding-right:5px">
+        <td style="text-align: right; padding-right: 5px;">
           <b>
             {{ pedido.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}</b
           >
@@ -85,12 +279,12 @@
       <tr
         height="20"
         *ngIf="pedido.desconto > 0"
-        style="border-bottom:1px solid #ccc;"
+        style="border-bottom: 1px solid #ccc;"
       >
         <td colspan="4">
           <b>Desconto ({{ pedido.desconto }} %)</b>
         </td>
-        <td style="text-align: right;padding-right:5px">
+        <td style="text-align: right; padding-right: 5px;">
           <b>
             {{
               pedido.valorTotal - pedido.valorLiquido
@@ -101,7 +295,7 @@
       </tr>
       <tr height="20" *ngIf="pedido.desconto > 0">
         <td colspan="4"><b>Valor Total Líquido</b></td>
-        <td style="text-align: right;padding-right:5px">
+        <td style="text-align: right; padding-right: 5px;">
           <b>
             {{ pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt" }}</b
           >
@@ -112,28 +306,54 @@
     <br />
   </div>
   <br />
-  <br />
   <div
-    style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+    style="
+      text-align: left;
+      font-size: 14px;
+      font-family: Arial;
+      width: 600px !important;
+      margin: auto;
+      margin-bottom: 20px;
+    "
   >
     <b>Observações:</b> {{ entregaSelecionada.obs }}
   </div>
 
   <div
-    style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+    style="
+      text-align: left;
+      font-size: 14px;
+      font-family: Arial;
+      width: 600px !important;
+      margin: auto;
+      margin-bottom: 20px;
+    "
   >
     <b>Valor total da entrega:</b>
     {{ totalEntregaSelecionada | currency: "BRL":"symbol":"0.2-2":"pt" }}
   </div>
   <div *ngIf="!entregaSelecionada.recebedor">
     <div
-      style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+      style="
+        text-align: left;
+        font-size: 14px;
+        font-family: Arial;
+        width: 600px !important;
+        margin: auto;
+        margin-bottom: 20px;
+      "
     >
       <b>Data da entrega:</b> ___/___/________
     </div>
 
     <div
-      style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;"
+      style="
+        text-align: left;
+        font-size: 14px;
+        font-family: Arial;
+        width: 600px !important;
+        margin: auto;
+      "
     >
       <b>Nome legível:</b>___________________________________________
     </div>
@@ -141,14 +361,27 @@
 
   <div *ngIf="entregaSelecionada.recebedor">
     <div
-      style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+      style="
+        text-align: left;
+        font-size: 14px;
+        font-family: Arial;
+        width: 600px !important;
+        margin: auto;
+        margin-bottom: 20px;
+      "
     >
       <b>Data da entrega:</b>
       {{ entregaSelecionada.dataEntrega | date: "dd/MM/yyyy" }}
     </div>
 
     <div
-      style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;"
+      style="
+        text-align: left;
+        font-size: 14px;
+        font-family: Arial;
+        width: 600px !important;
+        margin: auto;
+      "
     >
       <b>Recebedor:</b> {{ entregaSelecionada.recebedor }}
     </div>
@@ -170,31 +403,31 @@
   <div class="modal-body">
     <div class="container">
       <table class="table table-hover">
-        <tr style="color:#000099">
+        <tr style="color: #000099;">
           <td style="text-align: center;" width="10%"><b>Id</b></td>
-          <td width="40%" style="text-align:center;"><b>Pedidos</b></td>
-          <td width="30%" style="text-align:center;"><b>Valor Total</b></td>
-          <td width="20%" style="text-align:center;"><b>Dt. Entrega</b></td>
+          <td width="40%" style="text-align: center;"><b>Pedidos</b></td>
+          <td width="30%" style="text-align: center;"><b>Valor Total</b></td>
+          <td width="20%" style="text-align: center;"><b>Dt. Entrega</b></td>
         </tr>
 
         <tr *ngFor="let entrega of entregasCheckadas">
           <td
             width="5%"
             *ngIf="clinica.id == entrega.clinicaId"
-            style="text-align: center;;cursor:pointer"
+            style="text-align: center; cursor: pointer;"
           >
             {{ entrega.id }}
           </td>
           <td *ngIf="clinica.id == entrega.clinicaId" width="40%">
             <table
               class="table table-sm table-bordered"
-              style="font-size:12px"
+              style="font-size: 12px;"
               width="90%"
             >
               <tr *ngFor="let pedido of entrega.pedidos">
                 <td width="20%">{{ pedido.id }}</td>
                 <td width="50%">{{ pedido.nomePaciente }}</td>
-                <td style="text-align:right">
+                <td style="text-align: right;">
                   {{
                     pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
                   }}
@@ -205,7 +438,7 @@
           <td
             *ngIf="clinica.id == entrega.clinicaId"
             width="20%"
-            style="text-align: right"
+            style="text-align: right;"
           >
             {{ entrega.totalEntrega | currency: "BRL":"symbol":"0.2-2":"pt" }}
           </td>
@@ -219,7 +452,7 @@
         </tr>
         <tr>
           <td colspan="2"><b>Total Fechamento</b></td>
-          <td style="text-align:right">
+          <td style="text-align: right;">
             {{ totalFechamento | currency: "BRL":"symbol":"0.2-2":"pt" }}
           </td>
           <td></td>
@@ -229,8 +462,8 @@
       <br />
       <table class="table">
         <tr height="30">
-          <td style="border:none !important;">Obs</td>
-          <td style="border:none !important;">
+          <td style="border: none !important;">Obs</td>
+          <td style="border: none !important;">
             <input type="text" [(ngModel)]="obs" class="form-control" />
           </td>
         </tr>
@@ -260,7 +493,7 @@
 
 <br />
 
-<div style="text-align:center" id="titulo"><b>Entregas</b></div>
+<div style="text-align: center;" id="titulo"><b>Entregas</b></div>
 <br />
 <div class="container">
   <div class="alert alert-info" id="divAguardar">
@@ -282,7 +515,12 @@
 
     <div *ngFor="let clinica of clinicasComEntregas">
       <div
-        style="margin-bottom:20px;color:#000099;font-size:18px;text-align:center"
+        style="
+          margin-bottom: 20px;
+          color: #000099;
+          font-size: 18px;
+          text-align: center;
+        "
       >
         {{ clinica.nomeSimp }}
       </div>
@@ -296,7 +534,7 @@
             <td *ngIf="entrega.clinicaId == clinica.id" width="5%">
               <i
                 class="material-icons"
-                style="cursor:pointer"
+                style="cursor: pointer;"
                 (click)="abreModalEntrega(entrega.id, clinica.nomeSimp)"
                 title="Nota de entrega nº {{ entrega.id }}"
               >
@@ -309,13 +547,23 @@
             <td *ngIf="entrega.clinicaId == clinica.id" width="25%">
               <table
                 class="table table-sm table-bordered"
-                style="font-size:12px"
+                style="font-size: 12px;"
                 width="90%"
               >
                 <tr *ngFor="let pedido of entrega.pedidos" height="20">
+                  <td
+                    width="10%"
+                    (click)="printModalPedido(pedido)"
+                    style="cursor: pointer;"
+                    title="Detalhes Pedido nº {{ pedido.id }}"
+                  >
+                    <i class="material-icons" style="font-size: 12px;"
+                      >search
+                    </i>
+                  </td>
                   <td width="20%">{{ pedido.id }}</td>
-                  <td width="50%">{{ pedido.nomePaciente }}</td>
-                  <td style="text-align:right">
+                  <td width="40%">{{ pedido.nomePaciente }}</td>
+                  <td style="text-align: right;">
                     {{
                       pedido.valorLiquido
                         | currency: "BRL":"symbol":"0.2-2":"pt"
@@ -334,7 +582,7 @@
             <td
               *ngIf="entrega.clinicaId == clinica.id"
               width="20%"
-              style="text-align:center"
+              style="text-align: center;"
             >
               <div
                 [ngStyle]="{ display: entrega.recebedor ? '' : 'none' }"
@@ -397,7 +645,7 @@
         </tbody>
       </table>
       <div
-        style="display:none;text-align:right"
+        style="display: none; text-align: right;"
         id="botaoRegistrarFechamento_{{ clinica.id }}"
       >
         <button

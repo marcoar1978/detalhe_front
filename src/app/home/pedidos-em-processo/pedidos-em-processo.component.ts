@@ -10,6 +10,7 @@ import { PedidosEmProcessoService } from 'src/app/service/pedidosEmProcesso.serv
 import { Entrega } from 'src/app/model/entrega.model';
 import { DadosIniciais } from 'src/app/model/dados-iniciais.model';
 import { PedidoService } from 'src/app/service/pedido.service';
+import { Item } from 'src/app/model/item.model';
 
 @Component({
   selector: 'app-pedidos-em-processo',
@@ -20,7 +21,7 @@ export class PedidosEmProcessoComponent implements OnInit {
 
   pedidos: Pedido[];
   pedidosCheckados: Pedido[];
-  pedidoSelecionado: Pedido;
+  pedidoSelecionado: Pedido = new Pedido();
   pedidoId: number;
   totalPedidosSelecionados: number;
   clinicas: Clinica[];
@@ -35,6 +36,7 @@ export class PedidosEmProcessoComponent implements OnInit {
   modalConferencia: any;
   modalCancelPedido: any;
   dadosIniciais: DadosIniciais;
+  itemComDesconto: Item[] = [];
 
   constructor(private pedidosEmProcessoService: PedidosEmProcessoService,
     private pedidoService: PedidoService,
@@ -74,11 +76,25 @@ export class PedidosEmProcessoComponent implements OnInit {
 
   abreModalPedido(content, pedidoId) {
     this.pedidoSelecionado = this.pedidos.find(pedido => pedido.id == pedidoId);
+    this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
     this.modalService.open(content, { centered: true, size: 'lg', scrollable: true });
   }
 
-  checkEntrega(clinicaId: number, pedidoId: number) {
+  printModalPedido(pedidoId) {
+    this.pedidoSelecionado = this.pedidos.find(pedido => pedido.id == pedidoId);
+    this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
+    setTimeout(() => {
+      const janela = window.open('', 'PRINT', 'height=400,width=700');
+      janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
+      janela.document.write('<title>Pedido nº ' + this.pedidoSelecionado.id + '</title>');
+      janela.document.write('</head><body><br>');
+      janela.document.write(document.getElementById("consultaPedido").innerHTML);
+      janela.document.write('</body></html>');
+    }, 500)
 
+  }
+
+  checkEntrega(clinicaId: number, pedidoId: number) {
     this.dataEntrega = this.dadosIniciais.dataHoje;
     this.obs = "";
     this.verifCheckEntrega = false;
