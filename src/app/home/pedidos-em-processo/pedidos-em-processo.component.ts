@@ -84,7 +84,7 @@ export class PedidosEmProcessoComponent implements OnInit {
     this.pedidoSelecionado = this.pedidos.find(pedido => pedido.id == pedidoId);
     this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
     setTimeout(() => {
-      const janela = window.open('', 'PRINT', 'height=400,width=700');
+      const janela = window.open('', 'PRINT', 'height=600,width=700');
       janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
       janela.document.write('<title>Pedido nº ' + this.pedidoSelecionado.id + '</title>');
       janela.document.write('</head><body><br>');

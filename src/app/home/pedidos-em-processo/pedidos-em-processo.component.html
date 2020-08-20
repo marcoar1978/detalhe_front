@@ -67,7 +67,10 @@
     </tr>
     <tr *ngFor="let item of pedidoSelecionado?.itens; let i = index">
       <td>{{ i + 1 }}</td>
-      <td>{{ item.descricao }}</td>
+      <td>
+        {{ item.descricao }}
+        <div style="font-size: 12px;">{{ item.obs }}</div>
+      </td>
       <td style="text-align: right;">
         {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
       </td>
@@ -275,7 +278,10 @@
       </tr>
       <tr *ngFor="let item of pedidoSelecionado.itens; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ item.descricao }}</td>
+        <td>
+          {{ item.descricao }}
+          <div style="font-size: 12px;">{{ item.obs }}</div>
+        </td>
         <td style="text-align: right;">
           {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
         </td>

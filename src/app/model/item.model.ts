@@ -6,6 +6,7 @@ export class Item {
     produtoId: number;
     ordem: number;
     descricao: string;
+    obs: string;
     desconto: number;
     qde: number;
     valorUnitario: number;

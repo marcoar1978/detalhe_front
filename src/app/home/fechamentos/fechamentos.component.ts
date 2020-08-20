@@ -10,6 +10,9 @@ import { Fechamento } from 'src/app/model/fechamento.model';
 import { Clinica } from 'src/app/model/clinica.model';
 import { Entrega } from 'src/app/model/entrega.model';
 import { Pgto } from 'src/app/model/pgto.model';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { Pedido } from 'src/app/model/pedido.model';
 
 @Component({
   selector: 'app-fechamentos',
@@ -19,8 +22,12 @@ import { Pgto } from 'src/app/model/pgto.model';
 export class FechamentosComponent implements OnInit {
 
   dadosIniciais: DadosIniciais;
+  fechamentoId: number;
+  fechamentoIndex: number;
   fechamentos: Fechamento[];
   fechamentoSelecionado: Fechamento = new Fechamento();
+  pedidosFechamento: Pedido[] = [];
+  pedidosFechamentoSelecionado: Pedido[] = [];
   clinicas: Clinica[];
   nomeClinica: string;
   clinicasComFechamento: Clinica[];
@@ -35,6 +42,7 @@ export class FechamentosComponent implements OnInit {
   disabledConfPgto: boolean = false;
   obsCadastroPgto: string;
   msgAlertValor: string;
+  subjectDesconto: Subject<number> = new Subject<number>();
 
   constructor(private fechamentoService: FechamentoService,
     private modalService: NgbModal,
@@ -54,7 +62,6 @@ export class FechamentosComponent implements OnInit {
     this.fechamentoService.listaFechamentos()
       .subscribe(res => {
         this.fechamentos = res;
-
         this.clinicasComFechamento = this.clinicas.filter(clinica => {
           let verifClinicaComFechamento = false;
           for (let i = 0; i < this.fechamentos.length; i++) {
@@ -64,10 +71,23 @@ export class FechamentosComponent implements OnInit {
           }
           return verifClinicaComFechamento;
         })
+
+        for (let i = 0; i < this.fechamentos.length; i++) {
+          for (let f = 0; f < this.fechamentos[i].entregas.length; f++) {
+            for (let k = 0; k < this.fechamentos[i].entregas[f].pedidos.length; k++) {
+              this.pedidosFechamento.push(this.fechamentos[i].entregas[f].pedidos[k]);
+            }
+          }
+        }
         this.carregamentoFechamentos = true;
         this.escondeAlert();
       })
+
+    this.subjectDesc();
+
   }
+
+
 
   escondeAlert() {
     if ((this.carregamentoClinicas) && (this.carregamentoFechamentos)) {
@@ -78,9 +98,21 @@ export class FechamentosComponent implements OnInit {
   abreModalFechamento(fechamentoId: number, nomeClinica: string) {
     this.nomeClinica = nomeClinica;
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
+    console.log(this.fechamentoSelecionado.clinicaId);
+    this.pedidosFechamentoSelecionado = [];
+    for (let i = 0; i < this.fechamentoSelecionado.entregas.length; i++) {
+      for (let f = 0; f < this.pedidosFechamento.length; f++) {
+        if (this.fechamentoSelecionado.entregas[i].id == this.pedidosFechamento[f].entrega.id) {
+          this.pedidosFechamentoSelecionado.push(this.pedidosFechamento[f]);
+        }
+      }
+    }
+
+    console.log(this.pedidosFechamentoSelecionado);
     setTimeout(() => {
       const janela = window.open('', 'PRINT', 'height=600,width=800');
-      janela.document.write('<html><head><title>NotaFechamento' + fechamentoId + '</title>');
+      janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
+      janela.document.write('<title>NotaFechamento' + fechamentoId + '</title>');
       janela.document.write('</head><body>');
       janela.document.write(document.getElementById("caixaNotaFechamento").innerHTML);
       janela.document.write('</body></html>');
@@ -91,7 +123,7 @@ export class FechamentosComponent implements OnInit {
   abreModalEntrega(fechamentoId: number, entregaId: number, nomeClinica: string) {
     this.nomeClinica = nomeClinica;
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
-    this.entregaSelecionada = this.fechamentoSelecionado.entregas.find(entrega => entregaId == entregaId);
+    this.entregaSelecionada = this.fechamentoSelecionado.entregas.find(entrega => entrega.id == entregaId);
     setTimeout(() => {
       const janela = window.open('', 'PRINT', 'height=600,width=800');
       janela.document.write('<html><head><title>NotaEntrega' + entregaId + '</title>');
@@ -162,6 +194,23 @@ export class FechamentosComponent implements OnInit {
     }
 
     return verifError;
+  }
+
+  insertDesconto(fechamentoId, i) {
+    this.fechamentoId = fechamentoId;
+    this.fechamentoIndex = i;
+    const desconto = $(`#inputDesconto_${fechamentoId}`).val();
+    this.subjectDesconto.next(desconto);
+  }
+
+  subjectDesc() {
+    this.subjectDesconto
+      .pipe(debounceTime(1000))
+      .subscribe(desconto => {
+        const valorLiquido = this.fechamentos[this.fechamentoIndex].valorFechamento - desconto;
+        this.fechamentos[this.fechamentoIndex].valorTotal = valorLiquido;
+        this.fechamentoService.addDesconto(this.fechamentoId, desconto).subscribe(res => { });
+      })
   }
 
 }

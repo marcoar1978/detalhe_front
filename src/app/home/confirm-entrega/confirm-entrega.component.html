@@ -19,10 +19,15 @@
   </div>
   <div class="col-md-8">
     <div
-      style="padding:15px; text-align: center; border:1px solid #000;width:630px"
+      style="
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #000;
+        width: 630px;
+      "
       id="caixaNotaEntrega"
     >
-      <table style="width: 600px !important;margin: auto;">
+      <table style="width: 600px !important; margin: auto;">
         <tr>
           <td width="90px">
             <img
@@ -31,7 +36,12 @@
             />
           </td>
           <td
-            style="text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:14px;color:#000099"
+            style="
+              text-align: center;
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 14px;
+              color: #000099;
+            "
           >
             <b>NOTA DE ENTREGA nº {{ entregaId }} <br />({{ nomeClinica }})</b>
           </td>
@@ -41,7 +51,13 @@
       <br />
       <div *ngFor="let pedido of pedidos">
         <table
-          style="width: 600px !important;margin: auto; font-family: Arial, Helvetica, sans-serif;font-size:12px; text-align:left;"
+          style="
+            width: 600px !important;
+            margin: auto;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            text-align: left;
+          "
         >
           <tr height="20">
             <td style="text-align: center;" colspan="4">
@@ -64,11 +80,20 @@
         </table>
 
         <table
-          style="width: 600px !important;margin: auto;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;border:1px solid #ccc; font-size:12px;padding:5px;text-align:left; "
+          style="
+            width: 600px !important;
+            margin: auto;
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            font-size: 12px;
+            padding: 5px;
+            text-align: left;
+          "
         >
           <tr
             height="20"
-            style="border-bottom:1px solid #ccc;text-align:center;"
+            style="border-bottom: 1px solid #ccc; text-align: center;"
           >
             <td width="10%"></td>
             <td width="40%" style="text-align: center;"><b>Derscrição</b></td>
@@ -81,21 +106,24 @@
           <tr
             height="20"
             *ngFor="let item of pedido.itens; let i = index"
-            style="border-bottom:1px solid #ccc;"
+            style="border-bottom: 1px solid #ccc;"
           >
             <td style="text-align: center;">{{ i + 1 }}</td>
-            <td>{{ item.descricao }}</td>
-            <td style="text-align: right;padding-right:5px">
+            <td>
+              {{ item.descricao }}
+              <div style="font-size: 12px;">{{ item.obs }}</div>
+            </td>
+            <td style="text-align: right; padding-right: 5px;">
               {{ item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt" }}
             </td>
             <td style="text-align: center;">{{ item.qde }}</td>
-            <td style="text-align: right;padding-right:5px">
+            <td style="text-align: right; padding-right: 5px;">
               {{ item.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt" }}
             </td>
           </tr>
-          <tr height="20" style="border-bottom:1px solid #ccc;">
+          <tr height="20" style="border-bottom: 1px solid #ccc;">
             <td colspan="4"><b>Valor Total</b></td>
-            <td style="text-align: right;padding-right:5px">
+            <td style="text-align: right; padding-right: 5px;">
               <b>
                 {{
                   pedido.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt"
@@ -108,12 +136,12 @@
           <tr
             height="20"
             *ngIf="pedido.desconto > 0"
-            style="border-bottom:1px solid #ccc;"
+            style="border-bottom: 1px solid #ccc;"
           >
             <td colspan="4">
-              <b>Desconto ({{ pedido.desconto }} %)</b>
+              <b>Desconto</b>
             </td>
-            <td style="text-align: right;padding-right:5px">
+            <td style="text-align: right; padding-right: 5px;">
               <b>
                 {{
                   pedido.valorTotal - pedido.valorLiquido
@@ -124,7 +152,7 @@
           </tr>
           <tr height="20" *ngIf="pedido.desconto > 0">
             <td colspan="4"><b>Valor Total Líquido</b></td>
-            <td style="text-align: right;padding-right:5px">
+            <td style="text-align: right; padding-right: 5px;">
               <b>
                 {{
                   pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
@@ -140,26 +168,53 @@
       <br />
 
       <div
-        style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+        style="
+          text-align: left;
+          font-size: 14px;
+          font-family: Arial;
+          width: 600px !important;
+          margin: auto;
+          margin-bottom: 20px;
+        "
       >
         <b>Observações:</b> {{ obs }}
       </div>
 
       <div
-        style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+        style="
+          text-align: left;
+          font-size: 14px;
+          font-family: Arial;
+          width: 600px !important;
+          margin: auto;
+          margin-bottom: 20px;
+        "
       >
         <b>Valor total da entrega:</b>
         {{ totalEntrega | currency: "BRL":"symbol":"0.2-2":"pt" }}
       </div>
 
       <div
-        style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;margin-bottom:20px"
+        style="
+          text-align: left;
+          font-size: 14px;
+          font-family: Arial;
+          width: 600px !important;
+          margin: auto;
+          margin-bottom: 20px;
+        "
       >
         <b>Data da entrega:</b> ___/___/________
       </div>
 
       <div
-        style="text-align: left; font-size:14px;font-family: Arial;width:600px !important;margin: auto;"
+        style="
+          text-align: left;
+          font-size: 14px;
+          font-family: Arial;
+          width: 600px !important;
+          margin: auto;
+        "
       >
         <b>Nome legível: </b>___________________________________________
       </div>

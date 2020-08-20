@@ -7,32 +7,39 @@ import { Observable } from 'rxjs';
 import { API } from '../../environments/api';
 
 
-@Injectable({providedIn: 'root'})
-export class FechamentoService{
+@Injectable({ providedIn: 'root' })
+export class FechamentoService {
 
- constructor(private http: HttpClient){}
+    constructor(private http: HttpClient) { }
 
- listaFechamentos(){
+    listaFechamentos() {
 
-     return this.http.get<Fechamento[]>(API + '/fechamento/lista');
- }
+        return this.http.get<Fechamento[]>(API + '/fechamento/lista');
+    }
 
- addPgto(pgto:Pgto): Observable<Response>{
-     
-    return this.http.post<Response>(API + '/fechamento/addPgto', pgto);
- }
+    addPgto(pgto: Pgto): Observable<Response> {
 
- getFechamento(fechamentoId:number){
-     return this.http.get<Fechamento>(API+"/fechamento/"+fechamentoId.toString());
- }
+        return this.http.post<Response>(API + '/fechamento/addPgto', pgto);
+    }
 
- consultaPorClinica(clinicaId: number, ano: string, mes: string){
-    let httpParams:HttpParams = new HttpParams()
-    .set("clinicaIdForm", clinicaId.toString())
-    .set("anoForm", ano)
-    .set("mesForm", mes);
-     return this.http.get<Fechamento[]>(API+"/fechamento/consultaPorClinica?"+httpParams.toString());
- }
+    getFechamento(fechamentoId: number) {
+        return this.http.get<Fechamento>(API + "/fechamento/" + fechamentoId.toString());
+    }
+
+    consultaPorClinica(clinicaId: number, ano: string, mes: string) {
+        let httpParams: HttpParams = new HttpParams()
+            .set("clinicaIdForm", clinicaId.toString())
+            .set("anoForm", ano)
+            .set("mesForm", mes);
+        return this.http.get<Fechamento[]>(API + "/fechamento/consultaPorClinica?" + httpParams.toString());
+    }
+
+    addDesconto(fechamentoId: number, desconto: number): Observable<Response> {
+        let httpParams: HttpParams = new HttpParams()
+            .set("fechamentoId", fechamentoId.toString())
+            .set("desconto", desconto.toString());
+        return this.http.get<Response>(API + '/fechamento/addDesconto?' + httpParams.toString());
+    }
 
 }
 

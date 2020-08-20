@@ -240,7 +240,21 @@
                 }}"
               >
                 <td>{{ i + 1 }}</td>
-                <td>{{ produtoEscolhido.nome }}</td>
+                <td>
+                  <div
+                    style="cursor: pointer; margin-bottom: 5px;"
+                    (click)="mostraCampoObsItem(produtoEscolhido.uuid)"
+                  >
+                    {{ produtoEscolhido.nome }}
+                  </div>
+                  <input
+                    type="text"
+                    style="display: none; width: 250px;"
+                    placeholder="Observações"
+                    id="obsItem_{{ produtoEscolhido.uuid }}"
+                    (keyup)="registraObsItem(produtoEscolhido.uuid)"
+                  />
+                </td>
                 <td>
                   {{
                     produtoEscolhido.valor
@@ -250,10 +264,10 @@
                 <td>
                   <input
                     type="number"
-                    style="width: 50px;"
+                    style="width: 80px;"
                     value="0"
                     id="desconto_{{ produtoEscolhido.uuid }}"
-                    (blur)="registraDesconto(i, produtoEscolhido.uuid)"
+                    (keyup)="registraDesconto(i, produtoEscolhido.uuid)"
                   />
                 </td>
                 <td>{{ produtoEscolhido.qde }}</td>
@@ -378,7 +392,10 @@
               </tr>
               <tr *ngFor="let item of pedido.itens; let i = index">
                 <td>{{ i + 1 }}</td>
-                <td>{{ item.descricao }}</td>
+                <td>
+                  {{ item.descricao }}
+                  <div style="font-size: 12px;">{{ item.obs }}</div>
+                </td>
                 <td>
                   {{
                     item.valorUnitario | currency: "BRL":"symbol":"0.2-2":"pt"

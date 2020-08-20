@@ -14,6 +14,7 @@ import { ItemVariavel } from '../model/itemVariavel.model';
 import { Item } from '../model/item.model';
 import { DadosIniciais } from '../model/dados-iniciais.model';
 import { API } from '../../environments/api';
+import { ObsItem } from '../model/obs.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -117,6 +118,10 @@ export class PedidoService {
             .set("pedidoIdForm", pedidoId.toString())
             .set("descontoForm", desconto.toString());
         return this.http.get<Response>(API + '/pedido/altDesconto?' + httpParams.toString());
+    }
+
+    altObsItem(obs: ObsItem): Observable<Response> {
+        return this.http.post<Response>(API + '/item/altObs', obs);
     }
 
     altDentista(pedidoId: number, dentistaId: number): Observable<Response> {

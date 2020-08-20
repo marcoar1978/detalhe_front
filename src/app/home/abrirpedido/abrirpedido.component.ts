@@ -7,8 +7,10 @@ import { PedidoService } from 'src/app/service/pedido.service';
 import { Clinica } from 'src/app/model/clinica.model';
 import { Dentista } from 'src/app/model/dentista.model';
 import { Protetico } from 'src/app/model/protetico.model';
+import { ObsItem } from 'src/app/model/obs.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DataService } from 'src/app/service/data.service';
 import { Produto } from 'src/app/model/produto.model';
 import { ItemPadrao } from 'src/app/model/itemPadrao.model';
@@ -47,6 +49,9 @@ export class AbrirpedidoComponent implements OnInit {
   recebeConfPedido: boolean = false;
   ordem: number = 1;
   itemComDesconto: Item[] = [];
+  submitDesconto: Subject<number> = new Subject<number>();
+  submitObs: Subject<string> = new Subject<string>();
+  itemUuid: string;
 
 
   constructor(private pedidoService: PedidoService,
@@ -62,6 +67,23 @@ export class AbrirpedidoComponent implements OnInit {
     this.dataService.proteticoMessage.subscribe(res => { this.proteticos = res });
     this.dataService.produtoMessage.subscribe(res => { this.produtos = res; });
     this.dataService.dentistaMessage.subscribe(res => { this.dentistas = res });
+
+    this.submitDesconto
+      .pipe(debounceTime(500))
+      .subscribe(desconto => {
+        this.valorDesconto = this.produtosEscolhidos.reduce((acc, el) => { return acc + (el.qde * el.desconto) }, 0);
+        this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
+        this.pedidoService.altDescItem(this.itemUuid, desconto).subscribe(res => { });
+      });
+
+    this.submitObs
+      .pipe(debounceTime(3000))
+      .subscribe(obs => {
+        const obsItem: ObsItem = new ObsItem();
+        obsItem.uuid = this.itemUuid;
+        obsItem.obs = obs;
+        this.pedidoService.altObsItem(obsItem).subscribe(res => { });
+      })
 
     for (let i = 1; i <= 100; i++) {
       this.options.push(i);
@@ -399,10 +421,26 @@ export class AbrirpedidoComponent implements OnInit {
   }
 
   async registraDesconto(i, uuid) {
+    this.itemUuid = uuid;
     this.produtosEscolhidos[i].desconto = $(`#desconto_${uuid}`).val();
+    this.submitDesconto.next(this.produtosEscolhidos[i].desconto);
+
+
+    /*
+    
     this.valorDesconto = this.produtosEscolhidos.reduce((acc, el) => { return acc + (el.qde * el.desconto) }, 0);
     this.valorTotalLiquido = this.totalPedido - this.valorDesconto;
     const res: any = await this.pedidoService.altDescItem(uuid, this.produtosEscolhidos[i].desconto).toPromise();
+    */
+  }
+
+  mostraCampoObsItem(uuid) {
+    $(`#obsItem_${uuid}`).slideToggle(250);
+  }
+
+  registraObsItem(uuid) {
+    this.itemUuid = uuid;
+    this.submitObs.next($(`#obsItem_${uuid}`).val());
   }
 
   imprimir() {
