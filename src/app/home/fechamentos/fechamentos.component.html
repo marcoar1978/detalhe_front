@@ -16,8 +16,8 @@
     <td width="10%">Valor<br />Líquido</td>
     <td width="20%" colspan="2">Valor Pago</td>
     <td>
-      Entregas<br /><span style="font-size: 11px;"
-        >(Número - Data Entrega - Valor)</span
+      Pedidos<br /><span style="font-size: 11px;"
+        >(N. Pedido - N. Entrega - Data - Valor)</span
       >
     </td>
   </tr>
@@ -53,7 +53,9 @@
             class="material-icons"
             style="cursor: pointer;"
             title="Nota de Fechamento nº {{ fechamento.id }}"
-            (click)="abreModalFechamento(fechamento.id, clinica.nomeSimp)"
+            (click)="
+              abreModalFechamento(fechamento.id, clinica.nomeSimp, clinica.id)
+            "
           >
             assignment</i
           >
@@ -125,27 +127,40 @@
           <table
             class="table table-sm table-bordered"
             style="font-size: 12px;"
-            width="280px"
+            width="300px"
           >
-            <tr *ngFor="let entrega of fechamento.entregas">
+            <tr
+              *ngFor="let p of pedidosFechamento"
+              title="Paciente: {{ p.pedido.nomePaciente }}"
+            >
               <td
                 width="10%"
-                style="text-align: center; cursor: pointer;"
-                title="Nota de Entrega nº {{ entrega.id }}"
-                (click)="
-                  abreModalEntrega(fechamento.id, entrega.id, clinica.nomeSimp)
-                "
+                style="text-align: center;"
+                *ngIf="p.fechamentoId == fechamento.id"
               >
-                <i class="material-icons" style="font-size: 12px;">search </i>
+                {{ p.pedido.id }}
               </td>
-
-              <td width="10%" style="text-align: center;">{{ entrega.id }}</td>
-              <td width="40%" style="text-align: center;">
-                {{ entrega.dataEntrega | date: "dd/MM/yyyy" }}
+              <td
+                width="10%"
+                style="text-align: center;"
+                *ngIf="p.fechamentoId == fechamento.id"
+              >
+                {{ p.entregaId }}
               </td>
-              <td width="40%" style="text-align: center;">
+              <td
+                width="40%"
+                style="text-align: center;"
+                *ngIf="p.fechamentoId == fechamento.id"
+              >
+                {{ p.pedido.dataPedido | date: "dd/MM/yyyy" }}
+              </td>
+              <td
+                width="30%"
+                style="text-align: center;"
+                *ngIf="p.fechamentoId == fechamento.id"
+              >
                 {{
-                  entrega.totalEntrega | currency: "BRL":"symbol":"0.2-2":"pt"
+                  p.pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt"
                 }}
               </td>
             </tr>
@@ -161,12 +176,13 @@
     padding: 15px;
     text-align: center;
     border: 1px solid #000;
-    width: 630px;
+    width: 800px;
     display: none;
   "
   id="caixaNotaFechamento"
 >
-  <table style="width: 600px !important; margin: auto;">
+  <br />
+  <table style="width: 800px !important; margin: auto;">
     <tr>
       <td width="100px">
         <img
@@ -185,11 +201,14 @@
   </table>
   <br />
 
-  <table class="table" style="width: 600px !important; margin: auto;">
+  <table
+    class="table table-bordered table-sm"
+    style="width: 700px !important; margin: auto; font-size: 14px;"
+  >
     <tr height="30" style="border-bottom: 1px solid #ccc; text-align: center;">
       <td colspan="4" style="text-align: center;"><b>PEDIDOS</b></td>
     </tr>
-    <tr height="30" style="border-bottom: 1px solid #ccc; text-align: center;">
+    <tr height="40" style="border-bottom: 1px solid #ccc; text-align: center;">
       <td width="10%"></td>
       <td width="30%" style="text-align: center;"><b>Data</b></td>
       <td width="30%" style="text-align: center;"><b>Paciente</b></td>
@@ -198,29 +217,68 @@
 
     <tr
       height="30"
-      *ngFor="let pedido of pedidosFechamentoSelecionado"
+      *ngFor="let p of pedidosFechamentoSelecionado"
       style="border-bottom: 1px solid #ccc;"
     >
-      <td style="text-align: center;">{{ pedido.id }}</td>
-      <td style="text-align: center;">
-        {{ pedido.dataPedido | date: "dd/MM/yyyy" }}
+      <td style="text-align: center; padding: 5px;">{{ p.pedido.id }}</td>
+      <td style="text-align: center; padding: 5px;">
+        {{ p.pedido.dataPedido | date: "dd/MM/yyyy" }}
       </td>
       <td>
-        {{ pedido.nomePaciente }}
+        {{ p.pedido.nomePaciente }}
       </td>
-      <td>
-        {{ pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt" }}
+      <td style="text-align: right; padding: 5px;">
+        {{ p.pedido.valorLiquido | currency: "BRL":"symbol":"0.2-2":"pt" }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Total deste fechamento</b></td>
+      <td style="text-align: right; padding: 5px;">
+        <b>{{
+          fechamentoSelecionado.valorFechamento
+            | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+    <tr *ngIf="fechamentoSelecionado.desconto > 0">
+      <td colspan="3"><b>Desconto</b></td>
+      <td style="text-align: right; padding: 5px;">
+        <b>{{
+          fechamentoSelecionado.desconto | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+    <tr *ngIf="fechamentoSelecionado.desconto > 0">
+      <td colspan="3"><b>Total com desconto</b></td>
+      <td style="text-align: right; padding: 5px;">
+        <b>{{
+          fechamentoSelecionado.valorTotal
+            | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+    <tr height="30px" *ngIf="fechamentosPendentes.length > 0">
+      <td
+        colspan="4"
+        style="border-right: 1px solid #ffffff; border-left: 1px solid #ffffff;"
+      ></td>
+    </tr>
+    <tr *ngIf="fechamentosPendentes.length > 0" style="font-size: 12px;">
+      <td colspan="3">
+        {{ fechamentosPendentes.length }} fechamentos pendentes
+      </td>
+      <td style="text-align: right; padding: 5px;">
+        {{ valorFechamentosPendentes | currency: "BRL":"symbol":"0.2-2":"pt" }}
+      </td>
+    </tr>
+    <tr *ngIf="fechamentosPendentes.length > 0" style="font-size: 12px;">
+      <td colspan="3">Total devido</td>
+      <td style="text-align: right; padding: 5px;">
+        {{ valorDevido | currency: "BRL":"symbol":"0.2-2":"pt" }}
       </td>
     </tr>
   </table>
-
   <br />
-  <p style="text-align: center; font-family: Arial, Helvetica, sans-serif;">
-    <b>Valor Total do Fechamento:</b>
-    {{
-      fechamentoSelecionado.valorTotal | currency: "BRL":"symbol":"0.2-2":"pt"
-    }}
-  </p>
 </div>
 
 <div

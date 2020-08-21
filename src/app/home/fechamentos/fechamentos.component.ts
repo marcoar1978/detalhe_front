@@ -13,6 +13,7 @@ import { Pgto } from 'src/app/model/pgto.model';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Pedido } from 'src/app/model/pedido.model';
+import { PedidoFechamento } from 'src/app/model/pedido-fechamento.model';
 
 @Component({
   selector: 'app-fechamentos',
@@ -26,8 +27,11 @@ export class FechamentosComponent implements OnInit {
   fechamentoIndex: number;
   fechamentos: Fechamento[];
   fechamentoSelecionado: Fechamento = new Fechamento();
-  pedidosFechamento: Pedido[] = [];
-  pedidosFechamentoSelecionado: Pedido[] = [];
+  fechamentosPendentes: Fechamento[] = [];
+  valorFechamentosPendentes: number;
+  valorDevido: number;
+  pedidosFechamento: PedidoFechamento[] = [];
+  pedidosFechamentoSelecionado: PedidoFechamento[] = [];
   clinicas: Clinica[];
   nomeClinica: string;
   clinicasComFechamento: Clinica[];
@@ -75,7 +79,11 @@ export class FechamentosComponent implements OnInit {
         for (let i = 0; i < this.fechamentos.length; i++) {
           for (let f = 0; f < this.fechamentos[i].entregas.length; f++) {
             for (let k = 0; k < this.fechamentos[i].entregas[f].pedidos.length; k++) {
-              this.pedidosFechamento.push(this.fechamentos[i].entregas[f].pedidos[k]);
+              const pedidoFech: PedidoFechamento = new PedidoFechamento();
+              pedidoFech.fechamentoId = this.fechamentos[i].id;
+              pedidoFech.entregaId = this.fechamentos[i].entregas[f].id;
+              pedidoFech.pedido = this.fechamentos[i].entregas[f].pedidos[k];
+              this.pedidosFechamento.push(pedidoFech);
             }
           }
         }
@@ -84,10 +92,7 @@ export class FechamentosComponent implements OnInit {
       })
 
     this.subjectDesc();
-
   }
-
-
 
   escondeAlert() {
     if ((this.carregamentoClinicas) && (this.carregamentoFechamentos)) {
@@ -95,22 +100,17 @@ export class FechamentosComponent implements OnInit {
     }
   }
 
-  abreModalFechamento(fechamentoId: number, nomeClinica: string) {
+  abreModalFechamento(fechamentoId: number, nomeClinica: string, clinicaId: number) {
     this.nomeClinica = nomeClinica;
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
-    console.log(this.fechamentoSelecionado.clinicaId);
-    this.pedidosFechamentoSelecionado = [];
-    for (let i = 0; i < this.fechamentoSelecionado.entregas.length; i++) {
-      for (let f = 0; f < this.pedidosFechamento.length; f++) {
-        if (this.fechamentoSelecionado.entregas[i].id == this.pedidosFechamento[f].entrega.id) {
-          this.pedidosFechamentoSelecionado.push(this.pedidosFechamento[f]);
-        }
-      }
-    }
+    this.pedidosFechamentoSelecionado = this.pedidosFechamento.filter(pedido => pedido.fechamentoId == fechamentoId);
+    this.fechamentosPendentes = this.fechamentos.filter(fechamento => fechamento.clinicaId == clinicaId && fechamento.id != fechamentoId);
+    this.valorFechamentosPendentes = this.fechamentosPendentes.reduce((acc, fechamento) => acc + fechamento.valorTotal, 0);
+    this.valorDevido = this.fechamentoSelecionado.valorTotal + this.valorFechamentosPendentes;
 
-    console.log(this.pedidosFechamentoSelecionado);
+
     setTimeout(() => {
-      const janela = window.open('', 'PRINT', 'height=600,width=800');
+      const janela = window.open('', 'PRINT', 'height=600,width=850');
       janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
       janela.document.write('<title>NotaFechamento' + fechamentoId + '</title>');
       janela.document.write('</head><body>');
