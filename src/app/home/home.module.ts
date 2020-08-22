@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LOCALE_ID } from '@angular/core';
-import {NgPrintModule} from 'ng-print';
+import { NgPrintModule } from 'ng-print';
 
 import { HomeComponent } from './home.component';
 import { AbrirpedidoComponent } from './abrirpedido/abrirpedido.component';
@@ -30,9 +30,8 @@ import { NotaEntregaComponent } from './modals/nota-entrega/nota-entrega.compone
 import { NotaFechamentoComponent } from './modals/nota-fechamento/nota-fechamento.component';
 import { CadClinicaComponent } from './cadastro/cad-clinica/cad-clinica.component';
 
-
 @NgModule({
-  declarations: [ HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent, ConsultaEntregasComponent, ConsultaPedidosComponent, NgbdTableSortable, NgbdSortableHeader, ConsultaFechamentosComponent, NotaEntregaComponent, NotaFechamentoComponent, CadClinicaComponent],
+  declarations: [HomeComponent, AbrirpedidoComponent, CadastroclinicaComponent, PedidoFechadoComponent, PedidosEmProcessoComponent, ModalPedidoConsComponent, ConfirmEntregaComponent, EntregasComponent, ConfirmFechamentoComponent, FechamentosComponent, StatusPedidosComponent, InicioHomeComponent, ImpressaoPedidosComponent, ConsultaEntregasComponent, ConsultaPedidosComponent, NgbdTableSortable, NgbdSortableHeader, ConsultaFechamentosComponent, NotaEntregaComponent, NotaFechamentoComponent, CadClinicaComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -43,11 +42,11 @@ import { CadClinicaComponent } from './cadastro/cad-clinica/cad-clinica.componen
     NgPrintModule
 
   ],
-  providers:[
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
-      multi:true
+      multi: true
 
     },
     { provide: LOCALE_ID, useValue: "pt-BR" }

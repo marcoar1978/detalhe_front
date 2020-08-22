@@ -126,6 +126,9 @@ export class ConsultaPedidosComponent implements OnInit {
         $('#divMgsPedidoId').slideUp(350, () => {
           this.mgsPedidoId = "";
         });
+        this.pedidosSelecionados = [];
+        this.pedidosSelecionados.push(res);
+        /*
         this.pedidoSelecionado = res;
         this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
 
@@ -139,6 +142,47 @@ export class ConsultaPedidosComponent implements OnInit {
         }
 
         this.modalService.open(content, { centered: true, size: 'lg', scrollable: true });
+        */
+        if (this.pedidosSelecionados.length == 0) {
+          $('#divMsgClinica').slideUp(150, () => {
+            $('#divMsgClinica').css('font-weight', 'bold');
+            $('#divMsgClinica').css('color', 'red');
+            this.msgClinica = "Não há registros neste período";
+            $('#divMsgClinica').slideDown(150, () => {
+
+              setTimeout(() => { $('#divMsgClinica').slideUp(150); }, 4000);
+            });
+          })
+
+          return;
+        }
+
+        this.pedidosSelecionados.forEach(pedidoSelecionado => {
+          const clinica: Clinica = this.clinicas.find(clinica => clinica.id == pedidoSelecionado.clinicaId);
+          pedidoSelecionado.clinica = clinica.nomeSimp;
+
+          if (!pedidoSelecionado.entrega) {
+            pedidoSelecionado.status = "Aberto";
+            pedidoSelecionado.corFonteStatus = "blue";
+          }
+          else if (pedidoSelecionado.entrega && !pedidoSelecionado.entrega.fechamento) {
+            pedidoSelecionado.status = "Entrega";
+            pedidoSelecionado.corFonteStatus = "orange";
+          }
+          else if (pedidoSelecionado.entrega && pedidoSelecionado.entrega.fechamento) {
+            pedidoSelecionado.status = "Fechamento";
+            pedidoSelecionado.corFonteStatus = "green";
+          }
+        });
+
+        $('#divMsgClinica').slideUp(150);
+
+        $("#tabelaPedidos").fadeOut(350, () => {
+          this.labelButtonForm = "Expandir";
+          $("#tabelaPedidos").fadeIn(350);
+        });
+
+
       }, error => {
         $('#divMgsPedidoId').slideUp(350, () => {
           this.mgsPedidoId = "";
@@ -190,16 +234,7 @@ export class ConsultaPedidosComponent implements OnInit {
             });
           })
 
-          /*
-          $('#divMsgNomePaciente').slideUp(350, () => {
-            $('#divMsgNomePaciente').css('font-weight','bold');
-            $('#divMsgNomePaciente').css('color','red');
-            this.msgNomePaciente = "Nome deste paciente não existe";
-            $('#divMsgNomePaciente').slideDown(350, () => {
-              setTimeout( () => { $('#divMsgNomePaciente').slideUp(350);}, 4000);
-            });
-          });
-          */
+
           return;
         }
 
@@ -257,8 +292,6 @@ export class ConsultaPedidosComponent implements OnInit {
       .subscribe(res => {
         this.pedidosSelecionados = res;
         if (this.pedidosSelecionados.length == 0) {
-
-
           $('#divMsgClinica').slideUp(150, () => {
             $('#divMsgClinica').css('font-weight', 'bold');
             $('#divMsgClinica').css('color', 'red');
@@ -383,6 +416,24 @@ export class ConsultaPedidosComponent implements OnInit {
         });
 
       });
+  }
+
+  consultaDetPedidoClienteImp(pedidoId: number) {
+    $(`#msgDetalhePedido_${pedidoId}`).fadeIn(250);
+    this.pedidoService.consultaPorId(pedidoId).subscribe(res => {
+      $(`#msgDetalhePedido_${pedidoId}`).fadeOut(250);
+      this.pedidoSelecionado = res;
+      this.itemComDesconto = this.pedidoSelecionado.itens.filter((i) => i.desconto > 0);
+      setTimeout(() => {
+        const janela = window.open('', 'PRINT', 'height=600,width=700');
+        janela.document.write('<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">');
+        janela.document.write('<title>Pedido nº ' + this.pedidoSelecionado.id + '</title>');
+        janela.document.write('</head><body><br>');
+        janela.document.write(document.getElementById("consultaPedidoImp").innerHTML);
+        janela.document.write('</body></html>');
+      }, 500)
+    })
+
   }
 
   onSort({ column, direction }: SortEvent) {

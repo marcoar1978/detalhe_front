@@ -87,7 +87,9 @@
             id="inputDesconto_{{ fechamento.id }}"
             [value]="fechamento.desconto"
             style="width: 100px;"
-            (keyup)="insertDesconto(fechamento.id, i)"
+            (keyup)="
+              insertDesconto(fechamento.id, i, fechamento.valorFechamento)
+            "
           />
         </td>
         <td
@@ -191,19 +193,32 @@
         />
       </td>
       <td style="color: #000099; text-align: center;">
-        <b
-          >FECHAMENTO nº {{ fechamentoSelecionado.id }} <br />({{
-            nomeClinica
-          }})</b
-        >
+        <b>FECHAMENTO </b>
       </td>
     </tr>
   </table>
   <br />
+  <table
+    style="
+      width: 700px !important;
+      margin: auto;
+      font-size: 12px;
+      margin-bottom: 15px;
+    "
+  >
+    <tr height="30">
+      <td width="150"><b>Data Fechamento</b></td>
+      <td>{{ fechamentoSelecionado.dataFechamento | date: "dd/MM/yyyy" }}</td>
+    </tr>
+    <tr height="30">
+      <td width="150"><b>Cliente</b></td>
+      <td>{{ nomeClinica }}</td>
+    </tr>
+  </table>
 
   <table
     class="table table-bordered table-sm"
-    style="width: 700px !important; margin: auto; font-size: 14px;"
+    style="width: 700px !important; margin: auto; font-size: 12px;"
   >
     <tr height="30" style="border-bottom: 1px solid #ccc; text-align: center;">
       <td colspan="4" style="text-align: center;"><b>PEDIDOS</b></td>
@@ -257,6 +272,24 @@
         }}</b>
       </td>
     </tr>
+    <tr *ngIf="fechamentoSelecionado.valorPgto > 0">
+      <td colspan="3"><b>Pagamentos efetuados</b></td>
+      <td style="text-align: right; padding: 5px;">
+        <b>{{
+          fechamentoSelecionado.valorPgto
+            | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
+    <tr *ngIf="fechamentoSelecionado.valorPgto > 0">
+      <td colspan="3"><b>Total devido deste fechamento</b></td>
+      <td style="text-align: right; padding: 5px;">
+        <b>{{
+          fechamentoSelecionado.valorTotal - fechamentoSelecionado.valorPgto
+            | currency: "BRL":"symbol":"0.2-2":"pt"
+        }}</b>
+      </td>
+    </tr>
     <tr height="30px" *ngIf="fechamentosPendentes.length > 0">
       <td
         colspan="4"
@@ -272,7 +305,7 @@
       </td>
     </tr>
     <tr *ngIf="fechamentosPendentes.length > 0" style="font-size: 12px;">
-      <td colspan="3">Total devido</td>
+      <td colspan="3">Total devido geral</td>
       <td style="text-align: right; padding: 5px;">
         {{ valorDevido | currency: "BRL":"symbol":"0.2-2":"pt" }}
       </td>

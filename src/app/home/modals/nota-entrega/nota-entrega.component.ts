@@ -8,10 +8,11 @@ import { Entrega } from 'src/app/model/entrega.model';
 })
 export class NotaEntregaComponent implements OnInit, OnChanges {
 
-  @Input() entregaSelecionadaInput: Entrega;
+  @Input() entregaSelecionadaInput: Entrega = new Entrega();
   @Input() nomeClinicaInput: string;
   entregaSelecionada: Entrega;
   nomeClinica: string;
+  totalEntrega: number;
 
   constructor() { }
 
@@ -20,6 +21,9 @@ export class NotaEntregaComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.entregaSelecionada = this.entregaSelecionadaInput;
+    if (this.entregaSelecionada.pedidos != undefined) {
+      this.totalEntrega = this.entregaSelecionada.pedidos.reduce((acc, pedido) => { return acc + pedido.valorLiquido }, 0)
+    }
     this.nomeClinica = this.nomeClinicaInput;
   }
 

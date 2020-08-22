@@ -105,7 +105,7 @@ export class FechamentosComponent implements OnInit {
     this.fechamentoSelecionado = this.fechamentos.find(fechamento => fechamento.id == fechamentoId);
     this.pedidosFechamentoSelecionado = this.pedidosFechamento.filter(pedido => pedido.fechamentoId == fechamentoId);
     this.fechamentosPendentes = this.fechamentos.filter(fechamento => fechamento.clinicaId == clinicaId && fechamento.id != fechamentoId);
-    this.valorFechamentosPendentes = this.fechamentosPendentes.reduce((acc, fechamento) => acc + fechamento.valorTotal, 0);
+    this.valorFechamentosPendentes = this.fechamentosPendentes.reduce((acc, fechamento) => acc + (fechamento.valorTotal - fechamento.valorPgto), 0);
     this.valorDevido = this.fechamentoSelecionado.valorTotal + this.valorFechamentosPendentes;
 
 
@@ -196,11 +196,19 @@ export class FechamentosComponent implements OnInit {
     return verifError;
   }
 
-  insertDesconto(fechamentoId, i) {
+  insertDesconto(fechamentoId, i, valorfechamento: number) {
     this.fechamentoId = fechamentoId;
     this.fechamentoIndex = i;
     const desconto = $(`#inputDesconto_${fechamentoId}`).val();
-    this.subjectDesconto.next(desconto);
+    if (desconto >= 0 && desconto <= valorfechamento) {
+      this.subjectDesconto.next(desconto);
+    }
+    else {
+      alert("Valor de desconto incorreto");
+      $(`#inputDesconto_${fechamentoId}`).val(0)
+      this.subjectDesconto.next(0);
+    }
+
   }
 
   subjectDesc() {
