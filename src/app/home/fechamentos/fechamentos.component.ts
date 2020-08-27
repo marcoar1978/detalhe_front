@@ -34,6 +34,7 @@ export class FechamentosComponent implements OnInit {
   pedidosFechamentoSelecionado: PedidoFechamento[] = [];
   clinicas: Clinica[];
   nomeClinica: string;
+  clinicaId: number;
   clinicasComFechamento: Clinica[];
   carregamentoClinicas: boolean;
   carregamentoFechamentos: boolean;
@@ -94,6 +95,17 @@ export class FechamentosComponent implements OnInit {
     this.subjectDesc();
   }
 
+  getValorDevido(clinicaId: number) {
+    let valorDevido: number = 0;
+    for (let i = 0; i < this.fechamentos.length; i++) {
+      if (this.fechamentos[i].clinicaId == clinicaId) {
+        //console.log(`${this.fechamentos[i].clinicaId} - ${this.fechamentos[i].valorTotal} - ${this.fechamentos[i].valorPgto}`)
+        valorDevido += (this.fechamentos[i].valorTotal - this.fechamentos[i].valorPgto)
+      }
+    }
+    return valorDevido;
+  }
+
   escondeAlert() {
     if ((this.carregamentoClinicas) && (this.carregamentoFechamentos)) {
       $("#divAguardar").slideUp(350);
@@ -106,7 +118,7 @@ export class FechamentosComponent implements OnInit {
     this.pedidosFechamentoSelecionado = this.pedidosFechamento.filter(pedido => pedido.fechamentoId == fechamentoId);
     this.fechamentosPendentes = this.fechamentos.filter(fechamento => fechamento.clinicaId == clinicaId && fechamento.id != fechamentoId);
     this.valorFechamentosPendentes = this.fechamentosPendentes.reduce((acc, fechamento) => acc + (fechamento.valorTotal - fechamento.valorPgto), 0);
-    this.valorDevido = this.fechamentoSelecionado.valorTotal + this.valorFechamentosPendentes;
+    this.valorDevido = (this.fechamentoSelecionado.valorTotal - this.fechamentoSelecionado.valorPgto) + this.valorFechamentosPendentes;
 
 
     setTimeout(() => {
@@ -196,8 +208,9 @@ export class FechamentosComponent implements OnInit {
     return verifError;
   }
 
-  insertDesconto(fechamentoId, i, valorfechamento: number) {
+  insertDesconto(fechamentoId, i, valorfechamento: number, clinicaId: number) {
     this.fechamentoId = fechamentoId;
+    this.clinicaId = clinicaId;
     this.fechamentoIndex = i;
     const desconto = $(`#inputDesconto_${fechamentoId}`).val();
     if (desconto >= 0 && desconto <= valorfechamento) {
@@ -217,6 +230,14 @@ export class FechamentosComponent implements OnInit {
       .subscribe(desconto => {
         const valorLiquido = this.fechamentos[this.fechamentoIndex].valorFechamento - desconto;
         this.fechamentos[this.fechamentoIndex].valorTotal = valorLiquido;
+        this.fechamentos[this.fechamentoIndex].desconto = desconto;
+        const valorDevidoTotal = this.getValorDevido(this.clinicaId);
+        $(`#divValorDevido_${this.clinicaId}`).fadeOut(250, () => {
+          $(`#divValorDevido_${this.clinicaId}`).empty();
+          $(`#divValorDevido_${this.clinicaId}`).append(`Valor Devido: ${valorDevidoTotal.toFixed(2)}`);
+          $(`#divValorDevido_${this.clinicaId}`).fadeIn(250);
+        });
+
         this.fechamentoService.addDesconto(this.fechamentoId, desconto).subscribe(res => { });
       })
   }
